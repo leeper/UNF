@@ -1,4 +1,0 @@
-1. copy unf.hlp and unf.plugin into your /ado directory (usually $HOME/ado on
-unix systems and C:\ado on windows systems)
-2. run stata
-3. type 'help ado'

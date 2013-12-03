@@ -1,23 +1,31 @@
 citHeader("To cite the UNF package in publications use:")
 
+year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date, perl = TRUE)
+vers <- paste("R package version", meta$Version)
+ 
+citEntry(entry="Manual",
+         title = "UNF: Tools for creating universal numeric fingerprints for data",
+         author = personList(as.person("Thomas J. Leeper")),
+         year = year,
+         note = vers,
+		 textVersion = paste("Thomas J. Leeper (",year,
+                             "). UNF: Tools for creating universal numeric fingerprints for data. ",
+                             vers, ".", sep=""))
+
+
 citEntry(entry="Book",
-         title = "Numerical Issues in Statistical Computing for the Social Scientist",
+         title  = "Numerical Issues in Statistical Computing for the Social Scientist",
          author = personList(as.person("M. Altman"), 
                              as.person("J. Gill"),
-                             as.person("M.P. McDonald")
-				),
-	 publisher = "John Wiley and Sons",
-         edition = "First",
-         address      = "New York",
-         year         = 2003,
-         ISBN 		= "ISBN 0-471-23633-0",
-         note         = "Software: R Package, UNF, version 1.13 ",
-         url          = "http://www.hmdc.harvard.edu/micah_altman/numal/",
-         
-         textVersion = 
-         paste("Altman, M., Gill, J. and M.P. McDonald (2003)", 
-               "Numerical Issues in Statistical Computing for the Social Scientist.",
-               "John Wiley and Sons, New York.",
-              "(Software version: R Package, UNF, version 1.13)",
-	       "ISBN 0-471-23633-0.")
+                             as.person("M.P. McDonald") ),
+        publisher    = "John Wiley and Sons",
+        edition      = "First",
+        address      = "New York",
+        year         = 2003,
+        ISBN 		 = "ISBN 0-471-23633-0",        
+        textVersion = 
+        paste("Altman, M., Gill, J. and M.P. McDonald (2003)", 
+              "Numerical Issues in Statistical Computing for the Social Scientist.",
+              "John Wiley and Sons, New York.",
+              "ISBN 0-471-23633-0.")
 )

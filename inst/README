@@ -1,4 +1,0 @@
-A makefile and source code is available for using UNF's outside of R:
-- standalone: contains source and help file for compiling a stand alone unf generator
-- stata: contains source and help forr compiling a Stata plugin
-- sas: contains an experimental sas macro for generating unfs
