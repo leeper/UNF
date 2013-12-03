@@ -1,0 +1,110 @@
+UNFVECTOR
+
+     Computes  a Universal Numeric Fingerprint for a single vector in an 
+     ASCII text file given as standard input. 
+
+
+_Usage_
+
+unfvector [-d #] -t [i|f|r|u] < inputfile # linux
+type inputfile | unfvector.exe [-d #] -t [i|f|r|u] -a [3|4]  # windows
+
+-d # of digits  (otherwise uses protocol defaults)
+-t type of vector, should be integer, real, character,  
+	or unf (for composite unf) Character is the default
+-a  version of UNF algorithm to use
+
+
+_Details_
+
+     A universal numeric fingerprint is used to guarantee that a
+     defined subset of data is substantively identical to a comparison
+     subset. Two fingerprints will match if and only if the subset of
+     data generating them are identical, when represented using a given
+     number of significant digits.
+
+
+     A UNF is created by rounding data values (or truncating strings) 
+     to a known number of  digits (characters), representing those
+     values in standard form (as 32bit unicode-formatted strings), and
+     applying a fingerprinting method (such as cryptographic hashing
+     function) to this representation.   UNF's are computed from data
+     values provided by the statistical package, so they directly
+     reflect the internal representation of the data -  the data as the
+     statistical package interprets it.
+
+     A UNF differs from an ordinary file checksum in several important
+     ways:
+
+     1. _UNF's are format independent._  The UNF for the data will be
+     the same regardless of whether the data is saved as a R binary
+     format,  SAS formatted file, Stata formatted file, etc., but file
+     checksums will differ.
+
+     2. _UNF's are robust to insignificant rounding error._  A UNF will
+     also be the same if the data differs in non-significant digits, a
+     file checksum not.
+
+     3._UNF's detect misinterpretation of the data by the statistical
+     software._  If the statistical software misreads the file, the
+     resulting UNF will not match the original, but the file checksums
+     may match.
+
+     4._UNF's are strongly tamper resistant._ Any accidental or
+     intentional changes to the data values will change the resulting
+     UNF. Most file checksums's and  descriptive statistics detect only
+     certain types of changes. 
+
+     UNF libraries are available for standalone use, for use in C++,
+     and for use with other packages.
+
+
+     Returns a character string representing the UNF computed from the
+     data. For example: UNF:4:6,128:ZNQRI14053UZq389x0Bffg==
+
+     This representation identifies the signature as a fingerprint,
+     using version 4, of the algorithm,  computed to 6 significant
+     digits for numeric values, and 128 digits for character values.
+     (The significant digits will be listed only when they differ 
+     from the defaults for that version of the algorithm) 
+     The segment following the final colon is the actual
+     fingerprint in base64 encoded format.
+
+     Note: to compare two UNF's, or sets of unfs, one often wants to
+     compare only the base64 portion.
+
+_Author_
+
+     Micah Altman Micah_Altman@harvard.edu
+
+     <URL: http://www.hmdc.harvard.edu/micah_altman/>
+
+_References_
+
+     Altman, M., J. Gill and M. P. McDonald.  2003.  _Numerical Issues
+     in Statistical Computing for the Social Scientist_.  John Wiley &
+     Sons. <URL: http://www.hmdc.harvard.edu/numerical_issues/>
+
+     The UNF algorithm repository:
+     <URL: http://thedata.org/index.php/Main/UNF>
+
+_Warnings_
+
+The standalone version is specific with regard to input formats. It is 
+intended primarily for use with in pipeline, to postprocess the 
+output coming from a statistical with application
+that has no ability to use external C++ libraries directly. E.g:
+
+	spss -m "print_vector.sps" | unfvector -ti
+
+In particular, unfvector requires that:
+
+- The text file contains a single vector only.
+- Lines are expected to be terminated with a LF character (unix format text)
+- The type of the vector must be specified correctly  with -t for a correct UNF to be produced.
+- Missing values must be encoded as '.' for int and real types, and as a blank line for character types.
+- When computing composite UNF's all the unf's forming the composite must have
+  identical versions and significant digits
+
+For a more flexible interfaces to create UNF's see the R package, UNF
+, and the Stata plugin.

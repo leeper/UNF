@@ -1,0 +1,23 @@
+citHeader("To cite the UNF package in publications use:")
+
+citEntry(entry="Book",
+         title = "Numerical Issues in Statistical Computing for the Social Scientist",
+         author = personList(as.person("M. Altman"), 
+                             as.person("J. Gill"),
+                             as.person("M.P. McDonald")
+				),
+	 publisher = "John Wiley and Sons",
+         edition = "First",
+         address      = "New York",
+         year         = 2003,
+         ISBN 		= "ISBN 0-471-23633-0",
+         note         = "Software: R Package, UNF, version 1.13 ",
+         url          = "http://www.hmdc.harvard.edu/micah_altman/numal/",
+         
+         textVersion = 
+         paste("Altman, M., Gill, J. and M.P. McDonald (2003)", 
+               "Numerical Issues in Statistical Computing for the Social Scientist.",
+               "John Wiley and Sons, New York.",
+              "(Software version: R Package, UNF, version 1.13)",
+	       "ISBN 0-471-23633-0.")
+)

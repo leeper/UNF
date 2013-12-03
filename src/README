@@ -1,0 +1,9 @@
+UNF code:
+
+unf.* -- The unf algorithm implementation. 
+R_unf.* -- R wrappers to UNF code.
+
+Support code from external sources:
+
+md5.* -- md5 hash algorithm
+sha256.* -- sha256 hash algorithm

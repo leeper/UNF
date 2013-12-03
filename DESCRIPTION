@@ -1,0 +1,13 @@
+Package: UNF
+Title: Tools for creating universal numeric fingerprints for data. 
+Version: 1.16.1
+Date: 2009-08-24
+Author: Micah Altman
+Description:  Computes a univeral numeric fingerprint of the data.
+Maintainer: ORPHANED
+Dialect: R, S-Plus
+Depends: R (>= 2.0)
+Imports: utils
+License: GPL 2.0
+URL: http://thedata.org/vdc/index.php?pagename=Main.UNF, http://www.r-project.org, http://www.hmdc.harvard.edu/micah_altman/numal/
+Packaged: 2009-08-24 05:45:35 UTC; hornik

@@ -1,0 +1,46 @@
+1.02
+
+- Standardizes representation of non-finite numbers as : +inf, -inf, +nan
+- Allows for separate specification of rounding levels for character and numeric
+  vectors
+- Composite unfs are sorted by unf value which disambiguates ordering
+- Discovered that sprintf() internal rounding behavior is inconsistent.
+  Now use explicit rounding using IEE 753 "round to nearest".
+- UNF Version 4, replaces MD5 with SHA256 algorithm
+- check with codetools()
+- remove -static (request from Brian Ripley)
+
+1.04 
+- Set locale for sort order
+- Add vignette
+- Move citation
+
+1.05
+- fix bug in as.unf
+
+1.06
+- workaround for lack of posix locale under windows
+
+1.07
+- Protocol v. 4.1, perf, as.unf bug
+
+1.08
+- code comments 
+
+1.09
+- fix prototyping bug, add other languages
+
+1.10
+- fix suppression of digits for default under v3
+
+1.11
+- fix non C99 #includes
+
+1.13
+- inital changes for Splus compatability
+
+1.14
+- Namespace imports, other  SPLUS changes
+
+1.15
+- Splus for linux debug

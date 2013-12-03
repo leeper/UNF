@@ -1,0 +1,100 @@
+.-
+help for ^unf^                             (Micah Altman)
+.-
+
+Computing Universal Numeric Fingerprints in Stata
+---------------------------------------------------
+
+        program ^unf^, plugin
+	plugin call ^unf^ varlist, [digits(num)]
+
+
+
+Description
+-----------
+
+Computes  the  Universal Numeric Fingerprints for a list of vectors.
+
+A universal numeric fingerprint is used to guarantee that a
+defined subset of data is substantively identical to a comparison
+subset. Two fingerprints will match if and only if the subset of
+data generating them are identical, when represented using a given
+number of significant digits.
+
+A UNF is created by rounding data values (or truncating strings) 
+to a known number of  digits (characters), representing those
+values in standard form (as 32bit unicode-formatted strings), and
+applying a fingerprinting method (such as cryptographic hashing
+function) to this representation.   UNF's are computed from data
+values provided by the statistical package, so they directly
+reflect the internal representation of the data -  the data as the
+statistical package interprets it.
+
+The unf plugin returns a character string representing the UNF computed from the
+data. For example: UNF:3:6:ZNQRI14053UZq389x0Bffg==
+
+This representation identifies the signature as a fingerprint,
+using version 3, of the algorithm,  computed to 6 significant
+digits. The segment following the final colon is the actual
+fingerprint in base64 encoded format.
+
+A UNF differs from an ordinary file checksum in several important
+ways:
+
+     1. _UNF's are format independent._  The UNF for the data will be
+     the same regardless of whether the data is saved as a R binary
+     format,  SAS formatted file, Stata formatted file, etc., but file
+     checksums will differ.
+
+     2. _UNF's are robust to insignificant rounding error._  A UNF will
+     also be the same if the data differs in non-significant digits, a
+     file checksum not.
+
+     3._UNF's detect misinterpretation of the data by the statistical
+     software._  If the statistical software misreads the file, the
+     resulting UNF will not match the original, but the file checksums
+     may match.
+
+     4._UNF's are strongly tamper resistant._ Any accidental or
+     intentional changes to the data values will change the resulting
+     UNF. Most file checksums's and  descriptive statistics detect only
+     certain types of changes. 
+
+UNF libraries are available for standalone use, for use in C++,
+and for use with other packages.
+
+Note: Because of limitations in stata's plugin architecture, it is
+not possible to compute a UNF for a 'string' variable within stata.
+
+To compute the UNF of a string variable run 
+^noisily clist variable_name, noheader noobs nodisplay^
+and process the resulting output with the standalone 'unfvector' program.
+
+Examples
+--------
+
+ . ^program unf, plugin^
+
+ . ^insheet mydata, clear^
+
+ . ^plugin call unf v1 v2 v3 v4^
+ 
+ . ^plugin call unf v5, digits(10)^
+
+
+Author
+------
+
+Micah Altman. See:
+
+     Altman, M., J. Gill and M. P. McDonald.  2003.  _Numerical Issues
+     in Statistical Computing for the Social Scientist_.  John Wiley &
+     Sons. <URL: http://www.hmdc.harvard.edu/numerical_issues/>
+
+
+Also see
+--------
+
+
+on-line: @http://www.hmdc.harvard.edu/numerical_issues/@
+

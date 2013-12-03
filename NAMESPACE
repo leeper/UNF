@@ -1,0 +1,8 @@
+#public methods
+export(unf,unf2base64,as.unf)
+export(signifz)
+# export methods subclassing other public methods
+S3method(summary, unf)
+S3method(print, unf)
+S3method("as.character", unf)
+useDynLib("UNF")
