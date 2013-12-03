@@ -1,22 +1,33 @@
 \name{unf}
 \alias{unf}
+\alias{unf3}
+\alias{unf4}
+\alias{unf5}
+\alias{print.UNF}
 \title{Universal Numeric Fingerprint}
 \description{
 A universal numeric fingerprint is used to guarantee that a defined subset of data is substantively identical to a comparison subset. Two fingerprints will match if and only if the subset of data generating them are identical, when represented using a given number of significant digits.
 }
 \usage{
-unf(x, digits = 7, chars = 128, ver = 5, ...)
+unf(x, ver = 5, ...)
+
+unf3(x, digits = 7, chars = 128, dvn = TRUE, ...)
+
+unf4(x, digits = 7, chars = 128, dvn = TRUE, ver = 4, ...)
+
+unf5(x, digits = 7, chars = 128, dvn = TRUE, ...)
 }
 
 \arguments{
 	\item{x}{A vector or data frame. For algorithm versions < 5, all non-numeric vectors are treated as character.}
+	\item{ver}{Version of the UNF algorithm. Allowed values are 3, 4, 4.1, and 5. Always use the same version of the algorithm to check a UNF. Default for \code{unf} is 5 and default for \code{unf4} is 4, but can also be set to 4.1.}
 	\item{digits}{The number of significant digits for rounding for numeric values. Default is 7.}
 	\item{chars}{The number of characters for truncation. Default is 128.}
-	\item{ver}{Version of the UNF algorithm. Allowed values are 3, 4, 4.1, and 5. Always use the same version of the algorithm to check a UNF.}
+    \item{dvn}{A logical indicating whether to use the Dataverse Network implementation of the UNF algorithm. Default is \code{TRUE}. See details.}
 	\item{\ldots}{Additional arguments passed to specific algorithm functions.}
 }
 \details{
-A UNF is created by rounding data values (or truncating strings) to a known number of digits (or characters), representing those values in standard form (as 8- or 32-bit unicode-formatted strings), and applying a fingerprinting method (a cryptographic hashing function) to this representation.  UNF's are computed from data values (independent of column arrangement for rectangular data), so they directly reflect the internal representation of the data.
+A UNF is created by rounding data values (or truncating strings) to a known number of digits (or characters), representing those values in standard form (as 8-bit [for versions 4.1 and 5] or 32-bit [for versions 3 and 4] unicode-formatted strings), and applying a fingerprinting method (a cryptographic hashing function) to this representation.  UNF's are computed from data values (independent of column arrangement for rectangular data), so they directly reflect the internal representation of the data.
 
 A UNF differs from an ordinary file checksum in several important ways:
 
@@ -27,6 +38,9 @@ A UNF differs from an ordinary file checksum in several important ways:
 3.\emph{UNF's detect misinterpretation of the data by the statistical software.} If the statistical software misreads the file, the resulting UNF will not match the original, but the file checksums may match.
 
 4.\emph{UNF's are strongly tamper resistant.} Any accidental or intentional changes to the data values will change the resulting UNF. Most file checksums's and descriptive statistics detect only certain types of changes. 
+
+
+Note: The Dataverse Network implements a potentially incorrect version of the UNF algorithm with regard to the handling of zero values and boolean FALSE values in data (though the specification is unclear). Setting the \code{dvn} argument to \code{TRUE} (the default), uses the Dataverse implementation (for comparison to files stored in that archive).
 }
 
 \value{
@@ -104,6 +118,51 @@ if (!unfTest(silent=FALSE)) {
 }
 
 }
+
+\examples{
+
+
+# Version 5 #
+## vectors
+
+### just numerics
+unf5(1:20) # UNF:5:/FIOZM/29oC3TK/IE52m2A==
+unf5(-3:3) # UNF:5:pwzm1tdPaqypPWRWDeW6Jw==
+
+# ???? SOMETHING ON NUMERIC PRECISION AND ROUNDING
+
+
+### characters and factors
+unf5(c('test','1','2','3')) # UNF:5:fH4NJMYkaAJ16OWMEE+zpQ==
+unf5(as.factor(c('test','1','2','3'))) # UNF:5:fH4NJMYkaAJ16OWMEE+zpQ==
+
+### booleans
+unf5(c(TRUE,TRUE,FALSE))# UNF:5:DedhGlU7W6o2CBelrIZ3iw==
+
+### dates
+# ????
+
+### bit-type
+
+### missing values
+unf5(c(1:5,NA)) # UNF:5:Msnz4m7QVvqBUWxxrE7kNQ==
+
+
+## dataframes (variable order is irrelevant)
+unf(data.frame(1:3,4:6,7:9)) # UNF:5:ukDZSJXck7fn4SlPJMPFTQ==
+unf(data.frame(7:9,1:3,4:6)) # UNF:5:ukDZSJXck7fn4SlPJMPFTQ==
+
+
+# Version 4 #
+unf4(1:20)
+
+
+# Version 3 #
+unf3(1:20) # HRSmPi9QZzlIA+KwmDNP8w==
+
+
+}
+
 
 \author{
 Thomas J. Leeper (\email{thosjleeper@gmail.com})

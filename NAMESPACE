@@ -1,3 +1,5 @@
 exportPattern("^[[:alpha:]]+")
 importFrom(digest, digest)
 importFrom(RCurl, base64Encode)
+
+S3method(print, UNF)
