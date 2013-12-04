@@ -1,4 +1,4 @@
-.signifz<-function(x,digits=6) {
+signifz<-function(x,digits=6) {
     if (class(x)=="data.frame") {
         ret <- sapply(x, signifz, digits=digits)
         rownames(ret)=rownames(x)
