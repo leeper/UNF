@@ -38,11 +38,16 @@ unf <- function(x, ver = 5, ...){
 }
 
 unf3 <- function(x, digits = 7, chars = 128, dvn=TRUE, ...){
-    if(is.numeric(x)){
+    if(inherits(x, 'AsIs'))
+        x <- as.character(x)
+    if(is.integer(x)){
         z <- signifz(x, digits)
         char <- .expform(z, digits)
-        if(dvn)
-            char <- ifelse(x==0, '+0.e-6\n', char) # https://redmine.hmdc.harvard.edu/issues/3085
+        char <- ifelse(x==0, '+0.e+\n', char) # dvn introduced 0-value bug after v3, apparently
+    } else if(is.numeric(x)){
+        z <- signifz(x, digits)
+        char <- .expform(z, digits)
+        char <- ifelse(x==0, '+0.e+\n', char) # dvn introduced 0-value bug after v3, apparently
     } else if(is.character(x)){
         # CHARACTER: truncate strings to k
         char <- paste(substring(x, 1, chars),'\n',sep='')
@@ -50,7 +55,7 @@ unf3 <- function(x, digits = 7, chars = 128, dvn=TRUE, ...){
         # FACTOR: treat factor as character and truncate to k
         char <- paste(substring(as.character(x), 1, chars),'\n',sep='')
     } 
-
+    
     # deal with non-finite and missing values
     char <- .nonfinite(x, char, dvn)
     
@@ -70,6 +75,8 @@ unf3 <- function(x, digits = 7, chars = 128, dvn=TRUE, ...){
 }
 
 unf4 <- function(x, digits = 7, chars = 128, dvn=TRUE, ver=4, ...){
+    if(inherits(x, 'AsIs'))
+        x <- as.character(x)
     if(is.numeric(x)){
         # NUMERICS:
         z <- signifz(x, digits)
@@ -113,7 +120,8 @@ unf4 <- function(x, digits = 7, chars = 128, dvn=TRUE, ver=4, ...){
 }
 
 unf5 <- function(x, digits = 7, chars = 128, dvn = TRUE, ...){
-    # dvn TRUE argument validates against DVN implementation (not the UNF standard)
+    if(inherits(x, 'AsIs'))
+        x <- as.character(x)
     if(is.character(x)){
         # CHARACTER: truncate strings to k
         char <- paste(substring(x, 1, chars),'\n',sep='')

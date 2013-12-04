@@ -128,6 +128,8 @@ unf(longley, ver=4.1, digits=3) # 8nzEDWbNacXlv5Zypp+3YCQgMao/eNusOv/u5GmBj9I=
 
 # Version 3 #
 
+# http://thedata.harvard.edu/dvn/dv/lzeng/faces/study/StudyPage.xhtml?studyId=161&versionNumber=2
+# http://thedata.harvard.edu/dvn/faces/study/StudyPage.xhtml?globalId=hdl:1902.1/11171&studyListingIndex=5_9d40025776eb558fb1c9646a7a02
 
 x1 <- 1:20
 x2 <- x1 + .00001
@@ -143,9 +145,8 @@ identical(unf3(x1, digits=5),unf3(x2, digits=5))
 unf(cbind.data.frame(x1,x2),ver=3)
 unf(list(x1,x2), ver=3)
 unf(cbind(x1,x2), ver=3)
+
 }
-
-
 \author{
 Thomas J. Leeper (\email{thosjleeper@gmail.com})
 
