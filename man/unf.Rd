@@ -19,27 +19,14 @@ unf5(x, digits = 7, chars = 128, dvn = TRUE, ...)
 }
 
 \arguments{
-	\item{x}{A vector or data frame. For algorithm versions < 5, all non-numeric vectors are treated as character.}
+	\item{x}{A vector, matrix, dataframe, or list. If \code{x} is a dataframe or list with one variable or one vector element, respectively, \code{unf} returns the UNF for the single vector (which is consistent with the Dataverse implementation but ambiguous in the UNF standard). For algorithm versions < 5, all non-numeric vectors are treated as character.}
 	\item{ver}{Version of the UNF algorithm. Allowed values are 3, 4, 4.1, and 5. Always use the same version of the algorithm to check a UNF. Default for \code{unf} is 5 and default for \code{unf4} is 4, but can also be set to 4.1.}
-	\item{digits}{The number of significant digits for rounding for numeric values. Default is 7.}
-	\item{chars}{The number of characters for truncation. Default is 128.}
+	\item{digits}{The number of significant digits for rounding for numeric values. Default is 7. Should be between 1 and 15.}
+	\item{chars}{The number of characters for truncation. Default is 128. Should be greater than 1.}
     \item{dvn}{A logical indicating whether to use the Dataverse Network implementation of the UNF algorithm. Default is \code{TRUE}. See details.}
 	\item{\ldots}{Additional arguments passed to specific algorithm functions.}
 }
 \details{
-A UNF is created by rounding data values (or truncating strings) to a known number of digits (or characters), representing those values in standard form (as 8-bit [for versions 4.1 and 5] or 32-bit [for versions 3 and 4] unicode-formatted strings), and applying a fingerprinting method (a cryptographic hashing function) to this representation.  UNF's are computed from data values (independent of column arrangement for rectangular data), so they directly reflect the internal representation of the data.
-
-A UNF differs from an ordinary file checksum in several important ways:
-
-1. \emph{UNF's are format independent.}  The UNF for the data will be the same regardless of whether the data is saved as a R binary format, SAS formatted file, Stata formatted file, etc., but file checksums will differ.
-
-2. \emph{UNF's are robust to insignificant rounding error.} A UNF will also be the same if the data differs in non-significant digits, a file checksum not.
-
-3.\emph{UNF's detect misinterpretation of the data by the statistical software.} If the statistical software misreads the file, the resulting UNF will not match the original, but the file checksums may match.
-
-4.\emph{UNF's are strongly tamper resistant.} Any accidental or intentional changes to the data values will change the resulting UNF. Most file checksums's and descriptive statistics detect only certain types of changes. 
-
-
 Note: The Dataverse Network implements a potentially incorrect version of the UNF algorithm with regard to the handling of zero values and boolean FALSE values in data (though the specification is unclear). Setting the \code{dvn} argument to \code{TRUE} (the default), uses the Dataverse implementation (for comparison to files stored in that archive).
 }
 
@@ -59,68 +46,17 @@ Note: to compare two UNF's, or sets of unfs, one often wants to compare only the
 
 Altman, M., J. Gill and M. P. McDonald.  2003.  \emph{Numerical Issues in Statistical
 Computing for the Social Scientist}.  John Wiley \& Sons.
-\url{http://www.hmdc.harvard.edu/numerical_issues/} [Defining the algorithm]
+\url{http://www.hmdc.harvard.edu/numerical_issues/} [Version 3 of the algorithm]
 
 Altman, M., \& G. King. 2007. A Proposed Standard for the Scholarly Citation of Quantitative Data.
 \emph{D-Lib} 13(3/4).
 \url{http://dlib.org/dlib/march07/altman/03altman.html} [Citation standard using UNF's]
+
+Altman, M. 2008. A Fingerprint Method for Scientiﬁc Data Veriﬁcation. In T. Sobh, editor, Advances
+in Computer and Information Sciences and Engineering, chapter 57, pages 311—-316. Springer
+Netherlands, Netherlands, 2008. \url{http://link.springer.com/chapter/10.1007/978-1-4020-8741-7_57} [Version 5 of the algorithm]
 }
-
-
 \examples{
-# simple example
-v=1:100/10 +.0111 
-vr=signif(v,digits=2)
-
-# print.unf shows in  standard format, including version and digits
-print(unf(v))
-
-# as.character will return base64 section only for comparisons
-as.character(unf(v))
-
-# this is false,  since computed  base64 values UNF's differ
-unf2base64(unf(v))==unf2base64(unf(vr))
-
-# this is true,  since computed UNF's base64 values are the same at 2 significant digits
-unf2base64(unf(v, digits=2))==unf2base64(unf(vr))
-
-# WARNING: this is false, since UNF's values are the same, but 
-# number of calculated digits differ , probably not the comparison
-# you intend
-
-identical(unf(v,digits=2),unf(vr))
-
-# compute a fingerprint of longley at 10 significant digits of accuracy for numeric values
-# this fingerprint can be stored and verified when reading the dataset
-# later
-data(longley)
-mf10<-unf(longley,ndigits=10);
-
-# this produces the same results as using signifz(), but not signif()
-mf11<-unf(signifz(longley,digits=10))
-
-unf2base64(mf11)==unf2base64(mf10)
-
-#printable representation, prints seven UNF's, one for each vector
-print(mf10)
-
-#  summarizes the base64 portion of the unf for each vector into a 
-# single  base64 UNF representing entire dataset
-summary(mf10)
-\dontshow{
-#self test
-
-unfTest=get("unfTest",envir=environment(unf))
-if (!unfTest(silent=FALSE)) {
-	stop("failed self tests")
-}
-
-}
-
-}
-
-\examples{
-
 
 # Version 5 #
 ## vectors
@@ -154,13 +90,49 @@ unf(data.frame(7:9,1:3,4:6)) # UNF:5:ukDZSJXck7fn4SlPJMPFTQ==
 
 
 # Version 4 #
-unf4(1:20)
+longley <-
+structure(list(GNP.deflator = c(83, 88.5, 88.2, 89.5, 96.2, 98.1, 
+99, 100, 101.2, 104.6, 108.4, 110.8, 112.6, 114.2, 115.7, 116.9
+), GNP = c(234.289, 259.426, 258.054, 284.599, 328.975, 346.999, 
+365.385, 363.112, 397.469, 419.18, 442.769, 444.546, 482.704, 
+502.601, 518.173, 554.894), Unemployed = c(235.6, 232.5, 368.2, 
+335.1, 209.9, 193.2, 187, 357.8, 290.4, 282.2, 293.6, 468.1, 
+381.3, 393.1, 480.6, 400.7), Armed.Forces = c(159, 145.6, 161.6, 
+165, 309.9, 359.4, 354.7, 335, 304.8, 285.7, 279.8, 263.7, 255.2, 
+251.4, 257.2, 282.7), Population = c(107.608, 108.632, 109.773, 
+110.929, 112.075, 113.27, 115.094, 116.219, 117.388, 118.734, 
+120.445, 121.95, 123.366, 125.368, 127.852, 130.081), Year = as.integer(c(1947, 
+1948, 1949, 1950, 1951, 1952, 1953, 1954, 1955, 1956, 1957, 1958, 
+1959, 1960, 1961, 1962)), Employed = c(60.323, 61.122, 60.171, 
+61.187, 63.221, 63.639, 64.989, 63.761, 66.019, 67.857, 68.169, 
+66.513, 68.655, 69.564, 69.331, 70.551)), .Names = c("GNP.deflator", 
+"GNP", "Unemployed", "Armed.Forces", "Population", "Year", "Employed"
+), row.names = c("1947", "1948", "1949", "1950", "1951", "1952", 
+"1953", "1954", "1955", "1956", "1957", "1958", "1959", "1960", 
+"1961", "1962"), class = "data.frame")
+
+unf(longley, ver=4, digits=3) # PjAV6/R6Kdg0urKrDVDzfMPWJrsBn5FfOdZVr9W8Ybg=
+
+unf(longley, ver=4.1, digits=3) # 8nzEDWbNacXlv5Zypp+3YCQgMao/eNusOv/u5GmBj9I=
 
 
 # Version 3 #
-unf3(1:20) # HRSmPi9QZzlIA+KwmDNP8w==
 
 
+x1 <- 1:20
+x2 <- x1 + .00001
+
+unf3(x1) # HRSmPi9QZzlIA+KwmDNP8w==
+
+# UNFs are identical at specified level of rounding
+identical(unf3(x1), unf3(x2))
+identical(unf3(x1, digits=5),unf3(x2, digits=5))
+
+# dataframes, matrices, and lists are all treated identically:
+# E8+DS5SG4CSoM7j8KAkC9A== # ????
+unf(cbind.data.frame(x1,x2),ver=3)
+unf(list(x1,x2), ver=3)
+unf(cbind(x1,x2), ver=3)
 }
 
 

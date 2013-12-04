@@ -1,25 +1,28 @@
 unf <- function(x, ver = 5, ...){
-    if(is.data.frame(x)){
+    if(is.matrix(x))
+        x <- as.data.frame(x)
+    if((is.data.frame(x) | is.list(x)) & length(x)==1)
+        x <- x[[1]]
+    if(is.data.frame(x) | is.list(x)){
         locale <- Sys.getlocale(category="LC_COLLATE")
         Sys.setlocale(category="LC_COLLATE", "C")
-        # Calculate the UNF for each lower-level data object, using a consistent UNF version and level of precision across the individual UNFs being combined.
-        # Sort the base64 representation of UNFs in POSIX locale sort order.
-        # Apply the UNF algorithm to the resulting vector of character strings using k at least as large as the length of the underlying character string.
-        # Combine UNFs from multiple variables to form a single UNF for an entire data frame, and then combine UNFs for a set of data frames to form a single UNF that represents an entire research study.        
+        # Apply UNF to each vector, base64 encode, sort, and apply UNF on that vector of UNFs
         if(ver==3){
-            vars <- sort(sapply(x, function(i) unf3(i, ...)))
-            out <- unf3(vars)
+            vars <- sapply(x, function(i) unf3(i, ...)$unf)
+            out <- unf3(sort(vars), ...)
         } else if(ver==4){
-            vars <- sort(sapply(x, function(i) unf4(i, ...)))
-            out <- unf4(vars)
+            vars <- sapply(x, function(i) unf4(i, ...)$unf)
+            out <- unf4(sort(vars), ...)
         } else if(ver==4.1){
-            vars <- sort(sapply(x, function(i) unf5(i, ver=4.1, ...)))
-            out <- unf4(vars, ver=4.1)
+            vars <- sapply(x, function(i) unf5(i, ver = 4.1, ...)$unflong)
+            out <- unf4(sort(vars), ver = 4.1, ...)
         } else if(ver==5){
-            vars <- sort(sapply(x, function(i) unf5(i, ...)))
-            out <- unf5(vars)
+            vars <- sapply(x, function(i) unf5(i, ...)$unf)
+            out <- unf5(sort(vars), ...)
         }
         Sys.setlocale(category="LC_COLLATE", locale)
+        out$variables <- vars
+        return(out)
     } else {
         if(ver==3){
             out <- unf3(x, ...)
@@ -30,13 +33,13 @@ unf <- function(x, ver = 5, ...){
         } else if(ver==5){
             out <- unf5(x, ...)
         }
+        return(out)
     }
-    return(out)
 }
 
 unf3 <- function(x, digits = 7, chars = 128, dvn=TRUE, ...){
     if(is.numeric(x)){
-        z <- .signifz(x, digits)
+        z <- signifz(x, digits)
         char <- .expform(z, digits)
         if(dvn)
             char <- ifelse(x==0, '+0.e-6\n', char) # https://redmine.hmdc.harvard.edu/issues/3085
@@ -49,17 +52,16 @@ unf3 <- function(x, digits = 7, chars = 128, dvn=TRUE, ...){
     } 
 
     # deal with non-finite and missing values
-    char <- ifelse((!is.finite(x) & !is.character(x)),tolower(as.character(x)),char)
-    char <- ifelse(char=='inf', '+inf', char)
-    char <- ifelse(is.nan(x), '+nan', char)
-    char <- ifelse(is.na(x) & !is.nan(x), NA, char)
+    char <- .nonfinite(x, char, dvn)
     
     eol <- intToBits(0)[1]
     unicode <- iconv(char, to='UTF-32BE', toRaw=TRUE)
     out <- unlist(lapply(unicode, function(i) if(is.null(i)) intToBits(0)[1:3] else c(i,eol))) # NA handling and nul byte appending
     
-    encoded <- base64Encode(digest(out, algo='md5', serialize=FALSE, raw=TRUE))
-    out <- as.character(encoded)
+    hash <- digest(out, algo='md5', serialize=FALSE, raw=TRUE)
+    encoded <- base64Encode(hash)
+    out <- list(unf = as.character(encoded),
+                hash = as.character(hash))
     class(out) <- c('UNF')
     attr(out, 'version') <- 3
     return(out)
@@ -68,7 +70,7 @@ unf3 <- function(x, digits = 7, chars = 128, dvn=TRUE, ...){
 unf4 <- function(x, digits = 7, chars = 128, dvn=TRUE, ver=4, ...){
     if(is.numeric(x)){
         # NUMERICS:
-        z <- .signifz(x, digits)
+        z <- signifz(x, digits)
         char <- .expform(z, digits)
         if(dvn)
             char <- ifelse(x==0, '+0.e-6\n', char) # https://redmine.hmdc.harvard.edu/issues/3085
@@ -81,10 +83,7 @@ unf4 <- function(x, digits = 7, chars = 128, dvn=TRUE, ver=4, ...){
     } 
 
     # deal with non-finite and missing values
-    char <- ifelse((!is.finite(x) & !is.character(x)),tolower(as.character(x)),char)
-    char <- ifelse(char=='inf', '+inf', char)
-    char <- ifelse(is.nan(x), '+nan', char)
-    char <- ifelse(is.na(x) & !is.nan(x), NA, char)
+    char <- .nonfinite(x, char, dvn)
     
     eol <- intToBits(0)[1]
     if(ver==4)
@@ -93,8 +92,18 @@ unf4 <- function(x, digits = 7, chars = 128, dvn=TRUE, ver=4, ...){
         unicode <- iconv(char, to='UTF-8', toRaw=TRUE) # v4.1 uses UTF-8
     out <- unlist(lapply(unicode, function(i) if(is.null(i)) intToBits(0)[1:3] else c(i,eol))) # NA handling and nul byte appending
     
-    encoded <- base64Encode(digest(out, algo='sha256', serialize=FALSE, raw=TRUE))
-    out <- as.character(encoded)
+    hash <- digest(out, algo='sha256', serialize=FALSE, raw=TRUE)
+    if(ver==4){
+        encoded <- base64Encode(hash)
+        out <- list(unf = as.character(encoded),
+                    hash = as.character(hash))
+    } else {
+        long <- base64Encode(hash)
+        short <- base64Encode(hash[1:16])
+        out <- list(unf = as.character(long),
+                    hash = as.character(hash),
+                    unflong = as.character(long))
+    }
     class(out) <- c('UNF')
     attr(out, 'version') <- ver
     return(out)
@@ -138,24 +147,19 @@ unf5 <- function(x, digits = 7, chars = 128, dvn = TRUE, ...){
     # https://redmine.hmdc.harvard.edu/issues/2997
     
     # deal with non-finite and missing values
-    char <- ifelse((!is.finite(x) & !is.character(x)),tolower(as.character(x)),char)
-    char <- ifelse(char=='inf', '+inf', char)
-    char <- ifelse(is.nan(x), '+nan', char)
-    char <- ifelse(is.na(x) & !is.nan(x), NA, char)
+    char <- .nonfinite(x, char, dvn)
     
-    # Encode each character string with Unicode bit encoding. Version 5 uses UTF-8.
-    # Combine the vector of character strings into a single sequence, with each character string separated by a POSIX end-of-line character and a null byte.
     eol <- intToBits(0)[1]
     unicode <- iconv(char, to='UTF-8', toRaw=TRUE)
     out <- unlist(lapply(unicode, function(i) if(is.null(i)) intToBits(0)[1:3] else c(i,eol))) # NA handling and nul byte appending
     
-    # Compute a hash on the resulting sequence using the standard SHA256 hashing algorithm. The resulting hash is base64 encoded to support readability.
     hash <- digest(out, algo='sha256', serialize=FALSE, raw=TRUE)
     long <- base64Encode(hash)
     short <- base64Encode(hash[1:16]) # truncated UNF
     
-    encoded <- short
-    out <- as.character(encoded)
+    out <- list(unf = as.character(short),
+                hash = as.character(hash),
+                unflong = as.character(long))
     class(out) <- c('UNF')
     attr(out, 'version') <- 5
     return(out)
@@ -166,5 +170,5 @@ print.UNF <- function(x, ...){
         cat('Universal Numeric Fingerprint: ')
     else
         cat('Universal Numeric Fingerprint (Truncated): ')
-    cat(paste('UNF',attr(x, 'version'),x,sep=':'),'\n')
+    cat(paste('UNF',attr(x, 'version'),x$unf,sep=':'),'\n')
 }
