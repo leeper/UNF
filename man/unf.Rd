@@ -31,14 +31,22 @@ Note: The Dataverse Network implements a potentially incorrect version of the UN
 }
 
 \value{
-The \code{unf} function returns a UNF object which can be converted using \code{as.character} to a signature string.
+The \code{unf} function returns a list of class \code{UNF}, containing:
+\item{unf}{A character string containing the universal numeric fingerprint.}
+\item{hash}{A raw vector expressing the unencoded universal numeric fingerprint. This can be converted to a UNF using \code{base64Encode}.}
+\item{unflong}{For \code{unf5}, a character string containing the un-truncated universal numeric fingerprint.}
 
-For example:
-	UNF:3:10,128:ZNQRI14053UZq389x0Bffg==
+The object additionally contains several attributes:
 
-This representation identifies the signature as a fingerprint, using version 3 of the algorithm, computed to 10 significant digits for numbers and 128 for characters. The segment following the final colon is the actual fingerprint in base64 encoded format.
+\item{version}{A one-element numeric vector specifying which version of the UNF algorithm was used to generate the object.}
+\item{digits}{A one-element numeric vector specifying how many significant digits were used in rounding numeric values.}
+\item{characters}{A one-element numeric vector specifying how many characters were preserved during truncation of character values.}
 
-Note: to compare two UNF's, or sets of unfs, one often wants to compare only the base64 portion. 
+The default print method displays the UNF along with these attributes. For example:
+
+UNF:3:10,128:ZNQRI14053UZq389x0Bffg==
+
+This representation identifies the signature as UNF, using version 3 of the algorithm, computed to 10 significant digits for numbers and 128 for characters. The segment following the final colon is the actual fingerprint in base64-encoded format.
 }
 
 \references{

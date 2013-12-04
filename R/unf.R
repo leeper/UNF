@@ -64,6 +64,8 @@ unf3 <- function(x, digits = 7, chars = 128, dvn=TRUE, ...){
                 hash = hash)
     class(out) <- c('UNF')
     attr(out, 'version') <- 3
+    attr(out, 'digits') <- digits
+    attr(out, 'characters') <- chars
     return(out)
 }
 
@@ -101,12 +103,12 @@ unf4 <- function(x, digits = 7, chars = 128, dvn=TRUE, ver=4, ...){
         long <- base64Encode(hash)
         short <- base64Encode(hash[1:16])
         out <- list(unf = as.character(long),
-                    hash = hash,
-                    unflong = as.character(long),
-                    unfshort = as.character(short))
+                    hash = hash)
     }
     class(out) <- c('UNF')
     attr(out, 'version') <- ver
+    attr(out, 'digits') <- digits
+    attr(out, 'characters') <- chars
     return(out)
 }
 
@@ -163,6 +165,8 @@ unf5 <- function(x, digits = 7, chars = 128, dvn = TRUE, ...){
                 unflong = as.character(long))
     class(out) <- c('UNF')
     attr(out, 'version') <- 5
+    attr(out, 'digits') <- digits
+    attr(out, 'characters') <- chars
     return(out)
 }
 
@@ -171,5 +175,10 @@ print.UNF <- function(x, ...){
         cat('Universal Numeric Fingerprint: ')
     else
         cat('Universal Numeric Fingerprint (Truncated): ')
-    cat(paste('UNF',attr(x, 'version'),x$unf,sep=':'),'\n')
+    if(attr(x,'digits')!=7 | attr(x,'characters')!=128)
+        cat(paste('UNF',attr(x, 'version'),
+            paste(attr(x,'digits'),attr(x,'characters'),sep=','),
+            x$unf,sep=':'),'\n')
+    else
+        cat(paste('UNF',attr(x, 'version'), x$unf,sep=':'),'\n')
 }
