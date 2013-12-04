@@ -8,6 +8,7 @@ Authors@R: c(person("Thomas", "Leeper", role = c("aut"),
 Description: Computes a univeral numeric fingerprint of vectors and dataframes.
 Maintainer: Thomas J. Leeper <thosjleeper@gmail.com>
 Depends: R (>= 2.0)
+Imports: RCurl, digest
 License: GPL 2.0
 URL: https://github.com/leeper/UNF
 BugReports: https://github.com/leeper/UNF/issues
