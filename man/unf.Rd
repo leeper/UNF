@@ -111,8 +111,10 @@ structure(list(GNP.deflator = c(83, 88.5, 88.2, 89.5, 96.2, 98.1,
 "1953", "1954", "1955", "1956", "1957", "1958", "1959", "1960", 
 "1961", "1962"), class = "data.frame")
 
+# version 4
 unf(longley, ver=4, digits=3) # PjAV6/R6Kdg0urKrDVDzfMPWJrsBn5FfOdZVr9W8Ybg=
 
+# version 4.1
 unf(longley, ver=4.1, digits=3) # 8nzEDWbNacXlv5Zypp+3YCQgMao/eNusOv/u5GmBj9I=
 
 

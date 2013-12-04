@@ -14,7 +14,7 @@ unf <- function(x, ver = 5, ...){
             vars <- sapply(x, function(i) unf4(i, ...)$unf)
             out <- unf4(sort(vars), ...)
         } else if(ver==4.1){
-            vars <- sapply(x, function(i) unf5(i, ver = 4.1, ...)$unflong)
+            vars <- sapply(x, function(i) unf4(i, ver = 4.1, ...)$unf)
             out <- unf4(sort(vars), ver = 4.1, ...)
         } else if(ver==5){
             vars <- sapply(x, function(i) unf5(i, ...)$unf)
@@ -61,7 +61,7 @@ unf3 <- function(x, digits = 7, chars = 128, dvn=TRUE, ...){
     hash <- digest(out, algo='md5', serialize=FALSE, raw=TRUE)
     encoded <- base64Encode(hash)
     out <- list(unf = as.character(encoded),
-                hash = as.character(hash))
+                hash = hash)
     class(out) <- c('UNF')
     attr(out, 'version') <- 3
     return(out)
@@ -96,13 +96,14 @@ unf4 <- function(x, digits = 7, chars = 128, dvn=TRUE, ver=4, ...){
     if(ver==4){
         encoded <- base64Encode(hash)
         out <- list(unf = as.character(encoded),
-                    hash = as.character(hash))
+                    hash = hash)
     } else {
         long <- base64Encode(hash)
         short <- base64Encode(hash[1:16])
         out <- list(unf = as.character(long),
-                    hash = as.character(hash),
-                    unflong = as.character(long))
+                    hash = hash,
+                    unflong = as.character(long),
+                    unfshort = as.character(short))
     }
     class(out) <- c('UNF')
     attr(out, 'version') <- ver
@@ -158,7 +159,7 @@ unf5 <- function(x, digits = 7, chars = 128, dvn = TRUE, ...){
     short <- base64Encode(hash[1:16]) # truncated UNF
     
     out <- list(unf = as.character(short),
-                hash = as.character(hash),
+                hash = hash,
                 unflong = as.character(long))
     class(out) <- c('UNF')
     attr(out, 'version') <- 5
