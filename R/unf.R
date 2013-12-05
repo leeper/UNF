@@ -130,8 +130,15 @@ unf5 <- function(x, digits = 7, chars = 128, dvn = TRUE, ...){
         char <- paste(substring(as.character(x), 1, chars),'\n',sep='')
     } else if(is.numeric(x)){
         # NUMERICS: round to nearest, ties to even
-        char <- round(x, digits)
-        char <- .expform(char, digits)
+        if(dvn){
+            # DVN mishandles this, but it's not exactly clear what it does wrong:
+            # https://redmine.hmdc.harvard.edu/issues/3085
+            char <- round(x, digits)
+            char <- .expform(char, digits)
+        } else{
+            char <- round(x, digits)
+            char <- .expform(char, digits)
+        }
         if(dvn)
             char <- ifelse(x==0, '+0.e-6\n', char) # https://redmine.hmdc.harvard.edu/issues/3085
     } else if(is.logical(x)){
@@ -158,6 +165,8 @@ unf5 <- function(x, digits = 7, chars = 128, dvn = TRUE, ...){
     # https://redmine.hmdc.harvard.edu/issues/2997
     
     # deal with non-finite and missing values
+    # https://redmine.hmdc.harvard.edu/issues/2867
+    # https://redmine.hmdc.harvard.edu/issues/2960
     char <- .nonfinite(x, char, dvn)
     
     eol <- intToBits(0)[1]

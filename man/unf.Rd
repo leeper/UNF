@@ -5,9 +5,7 @@
 \alias{unf5}
 \alias{print.UNF}
 \title{Universal Numeric Fingerprint}
-\description{
-A universal numeric fingerprint is used to guarantee that a defined subset of data is substantively identical to a comparison subset. Two fingerprints will match if and only if the subset of data generating them are identical, when represented using a given number of significant digits.
-}
+\description{A universal numeric fingerprint is used to guarantee that a defined subset of data is substantively identical to a comparison subset. Two fingerprints will match if and only if the subset of data generating them are identical, when represented using a given number of significant digits.}
 \usage{
 unf(x, ver = 5, ...)
 
@@ -19,15 +17,15 @@ unf5(x, digits = 7, chars = 128, dvn = TRUE, ...)
 }
 
 \arguments{
-	\item{x}{A vector, matrix, dataframe, or list. If \code{x} is a dataframe or list with one variable or one vector element, respectively, \code{unf} returns the UNF for the single vector (which is consistent with the Dataverse implementation but ambiguous in the UNF standard). For algorithm versions < 5, all non-numeric vectors are treated as character.}
-	\item{ver}{Version of the UNF algorithm. Allowed values are 3, 4, 4.1, and 5. Always use the same version of the algorithm to check a UNF. Default for \code{unf} is 5 and default for \code{unf4} is 4, but can also be set to 4.1.}
+	\item{x}{For \code{unf}, a vector, matrix, dataframe, or list; for \code{unf3}, \code{unf4}, \code{unf5}, a vector. If \code{x} is a dataframe or list with one variable or one vector element, respectively, \code{unf} returns the UNF for the single vector (which is consistent with the Dataverse implementation but ambiguous in the UNF standard). For algorithm versions < 5, all non-numeric vectors are treated as character.}
+	\item{ver}{Version of the UNF algorithm. Allowed values are 3, 4, 4.1, and 5. Always use the same version of the algorithm to check a UNF. Default for \code{unf} is 5 and default for \code{unf4} is 4 (but can also be set to 4.1, which is identical except for using SHA256 instead of MD5).}
 	\item{digits}{The number of significant digits for rounding for numeric values. Default is 7. Should be between 1 and 15.}
 	\item{chars}{The number of characters for truncation. Default is 128. Should be greater than 1.}
     \item{dvn}{A logical indicating whether to use the Dataverse Network implementation of the UNF algorithm. Default is \code{TRUE}. See details.}
 	\item{\ldots}{Additional arguments passed to specific algorithm functions.}
 }
 \details{
-Note: The Dataverse Network implements a potentially incorrect version of the UNF algorithm with regard to the handling of zero values and boolean FALSE values in data (though the specification is unclear). Setting the \code{dvn} argument to \code{TRUE} (the default), uses the Dataverse implementation (for comparison to files stored in that archive).
+The Dataverse Network implements a potentially incorrect version of the UNF algorithm with regard to the handling of zero values and boolean FALSE values in data (though the specification is unclear). Setting the \code{dvn} argument to \code{TRUE} (the default), uses the Dataverse implementation (for comparison to files stored in that archive).
 }
 
 \value{
@@ -128,9 +126,6 @@ unf(longley, ver=4.1, digits=3) # 8nzEDWbNacXlv5Zypp+3YCQgMao/eNusOv/u5GmBj9I=
 
 # Version 3 #
 
-# http://thedata.harvard.edu/dvn/dv/lzeng/faces/study/StudyPage.xhtml?studyId=161&versionNumber=2
-# http://thedata.harvard.edu/dvn/faces/study/StudyPage.xhtml?globalId=hdl:1902.1/11171&studyListingIndex=5_9d40025776eb558fb1c9646a7a02
-
 x1 <- 1:20
 x2 <- x1 + .00001
 
@@ -148,8 +143,7 @@ unf(cbind(x1,x2), ver=3)
 
 }
 \author{
-Thomas J. Leeper (\email{thosjleeper@gmail.com})
-
-Original algorithm and R implementation by Micah Altman (\email{Micah\_Altman@harvard.edu})
+    Current implementation by Thomas J. Leeper (\email{thosjleeper@gmail.com}).
+    Original algorithm and R implementation by Micah Altman.
 }
 %\keyword{}
