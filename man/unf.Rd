@@ -59,7 +59,7 @@ Altman, M., \& G. King. 2007. A Proposed Standard for the Scholarly Citation of 
 \url{http://dlib.org/dlib/march07/altman/03altman.html} [Citation standard using UNF's]
 
 Altman, M. 2008. A Fingerprint Method for Scientiﬁc Data Veriﬁcation. In T. Sobh, editor, Advances
-in Computer and Information Sciences and Engineering, chapter 57, pages 311—-316. Springer
+in Computer and Information Sciences and Engineering, chapter 57, pages 311--316. Springer
 Netherlands, Netherlands, 2008. \url{http://link.springer.com/chapter/10.1007/978-1-4020-8741-7_57} [Version 5 of the algorithm]
 }
 \examples{
