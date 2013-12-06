@@ -14,7 +14,7 @@ The UNF algorithm is described in general terms [here](http://thedata.org/book/u
 
 3. Convert numerics to an exponential notation (see links to specific implementations for details).
 
-    Importantly, note that the [Dataverse](http://thedata.org) implementation of UNF represents zero values (and boolean FALSE) values as "+0.e-6" rather than the implied "+0.e+" (like boolean TRUE values: "+1.e+"). The issue is described [here](https://redmine.hmdc.harvard.edu/issues/3085).
+    Importantly, note that the [Dataverse](http://thedata.org) implementation of UNFv5 represents zero values (and boolean FALSE) values as "+0.e-6" rather than the implied "+0.e+" (like boolean TRUE values: "+1.e+"). The issue is described [here](https://redmine.hmdc.harvard.edu/issues/3085).
 
 4. Handle non-finite values as special character strings (see [here](https://redmine.hmdc.harvard.edu/issues/2960) for some notes). (Dataverse appears to handle non-finites by treating them as missing.)
 

@@ -71,9 +71,6 @@ Netherlands, Netherlands, 2008. \url{http://link.springer.com/chapter/10.1007/97
 unf5(1:20) # UNF:5:/FIOZM/29oC3TK/IE52m2A==
 unf5(-3:3) # UNF:5:pwzm1tdPaqypPWRWDeW6Jw==
 
-# ???? SOMETHING ON NUMERIC PRECISION AND ROUNDING
-
-
 ### characters and factors
 unf5(c('test','1','2','3')) # UNF:5:fH4NJMYkaAJ16OWMEE+zpQ==
 unf5(as.factor(c('test','1','2','3'))) # UNF:5:fH4NJMYkaAJ16OWMEE+zpQ==
@@ -89,10 +86,10 @@ unf5(c(TRUE,TRUE,FALSE))# UNF:5:DedhGlU7W6o2CBelrIZ3iw==
 ### missing values
 unf5(c(1:5,NA)) # UNF:5:Msnz4m7QVvqBUWxxrE7kNQ==
 
-
-## dataframes (variable order is irrelevant)
+## variable order and object structure is irrelevant
 unf(data.frame(1:3,4:6,7:9)) # UNF:5:ukDZSJXck7fn4SlPJMPFTQ==
-unf(data.frame(7:9,1:3,4:6)) # UNF:5:ukDZSJXck7fn4SlPJMPFTQ==
+unf(data.frame(7:9,1:3,4:6))
+unf(list(1:3,4:6,7:9))
 
 
 # Version 4 #
@@ -137,8 +134,7 @@ identical(unf3(x1), unf3(x2))
 identical(unf3(x1, digits=5),unf3(x2, digits=5))
 
 # dataframes, matrices, and lists are all treated identically:
-# E8+DS5SG4CSoM7j8KAkC9A==
-unf(cbind.data.frame(x1,x2),ver=3)
+unf(cbind.data.frame(x1,x2),ver=3) # E8+DS5SG4CSoM7j8KAkC9A==
 unf(list(x1,x2), ver=3)
 unf(cbind(x1,x2), ver=3)
 
