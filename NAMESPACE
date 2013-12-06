@@ -1,5 +1,5 @@
 exportPattern("^[[:alpha:]]+")
 importFrom(digest, digest)
 importFrom(RCurl, base64Encode)
-
+importFrom(tools, md5sum)
 S3method(print, UNF)
