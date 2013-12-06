@@ -41,12 +41,12 @@ unf3 <- function(x, digits = 7, chars = 128, dvn=TRUE, ...){
     if(inherits(x, 'AsIs'))
         x <- as.character(x)
     if(is.integer(x)){
-        z <- signifz(x, digits)
-        char <- .expform(z, digits)
+        rounded <- signif(x, digits) # uses standard signif rounding, despite standard
+        char <- .expform(rounded, digits)
         char <- ifelse(x==0, '+0.e+\n', char) # dvn introduced 0-value bug after v3, apparently
     } else if(is.numeric(x)){
-        z <- signifz(x, digits)
-        char <- .expform(z, digits)
+        rounded <- signif(x, digits) # uses standard signif rounding, despite standard
+        char <- .expform(rounded, digits)
         char <- ifelse(x==0, '+0.e+\n', char) # dvn introduced 0-value bug after v3, apparently
     } else if(is.character(x)){
         # CHARACTER: truncate strings to k
@@ -74,13 +74,13 @@ unf3 <- function(x, digits = 7, chars = 128, dvn=TRUE, ...){
     return(out)
 }
 
-unf4 <- function(x, digits = 7, chars = 128, dvn=TRUE, ver=4, ...){
+unf4 <- function(x, digits = 8, chars = 128, dvn=TRUE, ver=4, ...){
     if(inherits(x, 'AsIs'))
         x <- as.character(x)
     if(is.numeric(x)){
         # NUMERICS:
-        z <- signifz(x, digits)
-        char <- .expform(z, digits)
+        rounded <- signifz(x, digits) # uses non-standard signifz rounding
+        char <- .expform(rounded, digits)
         if(dvn)
             char <- ifelse(x==0, '+0.e-6\n', char) # https://redmine.hmdc.harvard.edu/issues/3085
     } else if(is.character(x)){
@@ -119,7 +119,7 @@ unf4 <- function(x, digits = 7, chars = 128, dvn=TRUE, ver=4, ...){
     return(out)
 }
 
-unf5 <- function(x, digits = 7, chars = 128, dvn = TRUE, ...){
+unf5 <- function(x, digits = 8, chars = 128, dvn = TRUE, ...){
     if(inherits(x, 'AsIs'))
         x <- as.character(x)
     if(is.character(x)){
@@ -129,14 +129,14 @@ unf5 <- function(x, digits = 7, chars = 128, dvn = TRUE, ...){
         # FACTOR: treat factor as character and truncate to k
         char <- paste(substring(as.character(x), 1, chars),'\n',sep='')
     } else if(is.numeric(x)){
-        # NUMERICS: round to nearest, ties to even
+        # NUMERICS: round to nearest, ties to even (use `round` rather than `signif` or `signifz`)
         if(dvn){
             # DVN mishandles this, but it's not exactly clear what it does wrong:
             # https://redmine.hmdc.harvard.edu/issues/3085
-            char <- round(x, digits)
+            char <- round(x, digits-1)
             char <- .expform(char, digits)
         } else{
-            char <- round(x, digits)
+            char <- round(x, digits-1)
             char <- .expform(char, digits)
         }
         if(dvn)

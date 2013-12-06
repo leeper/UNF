@@ -130,13 +130,14 @@ x1 <- 1:20
 x2 <- x1 + .00001
 
 unf3(x1) # HRSmPi9QZzlIA+KwmDNP8w==
+unf3(x2) # OhFpUw1lrpTE+csF30Ut4Q==
 
 # UNFs are identical at specified level of rounding
 identical(unf3(x1), unf3(x2))
 identical(unf3(x1, digits=5),unf3(x2, digits=5))
 
 # dataframes, matrices, and lists are all treated identically:
-# E8+DS5SG4CSoM7j8KAkC9A== # ????
+# E8+DS5SG4CSoM7j8KAkC9A==
 unf(cbind.data.frame(x1,x2),ver=3)
 unf(list(x1,x2), ver=3)
 unf(cbind(x1,x2), ver=3)

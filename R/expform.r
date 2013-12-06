@@ -1,5 +1,5 @@
 .expform <- function(z, digits = 7) {
-    y <- sprintf(paste('%+1.',digits-1,'e',sep=''), z)
+    y <- sprintf(paste('%+1.',digits,'e',sep=''), z)
     plus <- grep('e+', y, fixed=TRUE)
     neg <- grep('e-', y, fixed=TRUE)
     nas <- seq_along(y)[-c(plus,neg)]
@@ -8,9 +8,9 @@
     b[plus] <- sapply(y[plus], function(i) strsplit(i, 'e+', fixed=TRUE)[[1]][1])
     b[neg] <- sapply(y[neg], function(i) strsplit(i, 'e-', fixed=TRUE)[[1]][1])
     b[c(plus,neg)] <- sapply(b[c(plus,neg)], function(i) {
-        sp <- strsplit(i,'.',fixed=TRUE)[[1]]
+        sp <- strsplit(as.character(i),'.',fixed=TRUE)[[1]]
         dec <- gsub('0+$','',sp[2])
-        paste(sp[1], dec, sep='.')
+        paste(if(sp[1]>0) paste('+',sp[1],sep='') else sp[1], if(is.na(dec) | digits==1) '' else dec, sep='.')
     })
     
     e <- numeric(length=length(z))
@@ -23,5 +23,6 @@
     char[plus] <- ifelse(e[plus]==0, paste(b[plus],'e+\n',sep=''), paste(b[plus],'e+',e[plus],'\n',sep=''))
     char[neg] <- ifelse(e[neg]==0, paste(b[neg],'e-\n',sep=''), paste(b[neg],'e-',e[neg],'\n',sep=''))
     char[nas] <- NA
+    print(char)
     return(char)
 }
