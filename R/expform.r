@@ -23,6 +23,5 @@
     char[plus] <- ifelse(e[plus]==0, paste(b[plus],'e+\n',sep=''), paste(b[plus],'e+',e[plus],'\n',sep=''))
     char[neg] <- ifelse(e[neg]==0, paste(b[neg],'e-\n',sep=''), paste(b[neg],'e-',e[neg],'\n',sep=''))
     char[nas] <- NA
-    print(char)
     return(char)
 }

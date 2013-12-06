@@ -74,7 +74,7 @@ unf3 <- function(x, digits = 7, chars = 128, dvn=TRUE, ...){
     return(out)
 }
 
-unf4 <- function(x, digits = 8, chars = 128, dvn=TRUE, ver=4, ...){
+unf4 <- function(x, digits = 7, chars = 128, dvn=TRUE, ver=4, ...){
     if(inherits(x, 'AsIs'))
         x <- as.character(x)
     if(is.numeric(x)){
@@ -119,7 +119,7 @@ unf4 <- function(x, digits = 8, chars = 128, dvn=TRUE, ver=4, ...){
     return(out)
 }
 
-unf5 <- function(x, digits = 8, chars = 128, dvn = TRUE, ...){
+unf5 <- function(x, digits = 7, chars = 128, dvn = TRUE, ...){
     if(inherits(x, 'AsIs'))
         x <- as.character(x)
     if(is.character(x)){
@@ -133,10 +133,10 @@ unf5 <- function(x, digits = 8, chars = 128, dvn = TRUE, ...){
         if(dvn){
             # DVN mishandles this, but it's not exactly clear what it does wrong:
             # https://redmine.hmdc.harvard.edu/issues/3085
-            char <- round(x, digits-1)
+            char <- round(x, digits)
             char <- .expform(char, digits)
         } else{
-            char <- round(x, digits-1)
+            char <- round(x, digits)
             char <- .expform(char, digits)
         }
         if(dvn)
