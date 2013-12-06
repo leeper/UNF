@@ -2,11 +2,10 @@ Package: UNF
 Title: Tools for creating universal numeric fingerprints for data
 Version: 2.0
 Date: 2013-12-03
-Authors@R: c(person("Thomas", "Leeper", role = c("aut"),
+Authors@R: c(person("Thomas", "Leeper", role = c("aut","cre"),
 					email = "thosjleeper@gmail.com"),
-					person("Micah", "Altman", role = c("aut","cre")))
+					person("Micah", "Altman", role = c("aut")))
 Description: Computes a univeral numeric fingerprint of vectors and dataframes.
-Maintainer: Thomas J. Leeper <thosjleeper@gmail.com>
 Depends: R (>= 2.0)
 Imports: RCurl, digest
 License: GPL-2
