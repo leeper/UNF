@@ -1,5 +1,7 @@
 # Universal Numeric Fingerprint #
 
+[![Build Status](https://travis-ci.org/leeper/UNF.png?branch=master)](https://travis-ci.org/leeper/UNF)
+
 This package calculates a Universal Numeric Fingerprint (UNF) on an R data object. UNF is a crypographic hash that can be used to uniquely identify a (version of a) dataset, or a subset thereof. UNF is used by the [Dataverse](http://www.thedata.org) archives and this package can be used to verify a dataset against one listed available in a Dataverse study (e.g., as returned by the [dvn](http://cran.r-project.org/web/packages/dvn/) package).
 
 This is still a draft and the present output may be unreliable, but the plan is to implement versions 3, 4, 4.1, and 5 (the current version) of the algorithm. Versions 1 and 2 were available in an earlier version of the UNF package authored by Micah Altman, which was built on custom C libraries, and is included in the version logs on GitHub. The current version of the UNF R package is an R implementation that relies on general implementations of the relevant hash functions provided by [digest](http://cran.r-project.org/web/packages/digest/index.html) and base64 encoding provided by [RCurl](http://cran.r-project.org/web/packages/RCurl/index.html).
@@ -57,3 +59,4 @@ Altman, M., \& G. King. 2007. A Proposed Standard for the Scholarly Citation of 
 Altman, M. 2008. A Fingerprint Method for Scientiﬁc Data Veriﬁcation. In T. Sobh, editor, *Advances in Computer and Information Sciences and Engineering*, chapter 57, pages 311-316. Springer Netherlands, Netherlands. http://link.springer.com/chapter/10.1007/978-1-4020-8741-7_57 *(Describes version 5 of the algorithm)*
 
 Data Citation Synthesis Group. 2013. Declaration of Data Citation Principles [DRAFT]. http://www.force11.org/datacitation *(Describes general principles of data citation, of which UNF is likely to be a part)*
+
