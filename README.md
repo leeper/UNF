@@ -18,9 +18,13 @@ The UNF algorithm is described in general terms [here](http://thedata.org/book/u
 
     Importantly, note that the [Dataverse](http://thedata.org) implementation of UNFv5 represents zero values (and boolean FALSE) values as "+0.e-6" rather than the implied "+0.e+" (like boolean TRUE values: "+1.e+"). The issue is described [here](https://redmine.hmdc.harvard.edu/issues/3085).
 
-4. Handle non-finite values as special character strings (see [here](https://redmine.hmdc.harvard.edu/issues/2960) for some notes). (Dataverse appears to handle non-finites by treating them as missing.)
+4. Handle non-finite values as special character strings (see [here](https://redmine.hmdc.harvard.edu/issues/2960) for some notes).
 
-5. Append all non-missing values with an end-of-line (`\n`) character.
+    Dataverse appears to handle non-finites by treating them as missing.
+
+5. Append all non-missing values with an end-of-line (`\n`) character. Represent all missing values as a string of three null characters.
+
+    Dataverse appears to treat empty character strings `""` as missing values. This is ambiguous in all versions of the standard.
 
 6. Convert to Unicode bit encoding. For UNF versions < 4.1, use [UTF-32BE](http://en.wikipedia.org/wiki/UTF-32BE). For UNF versions >= 4.1, use [UTF-8](http://en.wikipedia.org/wiki/UTF-8).
 
@@ -59,4 +63,3 @@ Altman, M., \& G. King. 2007. A Proposed Standard for the Scholarly Citation of 
 Altman, M. 2008. A Fingerprint Method for Scientiﬁc Data Veriﬁcation. In T. Sobh, editor, *Advances in Computer and Information Sciences and Engineering*, chapter 57, pages 311-316. Springer Netherlands, Netherlands. http://link.springer.com/chapter/10.1007/978-1-4020-8741-7_57 *(Describes version 5 of the algorithm)*
 
 Data Citation Synthesis Group. 2013. Declaration of Data Citation Principles [DRAFT]. http://www.force11.org/datacitation *(Describes general principles of data citation, of which UNF is likely to be a part)*
-
