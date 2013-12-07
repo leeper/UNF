@@ -27,14 +27,20 @@ print.unf_equal <- function(x, ...){
     print(x$unf.x)
     cat('Dimensions: ', x$dim.x, '\n')
     if(!is.null(x$x.vars)){
-        cat('Variables:\n')
-        cat(paste(names(x$x.vars),x$x.vars,sep=': '), sep='\n')
+        misx <- x$x.vars[!x$x.vars %in% x$y.vars]
+        if(length(misx)){
+            cat('Mismatched variables:\n')
+            cat(paste(names(head(misx,10)),head(misx,10),sep=': '), sep='\n')
+        }
     }
     cat('\n')
     print(x$unf.y)
     cat('Dimensions: ', x$dim.y, '\n')
     if(!is.null(x$y.vars)){
-        cat('Variables:\n')
-        cat(paste(names(x$y.vars),x$y.vars,sep=': '), sep='\n')
+        misy <- x$y.vars[!x$y.vars %in% x$x.vars]
+        if(length(misy)){
+            cat('Mismatched variables:\n')
+            cat(paste(names(head(misy,10)),head(misy,10),sep=': '), sep='\n')
+        }
     }
 }
