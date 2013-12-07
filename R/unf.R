@@ -40,6 +40,12 @@ unf <- function(x, ver = 5, ...){
 unf3 <- function(x, digits = 7, chars = 128, dvn=TRUE, ...){
     if(inherits(x, 'AsIs'))
         x <- as.character(x)
+    if(is.factor(x)){
+        # FACTOR: treat factor as character and truncate to k
+        x <- as.character(x)
+        # old DVN files downloaded as Tab save factors as integers w/o labels
+        #warning('factors treated as character')
+    }
     if(is.integer(x)){
         rounded <- signif(x, digits) # uses standard signif rounding, despite standard
         char <- .expform(rounded, digits)
@@ -51,9 +57,8 @@ unf3 <- function(x, digits = 7, chars = 128, dvn=TRUE, ...){
     } else if(is.character(x)){
         # CHARACTER: truncate strings to k
         char <- paste(substring(x, 1, chars),'\n',sep='')
-    } else {
-        # FACTOR: treat factor as character and truncate to k
-        char <- paste(substring(as.character(x), 1, chars),'\n',sep='')
+        if(dvn)
+            char <- ifelse(x=='',NA,char)
     } 
     
     # deal with non-finite and missing values
@@ -86,9 +91,13 @@ unf4 <- function(x, digits = 7, chars = 128, dvn=TRUE, ver=4, ...){
     } else if(is.character(x)){
         # CHARACTER: truncate strings to k
         char <- paste(substring(x, 1, chars),'\n',sep='')
+        if(dvn)
+            char <- ifelse(x=='',NA,char)
     } else {
         # FACTOR: treat factor as character and truncate to k
         char <- paste(substring(as.character(x), 1, chars),'\n',sep='')
+        if(dvn)
+            char <- ifelse(x=='',NA,char)
     } 
 
     # deal with non-finite and missing values
@@ -122,16 +131,21 @@ unf4 <- function(x, digits = 7, chars = 128, dvn=TRUE, ver=4, ...){
 unf5 <- function(x, digits = 7, chars = 128, dvn = TRUE, ...){
     if(inherits(x, 'AsIs')){
         tmp <- as.character(x)
-        #if(!dvn)
-        #    tmp[is.na(tmp)] <- '' # DVN Stata/Tab-delimited and RData files use AsIs variables differently
+        #if(SOME CONDITION TBD)
+        #    tmp[is.na(tmp)] <- ''
+        # DVN Stata/Tab-delimited and RData files use AsIs variables differently
+        # AsIs is used in RData and in calculating UNF; this is coerced to character in other file formats
+        # This creates different missing data handling in different file types
         x <- tmp
     }
+    # FACTOR: treat factor as character and truncate to k
+    if(is.factor(x))
+        x <- as.character(x)
     if(is.character(x)){
         # CHARACTER: truncate strings to k
         char <- paste(substring(x, 1, chars),'\n',sep='')
-    } else if(is.factor(x)){
-        # FACTOR: treat factor as character and truncate to k
-        char <- paste(substring(as.character(x), 1, chars),'\n',sep='')
+        if(dvn)
+            char <- ifelse(x=='',NA,char)
     } else if(is.numeric(x)){
         # NUMERICS: round to nearest, ties to even (use `round` rather than `signif` or `signifz`)
         if(dvn){
