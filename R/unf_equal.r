@@ -32,6 +32,8 @@ print.unf_equal <- function(x, ...){
         if(length(misx)){
             cat('Mismatched variables:\n')
             cat(paste(names(head(misx,10)),head(misx,10),sep=': '), sep='\n')
+            if(length(misx)>10)
+                cat('[Additional mismatches not printed]\n')
         }
     }
     cat('\n')
@@ -42,6 +44,8 @@ print.unf_equal <- function(x, ...){
         if(length(misy)){
             cat('Mismatched variables:\n')
             cat(paste(names(head(misy,10)),head(misy,10),sep=': '), sep='\n')
+            if(length(misy)>10)
+                cat('[Additional mismatches not printed]\n')
         }
     }
 }
