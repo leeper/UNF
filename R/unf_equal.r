@@ -21,11 +21,12 @@ print.unf_equal <- function(x, ...){
     if(x$identical)
         cat('Objects are identical\n\n')
     else if(x$unf.x$unf==x$unf.y$unf)
-        cat('Objectcs are a UNF match but not identical\n\n')
+        cat('Objects are a UNF match but not identical\n\n')
     else
         cat('Objects are not identical\n\n')
     print(x$unf.x)
-    cat('Dimensions: ', x$dim.x, '\n')
+    if(!x$dim.x==x$dim.y)
+        cat('Dimensions: ', x$dim.x, '\n')
     if(!is.null(x$x.vars)){
         misx <- x$x.vars[!x$x.vars %in% x$y.vars]
         if(length(misx)){

@@ -120,8 +120,12 @@ unf4 <- function(x, digits = 7, chars = 128, dvn=TRUE, ver=4, ...){
 }
 
 unf5 <- function(x, digits = 7, chars = 128, dvn = TRUE, ...){
-    if(inherits(x, 'AsIs'))
-        x <- as.character(x)
+    if(inherits(x, 'AsIs')){
+        tmp <- as.character(x)
+        if(dvn)
+            tmp[is.na(tmp)] <- '' # DVN treats NA in AsIs class as empty character string
+        x <- tmp
+    }
     if(is.character(x)){
         # CHARACTER: truncate strings to k
         char <- paste(substring(x, 1, chars),'\n',sep='')
