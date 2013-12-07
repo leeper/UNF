@@ -1,7 +1,7 @@
 Package: UNF
-Title: Tools for creating universal numeric fingerprints for data
 Version: 2.0
-Date: 2013-12-03
+Title: Tools for creating universal numeric fingerprints for data
+Date: 2013-12-07
 Authors@R: c(person("Thomas", "Leeper", role = c("aut","cre"),
 					email = "thosjleeper@gmail.com"),
 					person("Micah", "Altman", role = c("aut")))

@@ -1,5 +1,15 @@
 `%unf%` <- function(x, y, ...){
+    if(!class(x)==class(y))
+        warning('Objects are of different classes.')
     i <- identical(x,y)
+    if(is.matrix(x)){
+        x <- as.data.frame(x)
+        warning('Coercing x to dataframe')
+    }
+    if(is.matrix(y)){
+        y <- as.data.frame(y)
+        warning('Coercing y to dataframe')
+    }
     unfx <- unf(x, ...)
     unfy <- unf(y, ...)
     if(is.list(x) | is.matrix(x)){
@@ -25,9 +35,7 @@
             y.vars = if(!is.null(unfy$variables)) unfy$variables,
             x.rows = x.rows,
             y.rows = y.rows,
-            equal = all.equal(x, y),
-            x = x,
-            y = y)
+            equal = all.equal(x, y))
     class(l) <- 'unf_equal'
     return(l)
 }

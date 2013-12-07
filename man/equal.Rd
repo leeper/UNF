@@ -4,9 +4,7 @@
 \title{Compare two objects}
 \description{Function to compare the size, structure, arrangement, and UNFs of two objects.}
 \usage{
-x \%unf\% y
-
-`\%unf\%`(a, b, \dots)
+`\%unf\%`(x, y, ...)
 }
 \arguments{
 	\item{x}{A vector, matrix, dataframe, or list.}

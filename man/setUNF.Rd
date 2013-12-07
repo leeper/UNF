@@ -5,7 +5,6 @@
 \description{Functions to add a UNF attribute to an object and to compare that attribute against the current state of the object.}
 \usage{
 setUNF(x, ...)
-
 checkUNF(x, ...)
 }
 
