@@ -1,9 +1,13 @@
-\name{unf_equal}
-\alias{unf_equal}
+\name{\%unf\%}
+\alias{\%unf\%}
 \alias{print.unf_equal}
 \title{Compare two objects}
 \description{Function to compare the size, structure, arrangement, and UNFs of two objects.}
-\usage{unf_equal(x, y, ...)}
+\usage{
+x \%unf\% y
+
+`\%unf\%`(a, b, \dots)
+}
 \arguments{
 	\item{x}{A vector, matrix, dataframe, or list.}
 	\item{y}{A vector, matrix, dataframe, or list.}
@@ -15,9 +19,9 @@
 \examples{
 a <- data.frame(x1=1:10, x2=11:20)
 b <- data.frame(x1=1:10, x2=11:20+.0005)
-unf_equal(a,a)
-unf_equal(a,b)
-unf_equal(a,b, digits=3)
+a \%unf\% a
+a \%unf\% b
+`\%unf\%`(a,b, digits=3)
 }
 \seealso{\code{\link{unf}}}
 \author{Thomas J. Leeper}

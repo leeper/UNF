@@ -1,4 +1,4 @@
-unf_equal <- function(x, y, ...){
+`%unf%` <- function(x, y, ...){
     i <- identical(x,y)
     unfx <- unf(x, ...)
     unfy <- unf(y, ...)

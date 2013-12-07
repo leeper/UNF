@@ -1,4 +1,5 @@
 exportPattern("^[[:alpha:]]+")
+export("%unf%")
 importFrom(digest, digest)
 importFrom(RCurl, base64Encode)
 importFrom(tools, md5sum)
