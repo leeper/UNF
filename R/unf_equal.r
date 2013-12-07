@@ -25,7 +25,7 @@ print.unf_equal <- function(x, ...){
     else
         cat('Objects are not identical\n\n')
     print(x$unf.x)
-    if(!x$dim.x==x$dim.y)
+    if(!identical(x$dim.x,x$dim.y))
         cat('Dimensions: ', x$dim.x, '\n')
     if(!is.null(x$x.vars)){
         misx <- x$x.vars[!x$x.vars %in% x$y.vars]
@@ -38,7 +38,8 @@ print.unf_equal <- function(x, ...){
     }
     cat('\n')
     print(x$unf.y)
-    cat('Dimensions: ', x$dim.y, '\n')
+    if(!identical(x$dim.x,x$dim.y))
+        cat('Dimensions: ', x$dim.y, '\n')
     if(!is.null(x$y.vars)){
         misy <- x$y.vars[!x$y.vars %in% x$x.vars]
         if(length(misy)){
