@@ -42,25 +42,21 @@ The object additionally contains several attributes:
 
 The default print method displays the UNF along with these attributes. For example:
 
-UNF:3:10,128:ZNQRI14053UZq389x0Bffg==
+UNF:3:4,128:ZNQRI14053UZq389x0Bffg==
 
-This representation identifies the signature as UNF, using version 3 of the algorithm, computed to 10 significant digits for numbers and 128 for characters. The segment following the final colon is the actual fingerprint in base64-encoded format.
+This representation identifies the signature as UNF, using version 3 of the algorithm, computed to 4 significant digits for numbers and 128 for characters. The segment following the final colon is the actual fingerprint in base64-encoded format.
 }
 
 \references{
 \url{http://thedata.org/book/universal-numerical-fingerprint}
 
-Altman, M., J. Gill and M. P. McDonald.  2003.  \emph{Numerical Issues in Statistical
-Computing for the Social Scientist}.  John Wiley \& Sons.
-\url{http://www.hmdc.harvard.edu/numerical_issues/} [Version 3 of the algorithm]
+Altman, M., J. Gill and M. P. McDonald. 2003. \emph{Numerical Issues in Statistical Computing for the Social Scientist}. John Wiley \& Sons. \url{http://www.hmdc.harvard.edu/numerical_issues/} [Describes version 3 of the algorithm]
 
-Altman, M., \& G. King. 2007. A Proposed Standard for the Scholarly Citation of Quantitative Data.
-\emph{D-Lib} 13(3/4).
-\url{http://dlib.org/dlib/march07/altman/03altman.html} [Citation standard using UNF's]
+Altman, M., \& G. King. 2007. A Proposed Standard for the Scholarly Citation of Quantitative Data. \emph{D-Lib} 13(3/4). \url{http://dlib.org/dlib/march07/altman/03altman.html} [Describes a citation standard using UNFs]
 
-Altman, M. 2008. A Fingerprint Method for Scientiﬁc Data Veriﬁcation. In T. Sobh, editor, Advances
-in Computer and Information Sciences and Engineering, chapter 57, pages 311--316. Springer
-Netherlands, Netherlands, 2008. \url{http://link.springer.com/chapter/10.1007/978-1-4020-8741-7_57} [Version 5 of the algorithm]
+Altman, M. 2008. A Fingerprint Method for Scientific Data Verification. In T. Sobh, editor, Advances in Computer and Information Sciences and Engineering, chapter 57, pages 311--316. Springer Netherlands, Netherlands, 2008. \url{http://link.springer.com/chapter/10.1007/978-1-4020-8741-7_57} [Describes version 5 of the algorithm]
+
+Data Citation Synthesis Group. 2013. Declaration of Data Citation Principles [DRAFT]. \url{http://www.force11.org/datacitation}. [Describes general principles of data citation, of which UNF is likely to be a part]
 }
 \examples{
 
@@ -93,28 +89,9 @@ unf(list(1:3,4:6,7:9))
 
 
 # Version 4 #
-longley <-
-structure(list(GNP.deflator = c(83, 88.5, 88.2, 89.5, 96.2, 98.1, 
-99, 100, 101.2, 104.6, 108.4, 110.8, 112.6, 114.2, 115.7, 116.9
-), GNP = c(234.289, 259.426, 258.054, 284.599, 328.975, 346.999, 
-365.385, 363.112, 397.469, 419.18, 442.769, 444.546, 482.704, 
-502.601, 518.173, 554.894), Unemployed = c(235.6, 232.5, 368.2, 
-335.1, 209.9, 193.2, 187, 357.8, 290.4, 282.2, 293.6, 468.1, 
-381.3, 393.1, 480.6, 400.7), Armed.Forces = c(159, 145.6, 161.6, 
-165, 309.9, 359.4, 354.7, 335, 304.8, 285.7, 279.8, 263.7, 255.2, 
-251.4, 257.2, 282.7), Population = c(107.608, 108.632, 109.773, 
-110.929, 112.075, 113.27, 115.094, 116.219, 117.388, 118.734, 
-120.445, 121.95, 123.366, 125.368, 127.852, 130.081), Year = as.integer(c(1947, 
-1948, 1949, 1950, 1951, 1952, 1953, 1954, 1955, 1956, 1957, 1958, 
-1959, 1960, 1961, 1962)), Employed = c(60.323, 61.122, 60.171, 
-61.187, 63.221, 63.639, 64.989, 63.761, 66.019, 67.857, 68.169, 
-66.513, 68.655, 69.564, 69.331, 70.551)), .Names = c("GNP.deflator", 
-"GNP", "Unemployed", "Armed.Forces", "Population", "Year", "Employed"
-), row.names = c("1947", "1948", "1949", "1950", "1951", "1952", 
-"1953", "1954", "1955", "1956", "1957", "1958", "1959", "1960", 
-"1961", "1962"), class = "data.frame")
 
 # version 4
+data(longley)
 unf(longley, ver=4, digits=3) # PjAV6/R6Kdg0urKrDVDzfMPWJrsBn5FfOdZVr9W8Ybg=
 
 # version 4.1
@@ -144,3 +121,7 @@ unf(cbind(x1,x2), ver=3)
     Original algorithm and R implementation by Micah Altman.
 }
 %\keyword{}
+\seealso{
+\code{\link{\%unf\%}} 
+\code{\link{setUNF}}
+}
