@@ -122,8 +122,8 @@ unf4 <- function(x, digits = 7, chars = 128, dvn=TRUE, ver=4, ...){
 unf5 <- function(x, digits = 7, chars = 128, dvn = TRUE, ...){
     if(inherits(x, 'AsIs')){
         tmp <- as.character(x)
-        if(dvn)
-            tmp[is.na(tmp)] <- '' # DVN treats NA in AsIs class as empty character string
+        #if(!dvn)
+        #    tmp[is.na(tmp)] <- '' # DVN Stata/Tab-delimited and RData files use AsIs variables differently
         x <- tmp
     }
     if(is.character(x)){
@@ -137,17 +137,17 @@ unf5 <- function(x, digits = 7, chars = 128, dvn = TRUE, ...){
         if(dvn){
             # DVN mishandles this, but it's not exactly clear what it does wrong:
             # https://redmine.hmdc.harvard.edu/issues/3085
-            char <- round(x, digits)
-            char <- .expform(char, digits)
+            char <- round(x, digits-1)
+            char <- .expform(char, digits-1)
         } else{
-            char <- round(x, digits)
-            char <- .expform(char, digits)
+            char <- round(x, digits-1)
+            char <- .expform(char, digits-1)
         }
         if(dvn)
             char <- ifelse(x==0, '+0.e-6\n', char) # https://redmine.hmdc.harvard.edu/issues/3085
     } else if(is.logical(x)){
         # LOGICAL: normalize boolean to 0, 1, or missing, then treat as numeric
-        char <- .expform(as.integer(x))
+        char <- .expform(as.integer(x), digits-1)
         if(dvn)
             char <- ifelse(x, char, '+0.e-6\n') # https://redmine.hmdc.harvard.edu/issues/3085
         # FALSE values not handled correctly (see: https://redmine.hmdc.harvard.edu/issues/2960)
