@@ -2,14 +2,16 @@
     i <- identical(x,y)
     unfx <- unf(x, ...)
     unfy <- unf(y, ...)
-    if(is.list(x) | is.matrix(x))
+    if(is.list(x) | is.matrix(x)){
         sorted <- identical(x[do.call(order, x), ], y[do.call(order, y), ])
-    else
-        sorted <- identical(sort(x),sort(y))
-    if(!sorted){
-        x.rows <- apply(x, 1, function(i) digest(as.character(i)))
-        y.rows <- apply(y, 1, function(i) digest(as.character(i)))
+        u <- sort(intersect(names(x),names(y)))
+        if(!sorted & length(u)){
+            x.rows <- apply(x[,u], 1, function(i) digest(as.character(i)))
+            y.rows <- apply(y[,u], 1, function(i) digest(as.character(i)))
+        } else
+            x.rows <- y.rows <- NULL
     } else {
+        sorted <- identical(sort(x),sort(y))
         x.rows <- y.rows <- NULL
     }
     l <- 
