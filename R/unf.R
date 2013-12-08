@@ -206,11 +206,12 @@ unf5 <- function(x, digits = 7, chars = 128, dvn = TRUE, ...){
 }
 
 print.UNF <- function(x, ...){
-    if(attr(x, 'version')<5)
+    if(!is.null(attr(x,'version')) && attr(x, 'version')<5)
         cat('Universal Numeric Fingerprint: ')
     else
         cat('Universal Numeric Fingerprint (Truncated): ')
-    if(attr(x,'digits')!=7 | attr(x,'characters')!=128)
+    if((!is.null(attr(x,'digits')) && attr(x,'digits')!=7) |
+        (!is.null(attr(x,'characters')) && attr(x,'characters')!=128))
         cat(paste('UNF',attr(x, 'version'),
             paste(attr(x,'digits'),attr(x,'characters'),sep=','),
             x$unf,sep=':'),'\n')
