@@ -16,8 +16,8 @@
         sorted <- identical(x[do.call(order, x), ], y[do.call(order, y), ])
         u <- sort(intersect(names(x),names(y)))
         if(!sorted & length(u)){
-            x.rows <- apply(x[,u], 1, function(i) digest(as.character(i)))
-            y.rows <- apply(y[,u], 1, function(i) digest(as.character(i)))
+            x.rows <- apply(x[,u,drop=FALSE], 1, function(i) digest(as.character(i)))
+            y.rows <- apply(y[,u,drop=FALSE], 1, function(i) digest(as.character(i)))
         } else
             x.rows <- y.rows <- NULL
     } else {
@@ -61,7 +61,7 @@ print.unf_equal <- function(x, ...){
             cat('Mismatched variables:\n')
             cat(paste(names(head(misx,10)),head(misx,10),sep=': '), sep='\n')
             if(length(misx)>10)
-                cat('[Additional mismatches not printed]\n')
+                cat('[',length(misx)-10,' additional mismatches not printed]\n',sep='')
         }
     }
     if(!x$sorted & !is.null(x$x.rows)){
@@ -81,7 +81,7 @@ print.unf_equal <- function(x, ...){
             cat('Mismatched variables:\n')
             cat(paste(names(head(misy,10)),head(misy,10),sep=': '), sep='\n')
             if(length(misy)>10)
-                cat('[Additional mismatches not printed]\n')
+                cat('[',length(misy)-10,' additional mismatches not printed]\n',sep='')
         }
     }
     if(!x$sorted & !is.null(x$y.rows)){
