@@ -19,6 +19,10 @@ unf <- function(x, ver = 5, ...){
         } else if(ver==5){
             vars <- sapply(x, function(i) unf5(i, ...)$unf)
             out <- unf5(sort(vars), ...)
+        } else if(ver==6){
+            warning('UNFv6 not yet immplemented')
+            vars <- sapply(x, function(i) unf6(i, ...)$unf)
+            out <- unf6(sort(vars), ...)
         }
         Sys.setlocale(category="LC_COLLATE", locale)
         out$variables <- vars
@@ -32,6 +36,8 @@ unf <- function(x, ver = 5, ...){
             out <- unf4(x, ver=4.1, ...)
         } else if(ver==5){
             out <- unf5(x, ...)
+        } else if(ver==6){
+            out <- unf6(x, ...)
         }
         return(out)
     }
@@ -203,6 +209,10 @@ unf5 <- function(x, digits = 7, chars = 128, dvn = TRUE, ...){
     attr(out, 'digits') <- digits
     attr(out, 'characters') <- chars
     return(out)
+}
+
+unf6 <- function(x, digits = 7, chars = 128, dvn = TRUE, ...){
+    stop('UNFv6 not yet implemented')
 }
 
 print.UNF <- function(x, ...){

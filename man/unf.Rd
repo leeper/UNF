@@ -14,11 +14,13 @@ unf3(x, digits = 7, chars = 128, dvn = TRUE, ...)
 unf4(x, digits = 7, chars = 128, dvn = TRUE, ver = 4, ...)
 
 unf5(x, digits = 7, chars = 128, dvn = TRUE, ...)
+
+unf6(x, digits = 7, chars = 128, dvn = TRUE, ...)
 }
 
 \arguments{
 	\item{x}{For \code{unf}, a vector, matrix, dataframe, or list; for \code{unf3}, \code{unf4}, \code{unf5}, a vector. If \code{x} is a dataframe or list with one variable or one vector element, respectively, \code{unf} returns the UNF for the single vector (which is consistent with the Dataverse implementation but ambiguous in the UNF standard). For algorithm versions < 5, all non-numeric vectors are treated as character.}
-	\item{ver}{Version of the UNF algorithm. Allowed values are 3, 4, 4.1, and 5. Always use the same version of the algorithm to check a UNF. Default for \code{unf} is 5 and default for \code{unf4} is 4 (but can also be set to 4.1, which is identical except for using SHA256 instead of MD5).}
+	\item{ver}{Version of the UNF algorithm. Allowed values are 3, 4, 4.1, 5, and 6. Always use the same version of the algorithm to check a UNF. Default for \code{unf} is 5 and default for \code{unf4} is 4 (but can also be set to 4.1, which is identical except for using SHA256 instead of MD5).}
 	\item{digits}{The number of significant digits for rounding for numeric values. Default is 7. Should be between 1 and 15.}
 	\item{chars}{The number of characters for truncation. Default is 128. Should be greater than 1.}
     \item{dvn}{A logical indicating whether to use the Dataverse Network implementation of the UNF algorithm. Default is \code{TRUE}. See details.}
@@ -59,6 +61,10 @@ Altman, M. 2008. A Fingerprint Method for Scientific Data Verification. In T. So
 Data Citation Synthesis Group. 2013. Declaration of Data Citation Principles [DRAFT]. \url{http://www.force11.org/datacitation}. [Describes general principles of data citation, of which UNF is likely to be a part]
 }
 \examples{
+
+# Version 6 #
+
+### FORTHCOMING ###
 
 # Version 5 #
 ## vectors
