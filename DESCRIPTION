@@ -5,7 +5,7 @@ Date: 2013-12-07
 Authors@R: c(person("Thomas", "Leeper", role = c("aut","cre"),
 					email = "thosjleeper@gmail.com"),
 					person("Micah", "Altman", role = c("aut")))
-Description: Computes a univeral numeric fingerprint of vectors and dataframes.
+Description: Computes a univeral numeric fingerprint of R data objects.
 Depends: R (>= 2.0)
 Imports: RCurl, digest, tools
 License: GPL-2

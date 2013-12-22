@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/leeper/UNF.png?branch=master)](https://travis-ci.org/leeper/UNF)
 
-This package calculates a Universal Numeric Fingerprint (UNF) on an R data object. UNF is a crypographic hash or signature that can be used to uniquely identify a (version of a) dataset, or a subset thereof. UNF is used by the [Dataverse](http://www.thedata.org) archives and this package can be used to verify a dataset against one listed available in a Dataverse study (e.g., as returned by the [dvn](http://cran.r-project.org/web/packages/dvn/) package).
+UNF is a crypographic hash or signature that can be used to uniquely identify (a version of) a dataset, or a subset thereof. UNF is used by the [Dataverse](http://www.thedata.org) archives and this package can be used to verify a dataset against one listed available in a Dataverse study (e.g., as returned by the [dvn](http://cran.r-project.org/web/packages/dvn/) package).
 
 ## Why UNFs? ##
 
@@ -18,7 +18,7 @@ While file checksums are a common strategy for verifying a file (e.g., md5 sums 
 
 ## The UNF Package ##
 
-This is still a draft and the present output may be unreliable, but the plan is to implement versions 3, 4, 4.1, and 5 (the current version) of the algorithm. **Please report any mismatches between this implementation and any other implementation (including Dataverse's) on [the issues page](https://github.com/leeper/UNF/issues).**
+This is still a draft and the present output may be unreliable, but the plan is to implement versions 3, 4, 4.1, and 5 (the current version) of the UNF algorithm. **Please report any mismatches between this implementation and any other implementation (including Dataverse's) on [the issues page](https://github.com/leeper/UNF/issues).**
 
 Versions 1 and 2 were available in an earlier version of the UNF package authored by Micah Altman, which was built on custom C libraries, and is included in the version logs on GitHub. That package was orphaned by CRAN in 2009.
 
@@ -26,9 +26,16 @@ The current version of this package is an R implementation that relies on genera
 
 The package retains the core `unf` function from the earlier versions of the UNF package, but simplifies its use considerably. The package additionally implements some new helper functions.
 
-* `unf` calculates the UNF signature for almost any R object for versions 3, 4, 4.1, or 5 of the UNF algorithm, with options to control the rounding of numeric values, truncation of character strings, and idiosyncratic details of the UNF algorithm as implemented by Dataverse.
-* `setUNF` adds a UNF signature as a "UNF" attribute to any R object and `checkUNF` can be used to compare the current UNF signature of an object against that stored attribute (e.g., to check whether the object has been modified).
-* `%unf%` provides a binary operator that can compare two R objects (ideally of like class and best used on dataframes). The function tests whether the objects are identical and, if they are not, provides object- and variable-level UNF comparisons between the two objects, checks for difference in the sorting of the two objects, and reports indices for rows seemingly present in one object but missing from the other based on row-level hashes. This can be used both to compare two objects in general (e.g., to see whether two dataframes differ) as well as to bugcheck incongruent UNFs. Two UNFs can differ dramatically due to minor changes like rounding, the deletion of an observation, addition of a variable, etc., so `%unf%` provides a useful tool for comparing them.
+### `unf` ###
+The core `unf` function calculates the UNF signature for almost any R object for versions 3, 4, 4.1, or 5 of the UNF algorithm, with options to control the rounding of numeric values, truncation of character strings, and idiosyncratic details of the UNF algorithm as implemented by Dataverse. `unf` is a wrapper for functions `unf5`, `unf4`, and `unf3`, which calculate vector-level UNF signatures.
+
+### `setUNF` and `checkUNF` ###
+`setUNF` adds a UNF signature as a "UNF" attribute to any R object and `checkUNF` can be used to compare the current UNF signature of an object against that stored attribute (e.g., to check whether the object has been modified).
+
+### `%unf%` ###
+`%unf%` is a binary operator that can compare two R objects, or an R object against a "UNF" class summary (e.g., as stored in a study metadata record, or returned by `unf`). The function tests whether the objects are identical and, if they are not, provides object- and variable-level UNF comparisons between the two objects, checks for difference in the sorting of the two objects, and (for dataframes) reports indices for rows seemingly present in one object but missing from the other based on row-level hashes of variables common to both dataframes.
+
+This can be used both to compare two objects in general (e.g., to see whether two dataframes differ) as well as to debug incongruent UNFs. Two UNFs can differ dramatically due to minor changes like rounding, the deletion of an observation, addition of a variable, etc., so `%unf%` provides a useful tool for looking under the hood at the differences between data objects that might produce different UNF signatures.
 
 
 ## The UNF Algorithm ##
@@ -37,7 +44,9 @@ The UNF algorithm is described in general terms [here](http://thedata.org/book/u
 
 1. Round numerics to *n* digits and truncate character strings to *k* characters.
 
-2. For UNF versions < 5, convert all non-numeric data to character. For UNF versions >= 5, treat factor as character, boolean as numeric (see next note), date/times as ISO 8601, and bits as big-endian. (More details to come.)
+2. For UNF versions < 5, convert all non-numeric data to character. For UNF versions >= 5, treat factor as character, boolean as numeric (see next note), date/times as ISO 8601, and bits as base64-encoded big-endian bit sequences.
+
+    More details to come. Date and date-time classes are currently converted to character even for UNFv5, due to numerous ambiguities in the UNF standard regarding the handling of dates and times.
 
 3. Convert numerics to an exponential notation (see links to specific implementations for details).
 
@@ -78,6 +87,8 @@ The UNF algorithm is described in general terms [here](http://thedata.org/book/u
 2. Sort the base64-encoded UNFs in POSIX locale order.
 
 3. Apply the UNF algorithm to the sorted, base64-encoded UNFs, using a *k* value as large as the original, treating the UNFs as character. For UNF version 5, the algorithm is applied to the truncated UNFs.
+
+    Multiple datasets needs to be combined based on UNFs calculated with the same version of the algorithm. Thus when calculating a study-level UNF, dataset-level UNFs need to be calculated using the same version of the algorithm. To achieve this, Dataverse recalculates old UNFs whenever new data is added to a study.
 
 ### References ###
 

@@ -147,7 +147,45 @@ unf5 <- function(x, digits = 7, chars = 128, dvn = TRUE, ...){
     # FACTOR: treat factor as character and truncate to k
     if(is.factor(x))
         x <- as.character(x)
-    if(is.character(x)){
+    
+    if(is.raw(x)){
+        # BIT: Normalize bit fields by converting to big-endian form, truncating all leading empty bits, aligning to a byte boundary by re-padding with leading zero bits, and base64 encoding to form a character string representation. No rounding is applied, and missing values are represented by three null bytes.
+        char <- sapply(x, function(i){
+            r <- raw()
+            a <- writeBin(i, r, endian='big')
+            as.character(base64Encode(a))
+        })
+        char <- paste(char,'\n',sep='')
+        warning('UNF is untested on raw vectors')
+    } else if(inherits(x, 'Date')){
+        # http://thedata.harvard.edu/guides/dataverse-user-main.html#appendix
+        # A pro tip: if it is important to produce SPSS/Stata and R versions of the same data set that result in the same UNF when ingested, you may define the time variables as strings in the R data frame, and use the "YYYY-MM-DD HH:mm:ss" formatting notation. This is the formatting used by the UNF algorithm to normalize time values, so doing the above will result in the same UNF as the vector of the same time values in Stata.
+        
+        # DATE:
+        # Normalize time, date, and durations based on a single, unambiguous representation selected from the many described in the ISO 8601 standard.
+        
+        # Convert calendar dates to a character string of the form YYYY-MM-DD. Partial dates in the form YYYY or YYYY-MM are permitted.
+        
+        # https://redmine.hmdc.harvard.edu/issues/2997
+    
+        char <- as.character(x)
+        warning('Date-time classes currently converted to character')
+
+    
+    } else if(inherits(x, 'POSIXt')){
+        # DATE-TIME:
+        
+        d <- getOption('digits.secs')
+        options("digits.secs" = 3)
+        
+        # Time representation is based on the ISO 8601 extended format, hh:mm:ss.fffff. When .fffff represents fractions of a second, it must contain no trailing (non-significant) zeroes, and is omitted if valued at zero. Other fractional representations, such as fractional minutes and hours, are not permitted. If the time zone of the observation is known, convert the time value to the UTC time zone and append a "Z" to the time representation.
+        
+        char <- as.character(x)
+        warning('Date-time classes currently converted to character')
+    
+        options("digits.secs" = d)
+    
+    } else if(is.character(x)){
         # CHARACTER: truncate strings to k
         char <- paste(substring(x, 1, chars),'\n',sep='')
         if(dvn)
@@ -173,20 +211,6 @@ unf5 <- function(x, digits = 7, chars = 128, dvn = TRUE, ...){
         # FALSE values not handled correctly (see: https://redmine.hmdc.harvard.edu/issues/2960)
     }
     
-    # BIT: Normalize bit fields by converting to big-endian form, truncating all leading empty bits, aligning to a byte boundary by re-padding with leading zero bits, and base64 encoding to form a character string representation. No rounding is applied, and missing values are represented by three null bytes.
-    
-    
-    # TIME/DATE:
-    # Normalize time, date, and durations based on a single, unambiguous representation selected from the many described in the ISO 8601 standard.
-    
-    # Convert calendar dates to a character string of the form YYYY-MM-DD. Partial dates in the form YYYY or YYYY-MM are permitted.
-    
-    # Time representation is based on the ISO 8601 extended format, hh:mm:ss.fffff. When .fffff represents fractions of a second, it must contain no trailing (non-significant) zeroes, and is omitted if valued at zero. Other fractional representations, such as fractional minutes and hours, are not permitted. If the time zone of the observation is known, convert the time value to the UTC time zone and append a ”Z” to the time representation.
-    
-    #timevar<-as.POSIXct("03/19/2013 18:20:00", format = "%m/%d/%Y %H:%M:%OS", tz="GMT")
-    #attr(timevar,"tzone")<-NULL
-    
-    # https://redmine.hmdc.harvard.edu/issues/2997
     
     # deal with non-finite and missing values
     # https://redmine.hmdc.harvard.edu/issues/2867
