@@ -3,6 +3,7 @@
 \alias{unf3}
 \alias{unf4}
 \alias{unf5}
+\alias{unf6}
 \alias{print.UNF}
 \title{Universal Numeric Fingerprint}
 \description{A universal numeric fingerprint is used to guarantee that a defined subset of data is substantively identical to a comparison subset. Two fingerprints will match if and only if the subset of data generating them are identical, when represented using a given number of significant digits.}
