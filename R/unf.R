@@ -20,7 +20,7 @@ unf <- function(x, ver = 5, ...){
             vars <- sapply(x, function(i) unf5(i, ...)$unf)
             out <- unf5(sort(vars), ...)
         } else if(ver==6){
-            warning('UNFv6 not yet immplemented')
+            warning('UNFv6 not yet fully implemented')
             vars <- sapply(x, function(i) unf6(i, ...)$unf)
             out <- unf6(sort(vars), ...)
         }
@@ -43,7 +43,11 @@ unf <- function(x, ver = 5, ...){
     }
 }
 
-unf3 <- function(x, digits = 7, chars = 128, dvn=TRUE, ...){
+unf3 <- 
+function(x, 
+         digits = 7L, 
+         chars = 128L, 
+         dvn=TRUE, ...){
     if(inherits(x, 'AsIs'))
         x <- as.character(x)
     if(is.factor(x)){
@@ -85,7 +89,17 @@ unf3 <- function(x, digits = 7, chars = 128, dvn=TRUE, ...){
     return(out)
 }
 
-unf4 <- function(x, digits = 7, chars = 128, dvn=TRUE, ver=4, ...){
+unf4 <- 
+function(x, 
+         digits = 7L, 
+         chars = 128L, 
+         truncation = 128L,
+         dvn=TRUE, 
+         ver=4, ...){
+    if(!truncation %in% c(128,192,196,256))
+        stop("'truncation' must be in 128, 192, 196, 256")
+    if(truncation < chars)
+        stop("'truncation' must be greater than or equal to 'chars'")
     if(inherits(x, 'AsIs'))
         x <- as.character(x)
     if(is.numeric(x)){
@@ -123,7 +137,7 @@ unf4 <- function(x, digits = 7, chars = 128, dvn=TRUE, ver=4, ...){
                     hash = hash)
     } else {
         long <- base64Encode(hash)
-        short <- base64Encode(hash[1:16])
+        short <- base64Encode(hash[1:(truncation/8L)])
         out <- list(unf = as.character(long),
                     hash = hash)
     }
@@ -134,7 +148,16 @@ unf4 <- function(x, digits = 7, chars = 128, dvn=TRUE, ver=4, ...){
     return(out)
 }
 
-unf5 <- function(x, digits = 7, chars = 128, dvn = TRUE, ...){
+unf5 <- 
+function(x, 
+         digits = 7L, 
+         chars = 128L, 
+         truncation = 128L,
+         dvn = TRUE, ...){
+    if(!truncation %in% c(128,192,196,256))
+        stop("'truncation' must be in 128, 192, 196, 256")
+    if(truncation < chars)
+        stop("'truncation' must be greater than or equal to 'chars'")
     if(inherits(x, 'AsIs')){
         tmp <- as.character(x)
         #if(SOME CONDITION TBD)
@@ -223,7 +246,7 @@ unf5 <- function(x, digits = 7, chars = 128, dvn = TRUE, ...){
     
     hash <- digest(out, algo='sha256', serialize=FALSE, raw=TRUE)
     long <- base64Encode(hash)
-    short <- base64Encode(hash[1:16]) # truncated UNF
+    short <- base64Encode(hash[1:(truncation/8L)]) # truncated UNF
     
     out <- list(unf = as.character(short),
                 hash = hash,
@@ -235,8 +258,40 @@ unf5 <- function(x, digits = 7, chars = 128, dvn = TRUE, ...){
     return(out)
 }
 
-unf6 <- function(x, digits = 7, chars = 128, dvn = TRUE, ...){
+unf6 <-
+function(x, 
+         digits = 7L, 
+         chars = 128L, 
+         truncation = 128L,
+         dvn = TRUE, ...){
     stop('UNFv6 not yet implemented')
+    if(!truncation %in% c(128,192,196,256))
+        stop("'truncation' must be in 128, 192, 196, 256")
+    if(truncation < chars)
+        stop("'truncation' must be greater than or equal to 'chars'")
+    
+    
+    # algorithm here
+    
+    
+    char <- .nonfinite(x, char, dvn)
+    
+    eol <- intToBits(0)[1]
+    unicode <- iconv(char, to='UTF-8', toRaw=TRUE)
+    out <- unlist(lapply(unicode, function(i) if(is.null(i)) intToBits(0)[1:3] else c(i,eol))) # NA handling and nul byte appending
+    
+    hash <- digest(out, algo='sha256', serialize=FALSE, raw=TRUE)
+    long <- base64Encode(hash)
+    short <- base64Encode(hash[1:(truncation/8L)]) # truncated UNF
+    
+    out <- list(unf = as.character(short),
+                hash = hash,
+                unflong = as.character(long))
+    class(out) <- c('UNF')
+    attr(out, 'version') <- 6
+    attr(out, 'digits') <- digits
+    attr(out, 'characters') <- chars
+    return(out)
 }
 
 print.UNF <- function(x, ...){
