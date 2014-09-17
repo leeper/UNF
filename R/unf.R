@@ -185,7 +185,7 @@ function(x,
         # A pro tip: if it is important to produce SPSS/Stata and R versions of the same data set that result in the same UNF when ingested, you may define the time variables as strings in the R data frame, and use the "YYYY-MM-DD HH:mm:ss" formatting notation. This is the formatting used by the UNF algorithm to normalize time values, so doing the above will result in the same UNF as the vector of the same time values in Stata.
         
         # DATE:
-        # Normalize time, date, and durations based on a single, unambiguous representation selected from the many described in the ISO 8601 standard.
+        # Normalize time and date, based on a single, unambiguous representation selected from the many described in the ISO 8601 standard.
         
         # Convert calendar dates to a character string of the form YYYY-MM-DD. Partial dates in the form YYYY or YYYY-MM are permitted.
         
@@ -275,7 +275,7 @@ function(x,
     # algorithm here
     
     
-    char <- .nonfinite(x, char, dvn)
+    char <- .nonfinite(x, char, dvn = FALSE)
     
     eol <- intToBits(0)[1]
     unicode <- iconv(char, to='UTF-8', toRaw=TRUE)
