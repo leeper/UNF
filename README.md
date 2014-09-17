@@ -40,45 +40,68 @@ This can be used both to compare two objects in general (e.g., to see whether tw
 
 ## The UNF Algorithm ##
 
-The UNF algorithm is described in general terms [here](http://thedata.org/book/universal-numerical-fingerprint) along with more specific (but incomplete) descriptions of the [Version 3/4](http://thedata.org/book/unf-version-3-0) and [Version 5](http://thedata.org/book/unf-version-5-0) algorithms. I describe the algorithm below, noting points of ambiguity and inconsistency and how they are implemented in this package.
+The UNF algorithm is described in general terms [here](http://thedata.org/book/universal-numerical-fingerprint) along with more specific (but incomplete) descriptions of the [Version 3/4](http://thedata.org/book/unf-version-3-0), [Version 5](http://thedata.org/book/unf-version-5-0) and [Version 6](http://thedata.org/book/unf-version-6) algorithms. I describe the algorithm below, noting points of ambiguity and inconsistency and how they are implemented in this package.
 
-1. Round numerics to *n* digits and truncate character strings to *k* characters.
+1. Round numerics to *k* digits, where the default value of *k* is 7. Then, convert those numerics to a character-class string containing exponential notation in the following form:
 
-2. For UNF versions < 5, convert all non-numeric data to character. For UNF versions >= 5, treat factor as character, boolean as numeric (see next note), date/times as ISO 8601, and bits as base64-encoded big-endian bit sequences.
+    - A sign character
+    - A single leading non-zero digit
+    - A decimal point
+    - Up to *k*-1 remaining digits following the decimal, no trailing zeros
+    - A lowercase letter "e"
+    - A sign character
+    - The digits of the exponent, omitting trailing zeros
+    
+    Note (a): Zero can be positive ("+0.e+") or negative ("-0.e+"). R's `Inf`, `-Inf`, and `NaN` are represented as: "+inf", "-inf", and "+nan", respectively. At some point in time, Dataverse appeared to have handled non-finites by treating them as missing. See [here](https://redmine.hmdc.harvard.edu/issues/2960) for some notes.
+    
+    Note (b): In UNF versions <= 5, *k* was labeled *n*.
+    
+    Note (c): the [Dataverse](http://thedata.org) implementation of UNFv5 represents zero values (and boolean FALSE) values as "+0.e-6" rather than the implied "+0.e+" (like boolean TRUE values: "+1.e+"). The issue is described [here](https://redmine.hmdc.harvard.edu/issues/3085).
 
-    More details to come. Date and date-time classes are currently converted to character even for UNFv5, due to numerous ambiguities in the UNF standard regarding the handling of dates and times.
+2. Truncate character strings to *l* characters, where the default value of *l* is 128.
 
-3. Convert numerics to an exponential notation (see links to specific implementations for details).
+    Note (a): In UNF versions <= 5, *l* was labeled *k*.
 
-    Importantly, note that the [Dataverse](http://thedata.org) implementation of UNFv5 represents zero values (and boolean FALSE) values as "+0.e-6" rather than the implied "+0.e+" (like boolean TRUE values: "+1.e+"). The issue is described [here](https://redmine.hmdc.harvard.edu/issues/3085).
+3. Handle other types of data in the following ways.
 
-4. Handle non-finite values as special character strings (see [here](https://redmine.hmdc.harvard.edu/issues/2960) for some notes).
+    a. For UNF versions < 5, convert all non-numeric data to character and handle as in (2), above.
+    b. For UNF versions >= 5:
+        i. Convert boolean values to numeric (`TRUE` is "1" and `FALSE` is "0") and handle as in (1), above.
+        ii. Treat factors as character and handle as in (2), above.
+        iii. Treat bits (raw) variables as base64-encoded big-endian bit sequences.
+        iii. Handle dates, times, and datetimes as in (4), below.
 
-    Dataverse appears to handle non-finites by treating them as missing.
+4. Dates, times, datetimes, intervals, and durations are handled as follows:
 
-5. Append all non-missing values with an end-of-line (`\n`) character. Represent all missing values as a string of three null characters.
+    a. Dates are converted to character strings in the form "YYYY-MM-DD", but partial dates ("YYYY" and "YYYY-MM") are permitted.
+    b. Times are converted to character strings using the ISO 8601 format "hh:mm:ss.fffff". "fffff" is fractions of a second and must not containing trailing zeroes (as with any numeric value, see [1], above). The time should be expressed in UTC time with a terminal "Z" character.
+    c. Datetimes may be expressed as a concatenated date (only in the form "YYYY-MM-DD") and time, separated by "T". As an example, Fri Aug 22 12:51:05 EDT 2014 is encoded as "2014-08-22T16:51:05Z".
+    d. Intervals are represented as two datetimes, concatenated by a "/".
+    e. Durations, while mentioned in versions of the specification, are not supported (and were never supported by the R implementation).
+    
+    Note (a): Given the different implementation of timezones in different programming languages and software applications, UNF signatures calculated for identical datasets in different applications may differ. For example, the UNFv6 specification notes that Stata does not implement time zones, while R always assumes a timezone. The suggested work around is to convert variables to a string representation and handle as in (2), above.
 
-    Dataverse appears to treat empty character strings `""` as missing values. This is ambiguous in all versions of the standard.
+5. Append all non-missing values with an end-of-line (`\n`) character and a single null byte. Represent all missing values as a string of three null bytes.
+
+    Note (a): At some point in time, Dataverse appeared to treat empty character strings `""` as missing values. As of UNFv6, this is explicit that a missing value `NA` is represented by only three null bytes and an empty character string `""` is represented by an end-of-line character and a null byte.
 
 6. Convert to Unicode bit encoding. For UNF versions < 4.1, use [UTF-32BE](http://en.wikipedia.org/wiki/UTF-32BE). For UNF versions >= 4.1, use [UTF-8](http://en.wikipedia.org/wiki/UTF-8).
 
-7. Combine all values into a single byte sequence, separating values by nul bytes.
+7. Concatenate all values into a single byte sequence. Compute a hash on the resulting byte sequence. For UNF version 3, use [MD5](http://en.wikipedia.org/wiki/MD5). For UNF versions > 3, use [SHA256](http://en.wikipedia.org/wiki/SHA-2).
 
-8. Compute a hash on the resulting byte sequence. For UNF version 3, use [MD5](http://en.wikipedia.org/wiki/MD5). For UNF versions > 3, use [SHA256](http://en.wikipedia.org/wiki/SHA-2).
-
-9. [Base64 encode](http://en.wikipedia.org/wiki/Base64) the resulting hash. For UNF version 5, truncate the UNF by performing base64 encoding only on the leftmost 16 bytes.
+9. [Base64 encode](http://en.wikipedia.org/wiki/Base64) the resulting hash. For UNF versions >= 5, truncate the UNF by performing base64 encoding only on the leftmost 128, 192, 196, or 256 bits, where 128 bits (16 bytes) is the default.
 
 **To aggregate multiple variables:**
 
 1. Calculate the UNF for each variable, as above.
 
-    For one-variable datasets, Dataverse implements the algorithm at the variable-level only, without aggregation. Thus a UNF for a one-variable dataframe is the same as the UNF for that variable alone. The standard is ambiguous in this regard and the package copies the Dataverse implementation.
+    Note (a): For one-variable datasets, Dataverse implements the algorithm at the variable-level only, without aggregation. Thus a UNF for a one-variable dataframe is the same as the UNF for that variable alone. The standard is ambiguous in this regard and the package copies the Dataverse implementation.
     
-    The package treats dataframes and lists identically. Matrices are coerced to dataframes before running the algorithm.
+    Note (a): The package treats dataframes and lists identically. Matrices are coerced to dataframes before running the algorithm.
 
 2. Sort the base64-encoded UNFs in POSIX locale order.
 
-3. Apply the UNF algorithm to the sorted, base64-encoded UNFs, using a *k* value as large as the original, treating the UNFs as character. For UNF version 5, the algorithm is applied to the truncated UNFs.
+3. Apply the UNF algorithm to the sorted, base64-encoded UNFs, using an *l* value as large as the original, treating the UNFs as character. For UNF versions >= 5, the algorithm is applied to the truncated UNFs.
 
 **To aggregate multiple datasets:**
 
@@ -86,9 +109,9 @@ The UNF algorithm is described in general terms [here](http://thedata.org/book/u
 
 2. Sort the base64-encoded UNFs in POSIX locale order.
 
-3. Apply the UNF algorithm to the sorted, base64-encoded UNFs, using a *k* value as large as the original, treating the UNFs as character. For UNF version 5, the algorithm is applied to the truncated UNFs.
+3. Apply the UNF algorithm to the sorted, base64-encoded UNFs, using a *l* value as large as the original, treating the UNFs as character. For UNF versions >= 5, the algorithm is applied to the truncated UNFs.
 
-    Multiple datasets needs to be combined based on UNFs calculated with the same version of the algorithm. Thus when calculating a study-level UNF, dataset-level UNFs need to be calculated using the same version of the algorithm. To achieve this, Dataverse recalculates old UNFs whenever new data is added to a study.
+    Note (a): Multiple datasets needs to be combined based on UNFs calculated with the same version of the algorithm. Thus when calculating a study-level UNF, dataset-level UNFs need to be calculated using the same version of the algorithm. To achieve this, Dataverse recalculates old UNFs whenever new data is added to a study.
 
 ### References ###
 
