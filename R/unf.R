@@ -255,6 +255,7 @@ function(x,
     attr(out, 'version') <- 5
     attr(out, 'digits') <- digits
     attr(out, 'characters') <- chars
+    attr(out, 'truncation') <- truncation
     return(out)
 }
 
@@ -291,19 +292,33 @@ function(x,
     attr(out, 'version') <- 6
     attr(out, 'digits') <- digits
     attr(out, 'characters') <- chars
+    attr(out, 'truncation') <- truncation
     return(out)
 }
 
 print.UNF <- function(x, ...){
-    if(!is.null(attr(x,'version')) && attr(x, 'version')<5)
-        cat('Universal Numeric Fingerprint: ')
-    else
-        cat('Universal Numeric Fingerprint (Truncated): ')
-    if((!is.null(attr(x,'digits')) && attr(x,'digits')!=7) |
-        (!is.null(attr(x,'characters')) && attr(x,'characters')!=128))
-        cat(paste('UNF',attr(x, 'version'),
-            paste(attr(x,'digits'),attr(x,'characters'),sep=','),
-            x$unf,sep=':'),'\n')
-    else
-        cat(paste('UNF',attr(x, 'version'), x$unf,sep=':'),'\n')
+    if(!is.null(attr(x,'version')) && attr(x, 'version')<5) {
+        cat('Universal Numeric Fingerprint: UNF', attr(x, 'version'), ':', x$unf, '\n', sep="")
+    } else if(!is.null(attr(x,'version')) && attr(x, 'version')==5) {
+        cat('Universal Numeric Fingerprint (Truncated): UNF', attr(x, 'version'), ':', sep="")
+        if((!is.null(attr(x,'digits')) && attr(x,'digits')!=7) |
+            (!is.null(attr(x,'characters')) && attr(x,'characters')!=128)) {
+            cat(paste(attr(x,'digits'), attr(x,'characters'), sep=','), ':', sep="")
+        }
+        cat(x$unf, '\n')
+    } else if(!is.null(attr(x,'version')) && attr(x, 'version')==5) {
+        cat('Universal Numeric Fingerprint (Truncated): UNF', attr(x, 'version'), ':', sep="")
+        if((!is.null(attr(x,'digits')) && attr(x,'digits')!=7)) {
+            if(!is.null(attr(x,'characters')) && attr(x,'characters')!=128)
+                cat('N', attr(x,'digits'), ',H', attr(x,'characters'), ':', sep="")
+            else
+                cat('N', attr(x,'digits'), ':', sep="")
+        }
+        if(!is.null(attr(x,'characters')) && attr(x,'characters')!=128) {
+            cat('H', attr(x,'characters'), ':', sep="")
+        }
+        cat(x$unf, '\n')
+    } else {
+        cat('Universal Numeric Fingerprint: UNF', attr(x, 'version'), ':', x$unf, '\n', sep="")
+    }
 }
