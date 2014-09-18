@@ -1,0 +1,16 @@
+<!--
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{The UNF Algorithm}
+-->
+
+# Data Citation with UNF Signatures #
+
+This vignette shows some simple examples of how to use UNF signatures for data citation, using the `iris` and `airquality` datasets available in base R.
+
+```{r}
+library("datasets")
+iris
+airquality
+```
+
+
