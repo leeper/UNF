@@ -40,7 +40,9 @@ This can be used both to compare two objects in general (e.g., to see whether tw
 
 ## The UNF Algorithm ##
 
-The UNF algorithm is described in general terms [here](http://thedata.org/book/universal-numerical-fingerprint) along with more specific (but incomplete) descriptions of the [Version 3/4](http://thedata.org/book/unf-version-3-0), [Version 5](http://thedata.org/book/unf-version-5-0) and [Version 6](http://thedata.org/book/unf-version-6) algorithms. I describe the algorithm below, noting points of ambiguity and inconsistency and how they are implemented in this package.
+The UNF algorithm is described in general terms [here](http://thedata.org/book/universal-numerical-fingerprint) along with more specific (but incomplete) descriptions of the [Version 3/4](http://thedata.org/book/unf-version-3-0), [Version 5](http://thedata.org/book/unf-version-5-0) and [Version 6](http://thedata.org/book/unf-version-6) algorithms.
+
+I describe the algorithm below, noting potential problem areas and describing how particular details are implemented in this package.
 
 
 ### Numerics ###
@@ -57,9 +59,9 @@ Round numerics to *k* digits, where the default value of *k* is 7. (Note: In UNF
     
   Note (a): Zero can be positive ("+0.e+") or negative ("-0.e+").
   
-  Note (b): `Inf`, `-Inf`, and `NaN` are represented as: "+inf", "-inf", and "+nan", respectively. At some point in time, Dataverse appeared to have handled non-finites by treating them as missing. See [here](https://redmine.hmdc.harvard.edu/issues/2960) for some notes.
+  Note (b): `Inf`, `-Inf`, and `NaN` are represented as: "+inf", "-inf", and "+nan", respectively. At some point in time, Dataverse handled non-finites by treating them as missing. See [here](https://redmine.hmdc.harvard.edu/issues/2960) for some notes.
     
-  Note (c): The [Dataverse](http://thedata.org) implementation of UNFv5 represents zero values (and boolean FALSE) values as "+0.e-6" rather than the implied "+0.e+" (like boolean `TRUE` values: "+1.e+"). The issue is described [here](https://redmine.hmdc.harvard.edu/issues/3085).
+  Note (c): The [Dataverse](http://thedata.org) implementation of UNFv5 represents zero values (and boolean FALSE) values as "+0.e-6" rather than the implied "+0.e+" (like boolean `TRUE` values: "+1.e+"). The issue is described [here](https://redmine.hmdc.harvard.edu/issues/3085). This can be replicated in `unf5` by adding the argument `dvn_zero = TRUE`.
 
 ### Character Strings ###
 
@@ -74,26 +76,25 @@ Handle other types of data in the following ways.
   
     a. Convert boolean values to numeric (`TRUE` is "1" and `FALSE` is "0") and handle as in (1), above.
 
-    b. Treat factors as character and handle as in (2), above.
+    b. In this package, "factor" and "AsIs" class vectors are coerced to character and handled as in (2), above.
     
     c. Treat bits (raw) variables as base64-encoded big-endian bit sequences.
     
-    d. Handle dates, times, and datetimes as in (4), below.
+    d. Handle dates, times, and datetimes as in (4), below. In this package, time-series classes ("ts" and "zoo") and "difftime" class objects are coerced to numeric.
+    
 
 ### Dates, times, datetimes, intervals, and durations ###
 
 Dates, times, datetimes, intervals, and durations are handled as follows:
 
-  a. Dates are converted to character strings in the form "YYYY-MM-DD", but partial dates ("YYYY" and "YYYY-MM") are permitted.
+  a. Dates are converted to character strings in the form "YYYY-MM-DD", but partial dates ("YYYY" and "YYYY-MM") are permitted. (Note: Partial dates are not supported in R, but one can create character representations of partial dates in the package by specifying `date_format`.)
   
-  b. Times are converted to character strings using the ISO 8601 format "hh:mm:ss.fffff". "fffff" is fractions of a second and must not containing trailing zeroes (as with any numeric value, see [1], above). The time should be expressed in UTC time with a terminal "Z" character.
+  b. Times are converted to character strings using the ISO 8601 format "hh:mm:ss.fffff". "fffff" is fractions of a second and must not containing trailing zeroes (as with any numeric value, see [1], above). The time should be expressed in UTC time with a terminal "Z" character. (Note: Times without accompanying dates are not supported in R, and thus not implemented in the package.)
   
-  c. Datetimes may be expressed as a concatenated date (only in the form "YYYY-MM-DD") and time, separated by "T". As an example, Fri Aug 22 12:51:05 EDT 2014 is encoded as "2014-08-22T16:51:05Z".
+  c. Datetimes may be expressed as a concatenated date (only in the form "YYYY-MM-DD") and time, separated by "T". As an example, Fri Aug 22 12:51:05 EDT 2014 is encoded as: `"2014-08-22T16:51:05Z"`.
   
-  d. Intervals are represented as two datetimes, concatenated by a "/".
+  d. Intervals are represented as two datetimes, concatenated by a "/". (Note: Intervals are not supported in R, and thus not implemented in the package.)
   
-  e. Durations, while mentioned in versions of the specification, are not supported (and were never supported by the R implementation).
-    
   Note: Given the different implementation of timezones in different programming languages and software applications, UNF signatures calculated for identical datasets in different applications may differ. For example, the UNFv6 specification notes that Stata does not implement time zones, while R always assumes a timezone. The suggested work around is to convert variables to a string representation and handle as in (2), above.
 
 ### Computing the UNF ###
@@ -102,7 +103,7 @@ Dates, times, datetimes, intervals, and durations are handled as follows:
 
 2. Convert to Unicode bit encoding. For UNF versions < 4.1, use [UTF-32BE](http://en.wikipedia.org/wiki/UTF-32BE). For UNF versions >= 4.1, use [UTF-8](http://en.wikipedia.org/wiki/UTF-8).
 
-3. Concatenate all values into a single byte sequence. Compute a hash on the resulting byte sequence. For UNF version 3, use [MD5](http://en.wikipedia.org/wiki/MD5). For UNF versions > 3, use [SHA256](http://en.wikipedia.org/wiki/SHA-2).
+3. Concatenate all values into a single byte sequence. Compute a hash on the resulting byte sequence. For UNF versions > 3, use [SHA256](http://en.wikipedia.org/wiki/SHA-2). For UNF version 3, use [MD5](http://en.wikipedia.org/wiki/MD5). 
 
 4. [Base64 encode](http://en.wikipedia.org/wiki/Base64) the resulting hash. For UNF versions >= 5, truncate the UNF by performing base64 encoding only on the leftmost 128, 192, 196, or 256 bits, where 128 bits (16 bytes) is the default.
 
