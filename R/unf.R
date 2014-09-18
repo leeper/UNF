@@ -180,6 +180,9 @@ function(x,
         # FACTOR: treat factor as character and truncate to k
         x <- as.character(x)
     }
+    if(is.complex(x)){
+        # COMPLEX numbers: treat as character?
+    }
     if(is.raw(x)){
         if(raw_as_character) # DVN ingests raw as character
             x <- as.character(x)
@@ -200,15 +203,15 @@ function(x,
         # https://redmine.hmdc.harvard.edu/issues/2997
         if(!date_format %in% c('%Y-%m-%d', '%Y-%m', '%Y', '%F'))
             stop("'date_format' must be '%Y-%m-%d', '%Y-%m', '%Y', or '%F'")
-        char <- format(x, fmt = date_format)
+        char <- paste0(format(x, fmt = date_format),'\n')
     } else if(inherits(x, 'POSIXt')){
         # DATE-TIME: Time representation is based on the ISO 8601 extended format, hh:mm:ss.fffff. When .fffff represents fractions of a second, it must contain no trailing (non-significant) zeroes, and is omitted if valued at zero. Other fractional representations, such as fractional minutes and hours, are not permitted. If the time zone of the observation is known, convert the time value to the UTC time zone and append a "Z" to the time representation.
+        if(inherits(x, 'POSIXlt'))
+            x <- as.POSIXct(x)
         d <- getOption("digits.secs")
         options("digits.secs" = 5)
-        char <- paste0(format(x, "%FT%H:%M:", timezone), gsub("\\.?0+$","",format(x, "%OS", timezone)))
-        if(timezone=="UTC" | Sys.timezone(location=FALSE)=="UTC")
-            char <- paste0(char,"Z")
-        options("digits.secs" = d)    
+        char <- paste0(format(x, "%FT%H:%M:", timezone), gsub("\\.?0+$","",format(x, "%OS", timezone)), "Z\n")
+        options("digits.secs" = d)
     } else if(is.character(x)){
         # CHARACTER: truncate strings to k
         char <- paste(substring(x, 1, chars),'\n',sep='')
@@ -227,7 +230,7 @@ function(x,
             char <- ifelse(x, char, '+0.e-6\n') # https://redmine.hmdc.harvard.edu/issues/3085
     }
     
-    # deal with non-finite and missing values
+    # replace non-finite and missing values with NA
     # https://redmine.hmdc.harvard.edu/issues/2867
     # https://redmine.hmdc.harvard.edu/issues/2960
     char <- .nonfinite(x, char, nonfinites_as_missing)
@@ -275,6 +278,9 @@ function(x,
         # FACTOR: treat factor as character and truncate to k
         x <- as.character(x)
     }
+    if(is.complex(x)){
+        # COMPLEX numbers: treat as character?
+    }
     if(is.raw(x)){
         if(raw_as_character) # DVN ingests raw as character
             x <- as.character(x)
@@ -292,15 +298,15 @@ function(x,
         # DATE: Dates are converted to character strings in the form "YYYY-MM-DD", but partial dates ("YYYY" and "YYYY-MM") are permitted.
         if(!date_format %in% c('%Y-%m-%d', '%Y-%m', '%Y', '%F'))
             stop("'date_format' must be '%Y-%m-%d', '%Y-%m', '%Y', or '%F'")
-        char <- format(x, fmt = date_format)
+        char <- paste0(format(x, fmt = date_format),'\n')
     } else if(inherits(x, 'POSIXt')){
         # DATE-TIME: Datetimes may be expressed as a concatenated date (only in the form "YYYY-MM-DD") and time, separated by "T". As an example, Fri Aug 22 12:51:05 EDT 2014 is encoded as: `"2014-08-22T16:51:05Z"`.
-        d <- getOption('digits.secs')
+        if(inherits(x, 'POSIXlt'))
+            x <- as.POSIXct(x)
+        d <- getOption("digits.secs")
         options("digits.secs" = 5)
-        char <- paste0(format(x, "%FT%H:%M:", timezone), gsub("\\.?0+$","",format(x, "%OS", timezone)))
-        if(timezone=="UTC" | Sys.timezone(location=FALSE)=="UTC")
-            char <- paste0(char,"Z")
-        options("digits.secs" = d)    
+        char <- paste0(format(x, "%FT%H:%M:", timezone), gsub("\\.?0+$","",format(x, "%OS", timezone)), "Z\n")
+        options("digits.secs" = d)
     } else if(is.character(x)){
         # CHARACTER: truncate strings to k
         char <- paste(substring(x, 1, chars),'\n',sep='')
