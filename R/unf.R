@@ -1,4 +1,4 @@
-unf <- function(x, version = 5, ...){
+unf <- function(x, version = 6, ...){
     if(is.matrix(x))
         x <- as.data.frame(x)
     if((is.data.frame(x) | is.list(x)) & length(x)==1)
@@ -49,14 +49,22 @@ function(x,
          chars = 128L, 
          nonfinites_as_missing = TRUE, 
          empty_character_as_missing = TRUE,
+         factor_as_character = TRUE,
          ...){
     if(inherits(x, 'AsIs'))
         x <- as.character(x)
-    if(is.factor(x)){
+    if(is.factor(x)) {
         # FACTOR: treat factor as character and truncate to k
-        x <- as.character(x)
         # old DVN files downloaded as Tab save factors as integers w/o labels
-        #warning('factors treated as character')
+        if(factor_as_character)
+            x <- as.character(x)
+        else
+            x <- as.numeric(x)
+    }
+    if(is.complex(x)){
+        # COMPLEX numbers: treat as character?
+        x <- as.character(x)
+        warning("Complex vector converted to character")
     }
     if(is.integer(x)){
         rounded <- signif(x, digits) # uses standard signif rounding, despite standard
@@ -98,6 +106,7 @@ function(x,
          truncation = 128L,
          nonfinites_as_missing = TRUE, 
          empty_character_as_missing = TRUE,
+         factor_as_character = TRUE,
          dvn_zero = TRUE,
          version=4, ...){
     if(!truncation %in% c(128,192,196,256))
@@ -108,6 +117,18 @@ function(x,
         x <- as.character(x)
     if(is.ts(x))
         x <- as.numeric(x)
+    if(is.factor(x)) {
+        # FACTOR: treat factor as character and truncate to k
+        if(factor_as_character)
+            x <- as.character(x)
+        else
+            x <- as.numeric(x)
+    }
+    if(is.complex(x)){
+        # COMPLEX numbers: treat as character?
+        x <- as.character(x)
+        warning("Complex vector converted to character")
+    }
     if(is.numeric(x)){
         # NUMERICS:
         rounded <- signifz(x, digits) # uses non-standard signifz rounding
@@ -119,13 +140,8 @@ function(x,
         char <- paste(substring(x, 1, chars),'\n',sep='')
         if(empty_character_as_missing)
             char <- ifelse(x=='',NA,char)
-    } else {
-        # FACTOR: treat factor as character and truncate to k
-        char <- paste(substring(as.character(x), 1, chars),'\n',sep='')
-        if(empty_character_as_missing)
-            char <- ifelse(x=='',NA,char)
     } 
-
+    
     # deal with non-finite and missing values
     char <- .nonfinite(x, char, nonfinites_as_missing)
     
@@ -162,6 +178,7 @@ function(x,
          nonfinites_as_missing = TRUE, 
          empty_character_as_missing = TRUE,
          raw_as_character = TRUE,
+         factor_as_character = TRUE,
          dvn_zero = TRUE,
          timezone = "",
          date_format = "%F",
@@ -178,10 +195,15 @@ function(x,
     }
     if(is.factor(x)) {
         # FACTOR: treat factor as character and truncate to k
-        x <- as.character(x)
+        if(factor_as_character)
+            x <- as.character(x)
+        else
+            x <- as.numeric(x)
     }
     if(is.complex(x)){
         # COMPLEX numbers: treat as character?
+        x <- as.character(x)
+        warning("Complex vector converted to character")
     }
     if(is.raw(x)){
         if(raw_as_character) # DVN ingests raw as character
@@ -261,6 +283,7 @@ function(x,
          truncation = 128L,
          nonfinites_as_missing = TRUE, 
          raw_as_character = TRUE,
+         factor_as_character = TRUE,
          timezone = "",
          date_format = "%F",
          ...){
@@ -276,10 +299,15 @@ function(x,
     }
     if(is.factor(x)) {
         # FACTOR: treat factor as character and truncate to k
-        x <- as.character(x)
+        if(factor_as_character)
+            x <- as.character(x)
+        else
+            x <- as.numeric(x)
     }
     if(is.complex(x)){
         # COMPLEX numbers: treat as character?
+        x <- as.character(x)
+        warning("Complex vector converted to character")
     }
     if(is.raw(x)){
         if(raw_as_character) # DVN ingests raw as character
@@ -344,20 +372,20 @@ function(x,
 
 print.UNF <- function(x, ...){
     if(is.null(attr(x,'version'))) {
-        cat('Universal Numeric Fingerprint: UNF', x$unf, '\n')
+        out <- paste0('UNF:', x$unf)
     } else {
         if(attr(x, 'version')<5) {
-            cat('Universal Numeric Fingerprint: UNF', attr(x, 'version'), ':', x$unf, '\n', sep="")
+            out <- paste0('UNF', attr(x, 'version'), ':', x$unf, '\n')
         } else if(attr(x, 'version')==5) {
-            cat('Universal Numeric Fingerprint: UNF5:')
-            if((!is.null(attr(x,'digits')) & attr(x,'digits')!=7) |
-                (!is.null(attr(x,'characters')) & attr(x,'characters')!=128)) {
-                cat(paste(attr(x,'digits'), attr(x,'characters'), sep=','), ':', x$unf, '\n', sep="")
-            } else {
-                cat(x$unf, '\n')
-            }
+            out <- paste0('UNF5:',
+                if((!is.null(attr(x,'digits')) & attr(x,'digits')!=7) |
+                    (!is.null(attr(x,'characters')) & attr(x,'characters')!=128)) {
+                    paste0(paste(attr(x,'digits'), attr(x,'characters'), sep=','), ':', x$unf)
+                } else {
+                    x$unf
+                })
         } else if(attr(x, 'version')==6) {
-            cat('Universal Numeric Fingerprint: UNF6:',
+            out <- paste0('UNF6:',
                 paste(ifelse(!is.null(attr(x,'digits')) & !attr(x,'digits')==7, 
                         paste0("N",attr(x,'digits')), ""),
                       ifelse(!is.null(attr(x,'characters')) & !attr(x,'characters')==128, 
@@ -365,16 +393,16 @@ print.UNF <- function(x, ...){
                       ifelse(!is.null(attr(x,'truncation')) & !attr(x,'truncation')==128, 
                         paste0("H",attr(x,'truncation')), ""),
                       sep = "", collapse=","),
-                sep="")
-            if((!is.null(attr(x,'digits')) & !attr(x,'digits')==7) |
-               (!is.null(attr(x,'characters')) & !attr(x,'characters')==128) | 
-               (!is.null(attr(x,'truncation')))  & !attr(x,'truncation')==128) {
-                cat(':', x$unf, '\n', sep="")
-            } else {
-                cat(x$unf, '\n', sep="")
-            }
+                if((!is.null(attr(x,'digits')) & !attr(x,'digits')==7) |
+                   (!is.null(attr(x,'characters')) & !attr(x,'characters')==128) | 
+                   (!is.null(attr(x,'truncation')))  & !attr(x,'truncation')==128) {
+                    paste0(':', x$unf)
+                } else {
+                    x$unf
+                })
         } else {
-            cat('Universal Numeric Fingerprint: UNF', attr(x, 'version'), ':', x$unf, '\n', sep="")
+            out <- paste0('UNF', attr(x, 'version'), ':', x$unf)
         }
     }
+    print(out)
 }
