@@ -5,12 +5,125 @@
 
 # Data Citation with UNF Signatures #
 
-This vignette shows some simple examples of how to use UNF signatures for data citation, using the `iris` and `airquality` datasets available in base R.
+This vignette shows some simple examples of how to use UNF signatures for data citation, using the **UNF** package on the `iris` dataset available in base R.
+
+```{r}
+library("UNF")
+```
+
+The datasets should already be available in R, but we will load it explicitly just for good measure:
 
 ```{r}
 library("datasets")
-iris
-airquality
+data(iris)
 ```
 
+## UNF versus MD5 ##
+
+A common method of creating a unique hash for a data file (or any file) is the MD5 algorithm which, in most cases, produces a unique hash for a file that will change if the file is changed. This is useful from a data citation perspective because meaningful changes to the data will produce meaningful changes to the hash:
+
+```{r}
+digest(iris, "md5")
+digest(head(iris), "md5")
+```
+
+A subset of the `iris` data has a different MD5 hash than the full dataset. But, MD5 is sensitive to variable ordering:
+
+```{r}
+digest(iris, "md5")
+digest(rev(iris), "md5")
+```
+
+`iris` and `rev(iris)` contain identical data values, but the variables are simply in reverse order. This means that while MD5 is sensitive to meaningful changes in data contents, it is also sensitive to meaningless changes in data structure. Relatedly, MD5 is sensitive to irrelevant changes in variable naming that might result from modifying how data are read into memory:
+
+```{r}
+iris2 <- iris
+names(iris2) <- gsub("\\.","",names(iris2))
+names(iris)
+names(iris2)
+digest(iris, "md5")
+digest(iris2, "md5")
+```
+
+MD5 sums are also sensitive to the format in which data are actually preserved (i.e., they are format-dependent). The same data saved as an .RData file and as a CSV yield different MD5 hashes: 
+
+```{r}
+library("tools")
+save(iris, file = "iris.RData")
+write.csv(iris, file = "iris.csv", row.names = FALSE)
+md5sum("iris.RData")
+md5sum("iris.csv")
+```
+
+And the `iris` dataset yields a different MD5 after being read back in from the CSV, despite being *identical*:
+
+```{r}
+# read CSV back into memory
+d <- read.csv("iris.csv")
+identical(iris, d)
+digest(iris, "md5")
+digest(d, "md5")
+```
+
+```{r, echo = FALSE}
+# cleanup files
+unlink("iris.RData")
+unlink("iris.csv")
+```
+
+This is problematic if moving between statistical software (e.g., R, Stata, SPSS, SAS, etc.), which prefer a native file format, or even between R sessions when data might be saved from a tabular format into native .RData and back again.
+
+## UNF in Practice ##
+
+UNF has at least two significant use cases:
+
+ 1. To create a format-independent citation to a specific (subset of) a version of a dataset for use in academic publishing, data sharing, and archiving.
+ 2. To make versions and subsets explicit in the description of complex analyses.
+ 
+This section walks through both of these use cases.
+
+### UNF As Data Citation ###
+
+Because it is format-independent, the UNF hash is appropriated labeled a *universal* numeric fingerprint: any software application and any programming language can implement the algorithm. This means that data users can use UNF to create UNF-embedded citations for their data and use UNF citations to confirm they have the appropriate version and subset of a specified dataset.
+
+For example, the `iris` dataset is cited in the R documentation (`? iris`) as:
+
+> Anderson, Edgar (1935). The irises of the Gaspe Peninsula, *Bulletin of the American Iris Society*, 59, 2–5.
+
+While R users are familiar with these data and they have been a part of R for a long time, it is possible for anyone to go Anderson's article, transcribe the data (or some part thereof) to a new dataset, start calling it `iris`, and use the same citation. A third user then, when holding `iris` in memory, has to wonder how can they confirm what version of `iris` they're using? If the citation were expanded to include a UNF signature, there would be no question about whether the data in-hand matched the data cited.
+
+```{r}
+unf(iris)
+```
+
+```{r, echo=FALSE}
+cat("> Anderson, Edgar (1935). The irises of the Gaspe Peninsula, *Bulletin of the American Iris Society*, 59, 2–5.", unf(iris), "\n")
+```
+
+When used in tandem with a persistent locator (e.g., a Handle or Data DOI), this rich citation not only persistently points data users to a location to find the data but also points them to a specific version of the data (of possibly many) available at that location. This means that as datasets evolve, expand, are corrected for errors, or move physical storage locations, a URI + UNF combination provides an incredibly valuable data citation. As an example, the following Handle and UNF citation provide a persistent link to replication files for an article. These files currently live on the Harvard University Dataverse Network, but the use of a handle and UNF mean interested users should be able to find the specific version of the data used in the original article indefinitely:
+
+> James Druckman; Jordan Fein; Thomas Leeper, 2012, "Replication data for: A Source of Bias in Public Opinion Stability", http://hdl.handle.net/1902.1/17864 UNF:5:esVZKwuUnh5kkpDhxXKLxA==
+
+### UNF As In-line Data Description ###
+
+In addition to use as part of a persistent identifier of a dataset, UNF can also be used within an analysis to make subsetting and versioning explicit. For example, `iris` contains data on three species (stored in the `Species` variable). If we analyze these data together, we are working with one subset of the data (the subset of the whole):
+
+```{r}
+unf(iris)
+```
+
+But if we want to work with species individually, each of those subsets has a unique UNF:
+
+```{r}
+unf(iris[iris$Species == 'setosa',])
+unf(iris[iris$Species == 'versicolor',])
+unf(iris[iris$Species == 'virginica',])
+```
+
+Similarly, if we wanted to work with a random subsample of observations in `iris`, we could use UNF to state explicitly the contents of that subset:
+
+```{r}
+set.seed(123)
+unf(iris[sample(20, 1:nrow(iris), FALSE),])
+```
 
