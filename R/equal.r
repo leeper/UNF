@@ -8,14 +8,29 @@
         y <- as.data.frame(y)
         warning('Coercing y to dataframe')
     }
-    if(inherits(x, 'UNF'))
+    if(inherits(x, 'UNF')) {
         unfx <- x
-    else
-        unfx <- unf(x, ...)
-    if(inherits(y, 'UNF'))
+        a <- (inherits(y, 'UNF') & (attr(x, 'version') != attr(y, 'version')))
+        b <- !inherits(y, 'UNF')
+        if(a | b)
+            unfy <- unf(y, version = attr(unfx, 'version'), ...)
+        } else {
+            unfy <- y
+        }
+    } else if (inherits(y, 'UNF')) {
         unfy <- y
-    else
+        a <- (inherits(x, 'UNF') & (attr(x, 'version') != attr(y, 'version')))
+        b <- !inherits(x, 'UNF')
+        if(a | b)
+            unfx <- unf(x, version = attr(unfy, 'version'), ...)
+        } else {
+            unfx <- x
+        }
+    } else {
+        unfx <- unf(x, ...)
         unfy <- unf(y, ...)
+    }
+    
     sorted <- NULL
     dimx <- dimy <- NULL
     x.rows <- y.rows <- NULL
