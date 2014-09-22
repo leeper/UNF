@@ -104,11 +104,12 @@ function(x,
          digits = 7L, 
          chars = 128L, 
          truncation = 128L,
+         version = 4, 
          nonfinites_as_missing = TRUE, 
          empty_character_as_missing = TRUE,
          factor_as_character = TRUE,
          dvn_zero = TRUE,
-         version=4, ...){
+         ...){
     if(!truncation %in% c(128,192,196,256))
         stop("'truncation' must be in 128, 192, 196, 256")
     if(truncation < chars)
@@ -177,9 +178,9 @@ function(x,
          truncation = 128L,
          nonfinites_as_missing = TRUE, 
          empty_character_as_missing = TRUE,
-         raw_as_character = TRUE,
          factor_as_character = TRUE,
          dvn_zero = TRUE,
+         raw_as_character = TRUE,
          timezone = "",
          date_format = "%F",
          ...){

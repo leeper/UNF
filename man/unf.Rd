@@ -6,29 +6,61 @@
 \alias{unf6}
 \alias{print.UNF}
 \title{Universal Numeric Fingerprint}
-\description{A universal numeric fingerprint is used to guarantee that a defined subset of data is substantively identical to a comparison subset. Two fingerprints will match if and only if the subset of data generating them are identical, when represented using a given number of significant digits.}
+\description{UNF is a cryptographic hash or signature that can be used to uniquely identify (a version of) a dataset, or a subset thereof.}
 \usage{
-unf(x, ver = 5, ...)
+unf(x, version = 6, ...)
 
-unf3(x, digits = 7, chars = 128, dvn = TRUE, ...)
+unf6(x, digits = 7L, chars = 128L, truncation = 128L, 
+     nonfinites_as_missing = TRUE, 
+     raw_as_character = TRUE,
+     factor_as_character = TRUE,
+     complex_as_character = TRUE,
+     timezone = "",
+     date_format = "%F",
+     ...)
 
-unf4(x, digits = 7, chars = 128, dvn = TRUE, ver = 4, ...)
+unf5(x, digits = 7L, chars = 128L, truncation = 128L,
+     nonfinites_as_missing = TRUE, 
+     empty_character_as_missing = TRUE,
+     factor_as_character = TRUE,
+     dvn_zero = TRUE,
+     raw_as_character = TRUE,
+     timezone = "",
+     date_format = "%F",
+     ...)
 
-unf5(x, digits = 7, chars = 128, dvn = TRUE, ...)
+unf4(x, digits = 7L, chars = 128L, truncation = 128L, version = 4, 
+     nonfinites_as_missing = TRUE, 
+     empty_character_as_missing = TRUE,
+     factor_as_character = TRUE,
+     dvn_zero = TRUE,
+     ...)
 
-unf6(x, digits = 7, chars = 128, dvn = TRUE, ...)
+unf3(x, digits = 7L, chars = 128L, 
+     nonfinites_as_missing = TRUE, 
+     empty_character_as_missing = TRUE,
+     factor_as_character = TRUE,
+     ...)
 }
 
 \arguments{
 	\item{x}{For \code{unf}, a vector, matrix, dataframe, or list; for \code{unf3}, \code{unf4}, \code{unf5}, a vector. If \code{x} is a dataframe or list with one variable or one vector element, respectively, \code{unf} returns the UNF for the single vector (which is consistent with the Dataverse implementation but ambiguous in the UNF standard). For algorithm versions < 5, all non-numeric vectors are treated as character.}
 	\item{ver}{Version of the UNF algorithm. Allowed values are 3, 4, 4.1, 5, and 6. Always use the same version of the algorithm to check a UNF. Default for \code{unf} is 5 and default for \code{unf4} is 4 (but can also be set to 4.1, which is identical except for using SHA256 instead of MD5).}
-	\item{digits}{The number of significant digits for rounding for numeric values. Default is 7. Should be between 1 and 15.}
-	\item{chars}{The number of characters for truncation. Default is 128. Should be greater than 1.}
-    \item{dvn}{A logical indicating whether to use the Dataverse Network implementation of the UNF algorithm. Default is \code{TRUE}. See details.}
-	\item{\ldots}{Additional arguments passed to specific algorithm functions.}
+	\item{digits}{The number of significant digits for rounding for numeric values. Default is 7L. Must be between 1 and 15.}
+	\item{chars}{The number of characters for truncation. Default is 128L. Must be greater than 1.}
+    \item{truncation}{The number of bits to truncate the UNF signature to. Default is 128L. Must be one of: 128,192,196,256.}
+    \item{nonfinites_as_missing}{A logical indicating whether to treat nonfinite values (\code{NaN}, \code{Inf}, \code{-Inf}) as \code{NA}. This is supplied to create compatibility with a Dataverse UNFv5 implementation.}
+    \item{empty_character_as_missing}{A logical indicating whether to treat an empty character string as a missing value. This is supplied to create compatibility with a Dataverse UNFv5 implementation.}
+    \item{factor_as_character}{A logical indicating whether to treat an factors as character. If \code{FALSE}, factor variables are treated as integer (and thus handled as any numeric value).}
+    \item{dvn_zero}{A logical indicating whether to format a zero (0) numeric value as \code{+0.e-6} instead of the default \code{+0.e+}. This is supplied to create compatibility with a Dataverse UNFv5 implementation.}
+    \item{raw_as_character}{A logical indicating whether to format raw vectors as character.}
+    \item{complex_as_character}{A logical indicating whether to format raw vectors as character. If \code{TRUE}, UNF should match Dataverse UNFv5 implementation. If \code{FALSE}, complex numbers are formatted as \code{A,iB}.}
+    \item{timezone}{}
+    \item{date_format}{}
+    \item{\ldots}{Additional arguments passed to specific algorithm functions.}
 }
 \details{
-The Dataverse Network implements a potentially incorrect version of the UNF algorithm with regard to the handling of zero values and boolean FALSE values in data (though the specification is unclear). Setting the \code{dvn} argument to \code{TRUE} (the default), uses the Dataverse implementation (for comparison to files stored in that archive).
+The Dataverse Network implements a potentially incorrect version of the UNF algorithm with regard to the handling of zero values and logical \code{FALSE} values in data (though the specification is unclear). Setting the \code{dvn} argument to \code{TRUE} (the default), uses the Dataverse implementation (for comparison to files stored in that archive).
 }
 
 \value{
@@ -42,10 +74,11 @@ The object additionally contains several attributes:
 \item{version}{A one-element numeric vector specifying which version of the UNF algorithm was used to generate the object.}
 \item{digits}{A one-element numeric vector specifying how many significant digits were used in rounding numeric values.}
 \item{characters}{A one-element numeric vector specifying how many characters were preserved during truncation of character values.}
+\item{truncation}{A one-element numeric vector specifying how many bits the UNF hash was truncated to.}
 
 The default print method displays the UNF along with these attributes. For example:
 
-UNF:3:4,128:ZNQRI14053UZq389x0Bffg==
+\code{UNF:3:4,128:ZNQRI14053UZq389x0Bffg==}
 
 This representation identifies the signature as UNF, using version 3 of the algorithm, computed to 4 significant digits for numbers and 128 for characters. The segment following the final colon is the actual fingerprint in base64-encoded format.
 }
@@ -78,7 +111,7 @@ unf5(-3:3) # UNF:5:pwzm1tdPaqypPWRWDeW6Jw==
 unf5(c('test','1','2','3')) # UNF:5:fH4NJMYkaAJ16OWMEE+zpQ==
 unf5(as.factor(c('test','1','2','3'))) # UNF:5:fH4NJMYkaAJ16OWMEE+zpQ==
 
-### booleans
+### logicals
 unf5(c(TRUE,TRUE,FALSE))# UNF:5:DedhGlU7W6o2CBelrIZ3iw==
 
 ### dates
