@@ -284,6 +284,7 @@ function(x,
          nonfinites_as_missing = TRUE, 
          raw_as_character = TRUE,
          factor_as_character = TRUE,
+         complex_as_character = TRUE,
          timezone = "",
          date_format = "%F",
          ...){
@@ -304,11 +305,6 @@ function(x,
         else
             x <- as.numeric(x)
     }
-    if(is.complex(x)){
-        # COMPLEX numbers: treat as character?
-        x <- as.character(x)
-        warning("Complex vector converted to character")
-    }
     if(is.raw(x)){
         if(raw_as_character) # DVN ingests raw as character
             x <- as.character(x)
@@ -322,7 +318,15 @@ function(x,
             warning('UNF is untested on raw vectors')
         }
     }
-    if(inherits(x, 'Date')){
+    if(is.complex(x) & complex_as_character) {
+        x <- as.character(x)
+    }
+    if(is.complex(x) & !complex_as_character){
+        # COMPLEX numbers: format as `A,iB`
+        re <- .expform(round(Re(x), digits-1), digits-1)
+        co <- .expform(round(Im(x), digits-1), digits-1)
+        char <- paste(substring(re, 1, nchar(re)-1), co, sep=",i")
+    } else if(inherits(x, 'Date')){
         # DATE: Dates are converted to character strings in the form "YYYY-MM-DD", but partial dates ("YYYY" and "YYYY-MM") are permitted.
         if(!date_format %in% c('%Y-%m-%d', '%Y-%m', '%Y', '%F'))
             stop("'date_format' must be '%Y-%m-%d', '%Y-%m', '%Y', or '%F'")

@@ -22,7 +22,7 @@ While file checksums are a common strategy for verifying a file (e.g., md5 sums 
 4. *UNFs are strongly tamper resistant.* Any accidental or intentional changes to data values will change the resulting UNF. Most file checksums and descriptive statistics detect only certain types of changes.
 
 
-## Numerics ##
+## (1) Numerics ##
 
 Round numerics to *k* digits, where the default value of *k* is 7. (Note: In UNF versions <= 5, *k* was labeled *n*.) Then, convert those numerics to a character-class string containing exponential notation in the following form:
 
@@ -38,20 +38,20 @@ Round numerics to *k* digits, where the default value of *k* is 7. (Note: In UNF
   
   Note (b): `Inf`, `-Inf`, and `NaN` are represented as: "+inf", "-inf", and "+nan", respectively. At some point in time, Dataverse handled non-finites by treating them as missing. See [here](https://redmine.hmdc.harvard.edu/issues/2960) for some notes.
     
-  Note (c): The [Dataverse](http://thedata.org) implementation of UNFv5 represents zero values (and boolean FALSE) values as "+0.e-6" rather than the implied "+0.e+" (like boolean `TRUE` values: "+1.e+"). The issue is described [here](https://redmine.hmdc.harvard.edu/issues/3085). This can be replicated in `unf5` by adding the argument `dvn_zero = TRUE`.
+  Note (c): The [Dataverse](http://thedata.org) implementation of UNFv5 represents zero values (and logical `FALSE`) values as "+0.e-6" rather than the implied "+0.e+" (like logical `TRUE` values: "+1.e+"). The issue is described [here](https://redmine.hmdc.harvard.edu/issues/3085). This can be replicated in `unf5` by adding the argument `dvn_zero = TRUE`.
 
-## Character Strings ##
+## (2) Character Strings ##
 
 Truncate character strings to *l* characters, where the default value of *l* is 128. (Note: In UNF versions <= 5, *l* was labeled *k*.)
 
-## Other Data Classes ##
+## (3) Other Data Classes ##
 
 Handle other types of data in the following ways.
 
   1. For UNF versions < 5, convert all non-numeric data to character and handle as in (2), above.
   2. For UNF versions >= 5:
   
-    a. Convert boolean values to numeric (`TRUE` is "1" and `FALSE` is "0") and handle as in (1), above.
+    a. Convert logical values to numeric (`TRUE` is "1" and `FALSE` is "0") and handle as in (1), above.
 
     b. In this package, "factor" and "AsIs" class vectors are coerced to character and handled as in (2), above.
     
@@ -59,8 +59,10 @@ Handle other types of data in the following ways.
     
     d. Handle dates, times, and datetimes as in (4), below. In this package, time-series classes ("ts" and "zoo") and "difftime" class objects are coerced to numeric.
     
+    e. Format complex numbers as `A,iB`, where `A` is the real component and and `B` is the complex component and both are formatted as numeric values as in (1), above.
+    
 
-## Dates, times, datetimes, intervals, and durations ##
+## (4) Dates, times, datetimes, intervals, and durations ##
 
 Dates, times, datetimes, intervals, and durations are handled as follows:
 
