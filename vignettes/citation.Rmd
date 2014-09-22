@@ -1,6 +1,6 @@
 <!--
 %\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{The UNF Algorithm}
+%\VignetteIndexEntry{Data Citation with UNF}
 -->
 
 # Data Citation with UNF Signatures #
