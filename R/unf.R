@@ -22,6 +22,8 @@ unf <- function(x, version = 6, ...){
         } else if(version==6){
             vars <- sapply(x, function(i) unf6(i, ...)$unf)
             out <- unf6(sort(vars), ...)
+        } else {
+            stop("Unrecognized UNF version: must be 3, 4, 4.1, 5, or 6.")
         }
         Sys.setlocale(category="LC_COLLATE", locale)
         out$variables <- vars
@@ -37,6 +39,8 @@ unf <- function(x, version = 6, ...){
             out <- unf5(x, ...)
         } else if(version==6){
             out <- unf6(x, ...)
+        } else {
+            stop("Unrecognized UNF version: must be 3, 4, 4.1, 5, or 6.")
         }
         return(out)
     }
