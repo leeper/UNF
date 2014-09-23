@@ -1,9 +1,7 @@
-.nonfinite <- function(x, char, dvn=TRUE){
-    if(dvn){
-        # Inf, -Inf, and NaN appear to be treated as missing values
+.nonfinite <- function(x, char, nonfinites_as_missing=FALSE){
+    if(nonfinites_as_missing){
         char <- ifelse(is.nan(x), NA, char)
     } else {
-        # Inf, -Inf, and NaN are described as being treated as +inf, -inf, and +nan in the standard
         char <- ifelse((!is.finite(x) & !is.character(x)), paste(tolower(as.character(x)),'\n',sep=''), char)
         char <- ifelse(char=='inf\n', '+inf\n', char)
         char <- ifelse(is.nan(x), '+nan\n', char)
