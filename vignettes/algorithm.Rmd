@@ -5,7 +5,7 @@
 
 # The UNF Algorithm #
 
-This vignette describes the UNF algorithm and the R implementation thereof, which includes some peculiarities. The official specifications for various versions of UNF can be found elsewhere online. The algorithm is described in general terms [here](http://thedata.org/book/universal-numerical-fingerprint) and one can also find more specific descriptions of the [Version 3/4](http://thedata.org/book/unf-version-3-0), [Version 5](http://thedata.org/book/unf-version-5-0) and [Version 6](http://thedata.org/book/unf-version-6) algorithms.
+This vignette describes the UNF algorithm (Altman, Gill, McDonald 2003; Altman and King 2007; Altman 2008) and the R implementation thereof, which includes some peculiarities. The official specifications for various versions of UNF can be found elsewhere online. The algorithm is described in general terms [here](http://thedata.org/book/universal-numerical-fingerprint) and one can also find more specific descriptions of the [Version 3/4](http://thedata.org/book/unf-version-3-0), [Version 5](http://thedata.org/book/unf-version-5-0) and [Version 6](http://thedata.org/book/unf-version-6) algorithms.
 
 The current version of this package is an R implementation that relies on general implementations of the relevant hash functions provided by [digest](http://cran.r-project.org/web/packages/digest/index.html) and base64 encoding provided by [RCurl](http://cran.r-project.org/web/packages/RCurl/index.html). Versions 1 and 2 were available in an earlier version of the UNF package authored by Micah Altman, which was built on custom C libraries, and is included in the version logs on GitHub. That package was orphaned by CRAN in 2009. The package retains the core `unf` function from the earlier versions of the UNF package, but simplifies its use considerably. The package additionally implements some new helper functions.
 
@@ -119,10 +119,10 @@ The package prints each UNF in the appropriate format, including any non-default
 
 Altman, Micah, Jeff Gill and Michael P. McDonald.  2003. *Numerical Issues in Statistical Computing for the Social Scientist*.  John Wiley \& Sons. http://www.hmdc.harvard.edu/numerical_issues/. *(Describes version 3 of the algorithm)*
 
-Altman, Micah, \& Gary King. 2007. A Proposed Standard for the Scholarly Citation of Quantitative Data. *D-Lib* 13(3/4). http://dlib.org/dlib/march07/altman/03altman.html. *(Describes a citation standard using UNFs)*
+Altman, Micah, \& Gary King. 2007. A Proposed Standard for the Scholarly Citation of Quantitative Data. *D-Lib* 13(3/4). http://dlib.org/dlib/march07/altman/03altman.html.
 
-Altman, Micah 2008. A Fingerprint Method for Scienti?c Data Veri?cation. In T. Sobh, editor, *Advances in Computer and Information Sciences and Engineering*, chapter 57, pages 311-316. Springer Netherlands, Netherlands. http://link.springer.com/chapter/10.1007/978-1-4020-8741-7_57 *(Describes version 5 of the algorithm)*
+Altman, Micah 2008. A Fingerprint Method for Scientific Data Verification. In T. Sobh, editor, *Advances in Computer and Information Sciences and Engineering*, chapter 57, pages 311-316. Springer Netherlands, Netherlands. http://link.springer.com/chapter/10.1007/978-1-4020-8741-7_57. *(Describes version 5 of the algorithm)*
 
-Data Citation Synthesis Group. 2013. Declaration of Data Citation Principles. http://www.force11.org/datacitation *(Describes general principles of data citation, of which UNF is likely to be a part)*
+Data Citation Synthesis Group. 2013. Declaration of Data Citation Principles. http://www.force11.org/datacitation.
 
-Altman, Michah, and Merce Crosas. 2014. The Evolution of Data Citation: From Principles to Implementation. *IASSIST QUARTERLY*, Forthcoming. http://thedata.org/files/thedata_new2/files/altmancrosasiassistqforthcoming.pdf
+Altman, Michah, and Merce Crosas. 2014. The Evolution of Data Citation: From Principles to Implementation. *IASSIST QUARTERLY*, Forthcoming. http://thedata.org/files/thedata_new2/files/altmancrosasiassistqforthcoming.pdf.
