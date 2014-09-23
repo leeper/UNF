@@ -19,7 +19,7 @@ library("digest")
 data(iris)
 ```
 
-## UNF versus MD5 ##
+## MD5: The Current Alternative to UNF ##
 
 A common method of creating a unique hash for a data file (or any file) is the MD5 algorithm which, in most cases, produces a unique hash for a file that will change if the file is changed. This is useful from a data citation perspective because meaningful changes to the data will produce meaningful changes to the hash:
 
@@ -73,6 +73,54 @@ unlink("iris.csv")
 ```
 
 This is problematic if moving between statistical software (e.g., R, Stata, SPSS, SAS, etc.), which prefer a native file format, or even between R sessions when data might be saved from a tabular format into native .RData and back again.
+
+Finally, MD5 depends on insignificant numerical information and that dependency cannot be modified. Thus numbers that are identical (up to a specified level of precision) still yield different MD5 hashes:
+
+```{r}
+x1 <- 1:20
+x2 <- x1 + 1e-7
+identical(digest(x1), digest(x2))
+```
+
+## UNF Solves Problems of MD5 ##
+
+While file checksums are a common strategy for verifying a file, they are not well-suited to being used as global signatures for a dataset. A UNF differs from an ordinary file checksum in several important ways:
+
+1. *UNFs are format independent.* The UNF for a dataset will be the same regardless of whether the data is saved as a R binary format, SAS formatted file, Stata formatted file, etc., but file checksums will differ. The UNF is also independent of variable arrangement and naming, which can be unintentionally changed during file reading.
+
+    ```{r}
+    write.csv(iris, file = "iris.csv", row.names = FALSE)
+    iris2 <- read.csv("iris.csv")
+    identical(iris, iris2)
+    identical(unf(iris), unf(iris2))
+    ```
+
+    ```{r, echo = FALSE}
+    # cleanup files
+    unlink("iris.csv")
+    ```
+
+2. *UNFs are robust to insignificant rounding error.* This important when dealing with floating-point numeric values. A UNF will also be the same if the data differs in non-significant digits, a file checksum not. The UNF specification also allows tolerances for alternative levels of precision to meet the needs of any particular use case:
+
+    ```{r}
+    x1 <- 1:20
+    x2 <- x1 + 1e-7
+    identical(unf(x1), unf(x2))
+    x3 <- x1 + 1e-3
+    identical(unf(x1), unf(x3))
+    identical(unf(x1, digits = 3), unf(x2, digits = 3))
+    ```
+
+3. *UNFs detect misinterpretation of the data by statistical software.* If the statistical software misreads the file, the resulting UNF will not match the original, but the file checksums may match. For example, numeric values read as character will produce a different UNF than those values read in as numerics.
+
+    ```{r}
+    x1 <- 1:20
+    x2 <- as.character(x1)
+    identical(unf(x1), unf(x2))
+    ```
+
+4. *UNFs are strongly tamper resistant.* Any accidental or intentional changes to data values will change the resulting UNF. Most file checksums and descriptive statistics detect only certain types of changes.
+
 
 ## UNF in Practice ##
 
