@@ -19,6 +19,7 @@ While file checksums are a common strategy for verifying a file (e.g., md5 sums 
 1. *UNFs are format independent.* The UNF for a dataset will be the same regardless of whether the data is saved as a R binary format, SAS formatted file, Stata formatted file, etc., but file checksums will differ. The UNF is also independent of variable arrangement and naming, which can be unintentionally changed during file reading.
 
     ```{r}
+    library("digest")
     library("UNF")
     write.csv(iris, file = "iris.csv", row.names = FALSE)
     iris2 <- read.csv("iris.csv")
@@ -60,5 +61,6 @@ While file checksums are a common strategy for verifying a file (e.g., md5 sums 
     ```{r}
     u <- unf(iris)
     unf(iris) %unf% u
-    unf(iris) %unf% unf(iris[1:4,])
+    unf(iris) %unf% unf(iris[,1:3])
+    unf(iris) %unf% head(iris[,1:3])
     ```

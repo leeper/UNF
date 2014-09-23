@@ -20,7 +20,6 @@ unf <- function(x, version = 6, ...){
             vars <- sapply(x, function(i) unf5(i, ...)$unf)
             out <- unf5(sort(vars), ...)
         } else if(version==6){
-            warning('UNFv6 not yet fully implemented')
             vars <- sapply(x, function(i) unf6(i, ...)$unf)
             out <- unf6(sort(vars), ...)
         }

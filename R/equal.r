@@ -10,18 +10,18 @@
     }
     if(inherits(x, 'UNF')) {
         unfx <- x
-        a <- (inherits(y, 'UNF') & (attr(x, 'version') != attr(y, 'version')))
-        b <- !inherits(y, 'UNF')
-        if(a | b)
+        if(!inherits(y, 'UNF')) {
+            unfy <- unf(y, version = attr(unfx, 'version'), ...)
+        } else if(inherits(y, 'UNF') & (attr(x, 'version') != attr(y, 'version'))) {
             unfy <- unf(y, version = attr(unfx, 'version'), ...)
         } else {
             unfy <- y
         }
     } else if (inherits(y, 'UNF')) {
         unfy <- y
-        a <- (inherits(x, 'UNF') & (attr(x, 'version') != attr(y, 'version')))
-        b <- !inherits(x, 'UNF')
-        if(a | b)
+        if(!inherits(x, 'UNF')) {
+            unfx <- unf(x, version = attr(unfy, 'version'), ...)
+        } else if(inherits(x, 'UNF') & (attr(y, 'version') != attr(x, 'version'))) {
             unfx <- unf(x, version = attr(unfy, 'version'), ...)
         } else {
             unfx <- x
@@ -117,8 +117,7 @@ print.UNFtest <- function(x, ...){
         misx <- x$x.vars[!x$x.vars %in% x$y.vars]
         if(length(misx)){
             cat('Mismatched variables:\n')
-            n <- names(head(misx,10))
-            n <- ifelse(is.null(n), head(which(!x$x.vars %in% x$y.vars), 10), n)
+            n <- ifelse(!is.na(names(misx)), names(head(misx,10)), head(which(!x$x.vars %in% x$y.vars), 10))
             cat(paste(n,head(misx,10),sep=': '), sep='\n')
             if(length(misx)>10)
                 cat('[',length(misx)-10,' additional mismatches not printed]\n',sep='')
@@ -138,8 +137,7 @@ print.UNFtest <- function(x, ...){
         misy <- x$y.vars[!x$y.vars %in% x$x.vars]
         if(length(misy)){
             cat('Mismatched variables:\n')
-            n <- names(head(misy,10))
-            n <- ifelse(is.null(n), head(which(!x$y.vars %in% x$x.vars), 10), n)
+            n <- ifelse(!is.na(names(misy)), names(head(misy,10)), head(which(!x$y.vars %in% x$x.vars), 10))
             cat(paste(n,head(misy,10),sep=': '), sep='\n')
             if(length(misy)>10)
                 cat('[',length(misy)-10,' additional mismatches not printed]\n',sep='')
