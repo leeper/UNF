@@ -11,35 +11,36 @@
 unf(x, version = 6, ...)
 
 unf6(x, digits = 7L, chars = 128L, truncation = 128L, 
-     nonfinites_as_missing = TRUE, 
      raw_as_character = TRUE,
      factor_as_character = TRUE,
      complex_as_character = TRUE,
+     nonfinites_as_missing = FALSE, 
      timezone = "",
      date_format = "\%F",
      ...)
 
 unf5(x, digits = 7L, chars = 128L, truncation = 128L,
-     nonfinites_as_missing = TRUE, 
-     empty_character_as_missing = TRUE,
-     factor_as_character = TRUE,
-     dvn_zero = TRUE,
      raw_as_character = TRUE,
+     factor_as_character = TRUE,
+     nonfinites_as_missing = FALSE, 
+     empty_character_as_missing = FALSE,
+     dvn_zero = FALSE,
      timezone = "",
      date_format = "\%F",
      ...)
 
 unf4(x, digits = 7L, chars = 128L, truncation = 128L, version = 4, 
-     nonfinites_as_missing = TRUE, 
-     empty_character_as_missing = TRUE,
      factor_as_character = TRUE,
-     dvn_zero = TRUE,
+     nonfinites_as_missing = FALSE, 
+     empty_character_as_missing = FALSE,
+     dvn_zero = FALSE,
      ...)
 
 unf3(x, digits = 7L, chars = 128L, 
-     nonfinites_as_missing = TRUE, 
-     empty_character_as_missing = TRUE,
      factor_as_character = TRUE,
+     nonfinites_as_missing = FALSE, 
+     empty_character_as_missing = FALSE,
+     dvn_zero = FALSE,
      ...)
 }
 
@@ -49,15 +50,15 @@ unf3(x, digits = 7L, chars = 128L,
 	\item{digits}{The number of significant digits for rounding for numeric values. Default is 7L. Must be between 1 and 15.}
 	\item{chars}{The number of characters for truncation. Default is 128L. Must be greater than 1.}
     \item{truncation}{The number of bits to truncate the UNF signature to. Default is 128L. Must be one of: 128,192,196,256.}
-    \item{nonfinites_as_missing}{A logical indicating whether to treat nonfinite values (\code{NaN}, \code{Inf}, \code{-Inf}) as \code{NA}. This is supplied to create compatibility with a Dataverse UNFv5 implementation.}
-    \item{empty_character_as_missing}{A logical indicating whether to treat an empty character string as a missing value. This is supplied to create compatibility with a Dataverse UNFv5 implementation.}
     \item{factor_as_character}{A logical indicating whether to treat an factors as character. If \code{FALSE}, factor variables are treated as integer (and thus handled as any numeric value).}
-    \item{dvn_zero}{A logical indicating whether to format a zero (0) numeric value as \code{+0.e-6} instead of the default \code{+0.e+}. This is supplied to create compatibility with a Dataverse UNFv5 implementation.}
     \item{raw_as_character}{A logical indicating whether to format raw vectors as character.}
     \item{complex_as_character}{A logical indicating whether to format raw vectors as character. If \code{TRUE}, UNF should match Dataverse UNFv5 implementation. If \code{FALSE}, complex numbers are formatted as \code{A,iB}.}
+    \item{nonfinites_as_missing}{A logical indicating whether to treat nonfinite values (\code{NaN}, \code{Inf}, \code{-Inf}) as \code{NA}. This is supplied to create compatibility with a Dataverse UNFv5 implementation.}
+    \item{empty_character_as_missing}{A logical indicating whether to treat an empty character string as a missing value. This is supplied to create compatibility with a Dataverse UNFv5 implementation.}
+    \item{dvn_zero}{A logical indicating whether to format a zero (0) numeric value as \code{+0.e-6} instead of the default \code{+0.e+}. This is supplied to create compatibility with a Dataverse UNFv5 implementation, backwards compatibility with v1.0 of the UNF package (for UNFv3, UNFv4, UNFv4.1).}
     \item{timezone}{A character string containing a valid timezone. This is used for formatting \dQuote{Date} and \dQuote{POSIXt} class variables. Because of different implementations of datetime classes across computer applications, UNF signatures may vary due to the timezone in which they are calculated. This parameter allows for the comparison of UNFs calculated in different timezones.}
     \item{date_format}{A character string containing a formatting pattern for \dQuote{Date} class variables. One of \code{'\%Y-\%m-\%d'}, \code{'\%Y-\%m'}, \code{'\%Y'}, \code{'\%F'} (the default).}
-    \item{\ldots}{Additional arguments passed to specific algorithm functions.}
+    \item{\ldots}{Additional arguments passed to specific algorithm functions. Ignored.}
 }
 \details{
 The Dataverse Network implements a potentially incorrect version of the UNF algorithm with regard to the handling of zero values and logical \code{FALSE} values in data (though the specification is unclear). Setting the \code{dvn} argument to \code{TRUE} (the default), uses the Dataverse implementation (for comparison to files stored in that archive).
@@ -106,14 +107,14 @@ Data Citation Synthesis Group. 2013. Declaration of Data Citation Principles [DR
 
 ### just numerics
 unf5(1:20) # UNF:5:/FIOZM/29oC3TK/IE52m2A==
-unf5(-3:3) # UNF:5:pwzm1tdPaqypPWRWDeW6Jw==
+unf5(-3:3, dvn_zero = TRUE) # UNF:5:pwzm1tdPaqypPWRWDeW6Jw==
 
 ### characters and factors
 unf5(c('test','1','2','3')) # UNF:5:fH4NJMYkaAJ16OWMEE+zpQ==
 unf5(as.factor(c('test','1','2','3'))) # UNF:5:fH4NJMYkaAJ16OWMEE+zpQ==
 
 ### logicals
-unf5(c(TRUE,TRUE,FALSE))# UNF:5:DedhGlU7W6o2CBelrIZ3iw==
+unf5(c(TRUE,TRUE,FALSE), dvn_zero=TRUE)# UNF:5:DedhGlU7W6o2CBelrIZ3iw==
 
 ### dates
 # ????

@@ -1,7 +1,7 @@
 context("UNFv6: Numerics")
 test_that("Original documentation examples", {
     expect_equal(unf(1:20)$unf, "/FIOZM/29oC3TK/IE52m2A==")
-    expect_equal(unf(-3:3)$unf, "pwzm1tdPaqypPWRWDeW6Jw==")
+    expect_equal(unf(-3:3)$unf, "7FsSuKWGIp6i7b0NFjckZQ==") # w/ dvn_zero: "pwzm1tdPaqypPWRWDeW6Jw=="
 })
 
 test_that("Irrelevant rounding irrelevant", {
