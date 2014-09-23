@@ -22,7 +22,6 @@ test_that("Nonfinites optionally treated as missing", {})
 context("UNFv6: Characters")
 test_that("Original documentation examples", {
     expect_equal(unf(c('test','1','2','3'))$unf, "fH4NJMYkaAJ16OWMEE+zpQ==")
-    expect_equal(unf(-3:3)$unf, "pwzm1tdPaqypPWRWDeW6Jw==")
 })
 
 
@@ -94,4 +93,12 @@ context("UNFv6: Matrices")
 test_that("Column order irrelevant", {})
 test_that("Row order relevant", {})
 test_that("Subsetting relevant", {})
+
+
+context("UNFv6: Signature Printing")
+test_that("Version is printed", {})
+test_that("Digits are printed", {})
+test_that("Characters are printed", {})
+test_that("Truncation is printed", {})
+
 
