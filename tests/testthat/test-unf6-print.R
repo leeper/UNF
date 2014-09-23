@@ -1,0 +1,5 @@
+context("UNFv6: Signature Printing")
+test_that("Version is printed", {})
+test_that("Digits are printed", {})
+test_that("Characters are printed", {})
+test_that("Truncation is printed", {})
