@@ -10,7 +10,7 @@
     b[c(plus,neg)] <- sapply(b[c(plus,neg)], function(i) {
         sp <- strsplit(as.character(i),'.',fixed=TRUE)[[1]]
         dec <- gsub('0+$','',sp[2])
-        paste(if(as.numeric(sp[1])>0) paste('+',sp[1],sep='') else sp[1], if(is.na(dec) | digits==1) '' else dec, sep='.')
+        paste(sp[1], if(is.na(dec) | digits==1) '' else dec, sep='.')
     })
     
     e <- numeric(length=length(z))
