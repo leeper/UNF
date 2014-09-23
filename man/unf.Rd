@@ -163,5 +163,4 @@ unf(cbind(x1,x2), ver=3)
 %\keyword{}
 \seealso{
 \code{\link{\%unf\%}} 
-\code{\link{setUNF}}
 }
