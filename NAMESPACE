@@ -1,7 +1,7 @@
 exportPattern("^[[:alpha:]]+")
 export("%unf%")
 importFrom(digest, digest)
-importFrom(RCurl, base64Encode)
+importFrom(base64enc, base64encode)
 importFrom(tools, md5sum)
 S3method(print, UNF)
 S3method(print, UNFtest)

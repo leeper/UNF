@@ -6,7 +6,6 @@ unf <- function(x, version = 6, ...){
     if(is.data.frame(x) | is.list(x)){
         locale <- Sys.getlocale(category="LC_COLLATE")
         Sys.setlocale(category="LC_COLLATE", "C")
-        # Apply UNF to each vector, base64 encode, sort, and apply UNF on that vector of UNFs
         if(version==3){
             vars <- sapply(x, function(i) unf3(i, ...)$unf)
             out <- unf3(sort(vars), ...)

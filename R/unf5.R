@@ -90,8 +90,8 @@ function(x,
     out <- unlist(lapply(unicode, function(i) if(is.null(i)) intToBits(0)[1:3] else c(i,eol))) # NA handling and nul byte appending
     
     hash <- digest(out, algo='sha256', serialize=FALSE, raw=TRUE)
-    long <- base64Encode(hash)
-    short <- base64Encode(hash[1:(truncation/8L)]) # truncated UNF
+    long <- base64encode(hash)
+    short <- base64encode(hash[1:(truncation/8L)]) # truncated UNF
     
     formatted <- paste0('UNF5:',
         if((digits != 7) | (chars != 128)) {

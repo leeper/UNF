@@ -45,7 +45,7 @@ function(x,
     out <- unlist(lapply(unicode, function(i) if(is.null(i)) intToBits(0)[1:3] else c(i,eol))) # NA handling and nul byte appending
     
     hash <- digest(out, algo='md5', serialize=FALSE, raw=TRUE)
-    encoded <- base64Encode(hash)
+    encoded <- base64encode(hash)
     out <- list(unf = as.character(encoded),
                 hash = hash)
     out$formatted <- paste0('UNF3:',

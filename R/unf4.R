@@ -55,12 +55,12 @@ function(x,
     hash <- digest(out, algo='sha256', serialize=FALSE, raw=TRUE)
     
     if(version==4){
-        encoded <- base64Encode(hash)
+        encoded <- base64encode(hash)
         out <- list(unf = as.character(encoded),
                     hash = hash)
     } else {
-        long <- base64Encode(hash)
-        short <- base64Encode(hash[1:(truncation/8L)])
+        long <- base64encode(hash)
+        short <- base64encode(hash[1:(truncation/8L)])
         out <- list(unf = as.character(long),
                     hash = hash)
     }
