@@ -16,7 +16,7 @@ unf6(x, digits = 7L, chars = 128L, truncation = 128L,
      factor_as_character = TRUE,
      complex_as_character = TRUE,
      timezone = "",
-     date_format = "%F",
+     date_format = "\%F",
      ...)
 
 unf5(x, digits = 7L, chars = 128L, truncation = 128L,
@@ -26,7 +26,7 @@ unf5(x, digits = 7L, chars = 128L, truncation = 128L,
      dvn_zero = TRUE,
      raw_as_character = TRUE,
      timezone = "",
-     date_format = "%F",
+     date_format = "\%F",
      ...)
 
 unf4(x, digits = 7L, chars = 128L, truncation = 128L, version = 4, 
@@ -45,7 +45,7 @@ unf3(x, digits = 7L, chars = 128L,
 
 \arguments{
 	\item{x}{For \code{unf}, a vector, matrix, dataframe, or list; for \code{unf3}, \code{unf4}, \code{unf5}, a vector. If \code{x} is a dataframe or list with one variable or one vector element, respectively, \code{unf} returns the UNF for the single vector (which is consistent with the Dataverse implementation but ambiguous in the UNF standard). For algorithm versions < 5, all non-numeric vectors are treated as character.}
-	\item{ver}{Version of the UNF algorithm. Allowed values are 3, 4, 4.1, 5, and 6. Always use the same version of the algorithm to check a UNF. Default for \code{unf} is 5 and default for \code{unf4} is 4 (but can also be set to 4.1, which is identical except for using SHA256 instead of MD5).}
+	\item{version}{Version of the UNF algorithm. Allowed values are 3, 4, 4.1, 5, and 6. Always use the same version of the algorithm to check a UNF. Default for \code{unf} is 6 and default for \code{unf4} is 4 (but can also be set to 4.1, which is identical except for using SHA256 instead of MD5).}
 	\item{digits}{The number of significant digits for rounding for numeric values. Default is 7L. Must be between 1 and 15.}
 	\item{chars}{The number of characters for truncation. Default is 128L. Must be greater than 1.}
     \item{truncation}{The number of bits to truncate the UNF signature to. Default is 128L. Must be one of: 128,192,196,256.}
@@ -55,8 +55,8 @@ unf3(x, digits = 7L, chars = 128L,
     \item{dvn_zero}{A logical indicating whether to format a zero (0) numeric value as \code{+0.e-6} instead of the default \code{+0.e+}. This is supplied to create compatibility with a Dataverse UNFv5 implementation.}
     \item{raw_as_character}{A logical indicating whether to format raw vectors as character.}
     \item{complex_as_character}{A logical indicating whether to format raw vectors as character. If \code{TRUE}, UNF should match Dataverse UNFv5 implementation. If \code{FALSE}, complex numbers are formatted as \code{A,iB}.}
-    \item{timezone}{}
-    \item{date_format}{}
+    \item{timezone}{A character string containing a valid timezone. This is used for formatting \dQuote{Date} and \dQuote{POSIXt} class variables. Because of different implementations of datetime classes across computer applications, UNF signatures may vary due to the timezone in which they are calculated. This parameter allows for the comparison of UNFs calculated in different timezones.}
+    \item{date_format}{A character string containing a formatting pattern for \dQuote{Date} class variables. One of \code{'\%Y-\%m-\%d'}, \code{'\%Y-\%m'}, \code{'\%Y'}, \code{'\%F'} (the default).}
     \item{\ldots}{Additional arguments passed to specific algorithm functions.}
 }
 \details{
@@ -68,6 +68,7 @@ The \code{unf} function returns a list of class \code{UNF}, containing:
 \item{unf}{A character string containing the universal numeric fingerprint.}
 \item{hash}{A raw vector expressing the unencoded universal numeric fingerprint. This can be converted to a UNF using \code{base64Encode}.}
 \item{unflong}{For \code{unf5}, a character string containing the un-truncated universal numeric fingerprint.}
+\item{formatted}{A character string containing the formatted UNF, including version number and header attributes.}
 
 The object additionally contains several attributes:
 

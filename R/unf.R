@@ -91,6 +91,13 @@ function(x,
     encoded <- base64Encode(hash)
     out <- list(unf = as.character(encoded),
                 hash = hash)
+    out$formatted <- paste0('UNF3:',
+        if((digits !=7) | (chars !=128)) {
+            paste0(paste(digits, chars, sep=','), ':', out$unf)
+        } else {
+            out$unf
+        })
+    
     class(out) <- c('UNF')
     attr(out, 'version') <- 3
     attr(out, 'digits') <- digits
@@ -153,6 +160,7 @@ function(x,
     out <- unlist(lapply(unicode, function(i) if(is.null(i)) intToBits(0)[1:3] else c(i,eol))) # NA handling and nul byte appending
     
     hash <- digest(out, algo='sha256', serialize=FALSE, raw=TRUE)
+    
     if(version==4){
         encoded <- base64Encode(hash)
         out <- list(unf = as.character(encoded),
@@ -163,6 +171,13 @@ function(x,
         out <- list(unf = as.character(long),
                     hash = hash)
     }
+    out$formatted <- paste0('UNF',version,':',
+        if((digits !=7) | (chars !=128)) {
+            paste0(paste(digits, chars, sep=','), ':', out$unf)
+        } else {
+            out$unf
+        })
+    
     class(out) <- c('UNF')
     attr(out, 'version') <- version
     attr(out, 'digits') <- digits
@@ -265,9 +280,17 @@ function(x,
     long <- base64Encode(hash)
     short <- base64Encode(hash[1:(truncation/8L)]) # truncated UNF
     
+    formatted <- paste0('UNF5:',
+        if((digits != 7) | (chars != 128)) {
+            paste0(paste(digits, chars, sep=','), ':', as.character(short))
+        } else {
+            as.character(short)
+        })
+    
     out <- list(unf = as.character(short),
                 hash = hash,
-                unflong = as.character(long))
+                unflong = as.character(long),
+                formatted = formatted)
     class(out) <- c('UNF')
     attr(out, 'version') <- 5
     attr(out, 'digits') <- digits
@@ -363,9 +386,22 @@ function(x,
     long <- base64Encode(hash)
     short <- base64Encode(hash[1:(truncation/8L)]) # truncated UNF
     
+    # format printable UNF
+    formatted <- paste0('UNF6:',
+        gsub(",+$", "", paste(ifelse(digits != 7, paste0("N", digits), ""),
+              ifelse(chars != 128, paste0("X", chars), ""),
+              ifelse(truncation != 128, paste0("H", truncation), ""),
+              sep = ",", collapse="")),
+        if((digits != 7) | (chars != 128) | (truncation != 128)) {
+            paste0(':', as.character(short))
+        } else {
+            as.character(short)
+        })
+    
     out <- list(unf = as.character(short),
                 hash = hash,
-                unflong = as.character(long))
+                unflong = as.character(long),
+                formatted = formatted)
     class(out) <- c('UNF')
     attr(out, 'version') <- 6
     attr(out, 'digits') <- digits
@@ -375,38 +411,41 @@ function(x,
 }
 
 print.UNF <- function(x, ...){
-    if(is.null(attr(x,'version'))) {
-        out <- paste0('UNF:', x$unf)
+    if('formatted' %in% names(x)) {
+        out <- x$formatted
     } else {
-        if(attr(x, 'version')<5) {
-            out <- paste0('UNF', attr(x, 'version'), ':', x$unf, '\n')
-        } else if(attr(x, 'version')==5) {
-            out <- paste0('UNF5:',
-                if((!is.null(attr(x,'digits')) & attr(x,'digits')!=7) |
-                    (!is.null(attr(x,'characters')) & attr(x,'characters')!=128)) {
-                    paste0(paste(attr(x,'digits'), attr(x,'characters'), sep=','), ':', x$unf)
-                } else {
-                    x$unf
-                })
-        } else if(attr(x, 'version')==6) {
-            out <- paste0('UNF6:',
-                paste(ifelse(!is.null(attr(x,'digits')) & !attr(x,'digits')==7, 
-                        paste0("N",attr(x,'digits')), ""),
-                      ifelse(!is.null(attr(x,'characters')) & !attr(x,'characters')==128, 
-                        paste0("X",attr(x,'characters')), ""),
-                      ifelse(!is.null(attr(x,'truncation')) & !attr(x,'truncation')==128, 
-                        paste0("H",attr(x,'truncation')), ""),
-                      sep = "", collapse=","),
-                if((!is.null(attr(x,'digits')) & !attr(x,'digits')==7) |
-                   (!is.null(attr(x,'characters')) & !attr(x,'characters')==128) | 
-                   (!is.null(attr(x,'truncation')))  & !attr(x,'truncation')==128) {
-                    paste0(':', x$unf)
-                } else {
-                    x$unf
-                })
+        if(is.null(attr(x,'version'))) {
+            out <- paste0('UNF:', x$unf)
         } else {
-            out <- paste0('UNF', attr(x, 'version'), ':', x$unf)
+            if(attr(x, 'version')==6) {
+                out <- paste0('UNF6:',
+                    paste(ifelse(!is.null(attr(x,'digits')) & !attr(x,'digits')==7, 
+                            paste0("N",attr(x,'digits')), ""),
+                          ifelse(!is.null(attr(x,'characters')) & !attr(x,'characters')==128, 
+                            paste0("X",attr(x,'characters')), ""),
+                          ifelse(!is.null(attr(x,'truncation')) & !attr(x,'truncation')==128, 
+                            paste0("H",attr(x,'truncation')), ""),
+                          sep = ",", collapse=""),
+                    if((!is.null(attr(x,'digits')) & !attr(x,'digits')==7) |
+                       (!is.null(attr(x,'characters')) & !attr(x,'characters')==128) | 
+                       (!is.null(attr(x,'truncation')))  & !attr(x,'truncation')==128) {
+                        paste0(':', x$unf)
+                    } else {
+                        x$unf
+                    })
+            } else if(attr(x, 'version') %in% c(3,4,4.1,5)) {
+                out <- paste0('UNF',version,':',
+                    if((!is.null(attr(x,'digits')) & attr(x,'digits')!=7) |
+                        (!is.null(attr(x,'characters')) & attr(x,'characters')!=128)) {
+                        paste0(paste(attr(x,'digits'), attr(x,'characters'), sep=','), ':', x$unf)
+                    } else {
+                        x$unf
+                    })
+            } else {
+                out <- paste0('UNF', attr(x, 'version'), ':', x$unf)
+            }
         }
     }
-    print(out)
+    cat(out, '\n')
+    invisible(x)
 }

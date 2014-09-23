@@ -100,9 +100,9 @@ While file checksums are a common strategy for verifying a file (e.g., md5 sums 
     ```
     ## Objects are identical
     ## 
-    ## [1] "UNF6:6oVTvlCR+F1W1HTJ/QUmkA=="
+    ## UNF6:6oVTvlCR+F1W1HTJ/QUmkA== 
     ## 
-    ## [1] "UNF6:6oVTvlCR+F1W1HTJ/QUmkA=="
+    ## UNF6:6oVTvlCR+F1W1HTJ/QUmkA==
     ```
     
     ```r
@@ -112,12 +112,12 @@ While file checksums are a common strategy for verifying a file (e.g., md5 sums 
     ```
     ## Objects are not identical
     ## 
-    ## [1] "UNF6:6oVTvlCR+F1W1HTJ/QUmkA=="
+    ## UNF6:6oVTvlCR+F1W1HTJ/QUmkA== 
     ## Mismatched variables:
     ## Petal.Width: TN39UY6H/vRGv4ARWQTXrw==
     ## Species: Xqh76nYY3z8eTfmL1KfxaQ==
     ## 
-    ## [1] "UNF6:lEajCAiTPXcxJuP+hr8Kew=="
+    ## UNF6:lEajCAiTPXcxJuP+hr8Kew==
     ```
     
     ```r
@@ -127,7 +127,7 @@ While file checksums are a common strategy for verifying a file (e.g., md5 sums 
     ```
     ## Objects are not identical
     ## 
-    ## [1] "UNF6:6oVTvlCR+F1W1HTJ/QUmkA=="
+    ## UNF6:6oVTvlCR+F1W1HTJ/QUmkA== 
     ## Mismatched variables:
     ## Sepal.Length: FnQvOCZE9tcn64bP78wLag==
     ## Sepal.Width: epaV+rjvURem8qIo0r9LBQ==
@@ -135,7 +135,7 @@ While file checksums are a common strategy for verifying a file (e.g., md5 sums 
     ## Petal.Width: TN39UY6H/vRGv4ARWQTXrw==
     ## Species: Xqh76nYY3z8eTfmL1KfxaQ==
     ## 
-    ## [1] "UNF6:0Ppu3rquJJrYvjkDePjGbA=="
+    ## UNF6:0Ppu3rquJJrYvjkDePjGbA== 
     ## Mismatched variables:
     ## Sepal.Length: yMtrQJDMuxcSay0afKLz5A==
     ## Sepal.Width: e6etgUxSU/7XccLSwNzHVQ==

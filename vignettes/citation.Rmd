@@ -11,10 +11,11 @@ This vignette shows some simple examples of how to use UNF signatures for data c
 library("UNF")
 ```
 
-The datasets should already be available in R, but we will load it explicitly just for good measure:
+The datasets should already be available in R, but we will load it explicitly just for good measure, along with the **digest** package for calculating MD5 sums:
 
 ```{r}
 library("datasets")
+library("digest")
 data(iris)
 ```
 
@@ -97,7 +98,7 @@ unf(iris)
 ```
 
 ```{r, echo=FALSE}
-cat("> Anderson, Edgar (1935). The irises of the Gaspe Peninsula, *Bulletin of the American Iris Society*, 59, 2–5.", unf(iris), "\n")
+cat("> Anderson, Edgar (1935). The irises of the Gaspe Peninsula, *Bulletin of the American Iris Society*, 59, 2–5.", unf(iris)$formatted, "\n")
 ```
 
 When used in tandem with a persistent locator (e.g., a Handle or Data DOI), this rich citation not only persistently points data users to a location to find the data but also points them to a specific version of the data (of possibly many) available at that location. This means that as datasets evolve, expand, are corrected for errors, or move physical storage locations, a URI + UNF combination provides an incredibly valuable data citation. As an example, the following Handle and UNF citation provide a persistent link to replication files for an article. These files currently live on the Harvard University Dataverse Network, but the use of a handle and UNF mean interested users should be able to find the specific version of the data used in the original article indefinitely:
