@@ -125,4 +125,4 @@ Altman, Micah 2008. A Fingerprint Method for Scienti?c Data Veri?cation. In T. S
 
 Data Citation Synthesis Group. 2013. Declaration of Data Citation Principles. http://www.force11.org/datacitation *(Describes general principles of data citation, of which UNF is likely to be a part)*
 
-Altman, Michah, and Mercè Crosas. 2014. The Evolution of Data Citation: From Principles to Implementation. *IASSIST QUARTERLY*, Forthcoming. http://thedata.org/files/thedata_new2/files/altmancrosasiassistqforthcoming.pdf
+Altman, Michah, and Merce Crosas. 2014. The Evolution of Data Citation: From Principles to Implementation. *IASSIST QUARTERLY*, Forthcoming. http://thedata.org/files/thedata_new2/files/altmancrosasiassistqforthcoming.pdf
