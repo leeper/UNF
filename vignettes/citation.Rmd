@@ -89,7 +89,7 @@ Because it is format-independent, the UNF hash is appropriated labeled a *univer
 
 For example, the `iris` dataset is cited in the R documentation (`? iris`) as:
 
-> Anderson, Edgar (1935). The irises of the Gaspe Peninsula, *Bulletin of the American Iris Society*, 59, 2–5.
+> Anderson, Edgar (1935). The irises of the Gaspe Peninsula, *Bulletin of the American Iris Society*, 59, 2-5.
 
 While R users are familiar with these data and they have been a part of R for a long time, it is possible for anyone to go Anderson's article, transcribe the data (or some part thereof) to a new dataset, start calling it `iris`, and use the same citation. A third user then, when holding `iris` in memory, has to wonder how can they confirm what version of `iris` they're using? If the citation were expanded to include a UNF signature, there would be no question about whether the data in-hand matched the data cited.
 
@@ -98,7 +98,7 @@ unf(iris)
 ```
 
 ```{r, echo=FALSE}
-cat("> Anderson, Edgar (1935). The irises of the Gaspe Peninsula, *Bulletin of the American Iris Society*, 59, 2–5.", unf(iris)$formatted, "\n")
+cat("> Anderson, Edgar (1935). The irises of the Gaspe Peninsula, *Bulletin of the American Iris Society*, 59, 2-5.", unf(iris)$formatted, "\n")
 ```
 
 When used in tandem with a persistent locator (e.g., a Handle or Data DOI), this rich citation not only persistently points data users to a location to find the data but also points them to a specific version of the data (of possibly many) available at that location. This means that as datasets evolve, expand, are corrected for errors, or move physical storage locations, a URI + UNF combination provides an incredibly valuable data citation. As an example, the following Handle and UNF citation provide a persistent link to replication files for an article. These files currently live on the Harvard University Dataverse Network, but the use of a handle and UNF mean interested users should be able to find the specific version of the data used in the original article indefinitely:
