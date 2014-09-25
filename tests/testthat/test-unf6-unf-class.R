@@ -11,8 +11,8 @@ test_that("Object slots", {
 })
 test_that("Attributes", {
     expect_equal(attr(unf6(1), "class"), "unf", label = "class")
-    expect_equal(attr(unf6(1), "version"), "unf", label = "version")
-    expect_equal(attr(unf6(1), "digits"), "unf", label = "digits")
-    expect_equal(attr(unf6(1), "characters"), "unf", label = "characters")
-    expect_equal(attr(unf6(1), "truncation"), "unf", label = "truncation")
+    expect_equal(attr(unf6(1), "version"), 1, label = "version")
+    expect_equal(attr(unf6(1), "digits"), 7, label = "digits")
+    expect_equal(attr(unf6(1), "characters"), 128, label = "characters")
+    expect_equal(attr(unf6(1), "truncation"), 128, label = "truncation")
 })
