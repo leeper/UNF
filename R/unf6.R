@@ -9,6 +9,7 @@ function(x,
          nonfinites_as_missing = FALSE, 
          timezone = "",
          date_format = "%F",
+         decimal_seconds = 5,
          ...){
     if(!truncation %in% c(128,192,196,256))
         stop("'truncation' must be in 128, 192, 196, 256")
@@ -54,13 +55,12 @@ function(x,
             stop("'date_format' must be '%Y-%m-%d', '%Y-%m', '%Y', or '%F'")
         char <- paste0(format(x, fmt = date_format),'\n')
     } else if(inherits(x, 'POSIXt')){
-        # DATE-TIME: Datetimes may be expressed as a concatenated date (only in the form "YYYY-MM-DD") and time, separated by "T". As an example, Fri Aug 22 12:51:05 EDT 2014 is encoded as: `"2014-08-22T16:51:05Z"`.
+        # DATE-TIME: Encoded as: `"2014-08-22T16:51:05Z"`.
         if(inherits(x, 'POSIXlt'))
             x <- as.POSIXct(x)
-        d <- getOption("digits.secs")
-        options("digits.secs" = 5)
-        char <- paste0(format(x, "%FT%H:%M:", timezone), gsub("\\.?0+$","",format(x, "%OS", timezone)), "Z\n")
-        options("digits.secs" = d)
+        char <- paste0(format(x, "%FT%H:%M:", timezone), 
+                       gsub("\\.?0+$","",format(x, paste0("%OS",decimal_seconds), timezone)), 
+                       ifelse(timezone=="UTC", "Z\n", "\n"))
     } else if(is.character(x)){
         # CHARACTER: truncate strings to k
         char <- paste(substring(x, 1, characters),'\n',sep='')
