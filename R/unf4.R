@@ -1,7 +1,7 @@
 unf4 <- 
 function(x, 
          digits = 7L, 
-         chars = 128L, 
+         characters = 128L, 
          truncation = 128L,
          version = 4, 
          factor_as_character = TRUE,
@@ -11,8 +11,8 @@ function(x,
          ...){
     if(!truncation %in% c(128,192,196,256))
         stop("'truncation' must be in 128, 192, 196, 256")
-    if(truncation < chars)
-        stop("'truncation' must be greater than or equal to 'chars'")
+    if(truncation < characters)
+        stop("'truncation' must be greater than or equal to 'characters'")
     if(inherits(x, 'AsIs'))
         x <- as.character(x)
     if(is.ts(x))
@@ -37,7 +37,7 @@ function(x,
             char <- ifelse(x==0, '+0.e-6\n', char) # https://redmine.hmdc.harvard.edu/issues/3085
     } else if(is.character(x)){
         # CHARACTER: truncate strings to k
-        char <- paste(substring(x, 1, chars),'\n',sep='')
+        char <- paste(substring(x, 1, characters),'\n',sep='')
         if(empty_character_as_missing)
             char <- ifelse(x=='',NA,char)
     } 
@@ -65,8 +65,8 @@ function(x,
                     hash = hash)
     }
     out$formatted <- paste0('UNF',version,':',
-        if((digits !=7) | (chars !=128)) {
-            paste0(paste(digits, chars, sep=','), ':', out$unf)
+        if((digits !=7) | (characters !=128)) {
+            paste0(paste(digits, characters, sep=','), ':', out$unf)
         } else {
             out$unf
         })
@@ -74,6 +74,6 @@ function(x,
     class(out) <- c('UNF')
     attr(out, 'version') <- version
     attr(out, 'digits') <- digits
-    attr(out, 'characters') <- chars
+    attr(out, 'characters') <- characters
     return(out)
 }

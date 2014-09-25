@@ -1,7 +1,7 @@
 unf3 <- 
 function(x, 
          digits = 7L, 
-         chars = 128L, 
+         characters = 128L, 
          factor_as_character = TRUE,
          nonfinites_as_missing = FALSE, 
          empty_character_as_missing = FALSE,
@@ -32,7 +32,7 @@ function(x,
         char <- ifelse(x==0, '+0.e+\n', char) # dvn introduced 0-value bug after v3, apparently
     } else if(is.character(x)){
         # CHARACTER: truncate strings to k
-        char <- paste(substring(x, 1, chars),'\n',sep='')
+        char <- paste(substring(x, 1, characters),'\n',sep='')
         if(empty_character_as_missing)
             char <- ifelse(x=='',NA,char)
     } 
@@ -49,8 +49,8 @@ function(x,
     out <- list(unf = as.character(encoded),
                 hash = hash)
     out$formatted <- paste0('UNF3:',
-        if((digits !=7) | (chars !=128)) {
-            paste0(paste(digits, chars, sep=','), ':', out$unf)
+        if((digits !=7) | (characters !=128)) {
+            paste0(paste(digits, characters, sep=','), ':', out$unf)
         } else {
             out$unf
         })
@@ -58,6 +58,6 @@ function(x,
     class(out) <- c('UNF')
     attr(out, 'version') <- 3
     attr(out, 'digits') <- digits
-    attr(out, 'characters') <- chars
+    attr(out, 'characters') <- characters
     return(out)
 }

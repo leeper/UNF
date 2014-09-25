@@ -53,21 +53,17 @@ print.UNF <- function(x, ...){
             out <- paste0('UNF:', x$unf)
         } else {
             if(attr(x, 'version')==6) {
-                out <- paste0('UNF6:',
-                    paste(ifelse(!is.null(attr(x,'digits')) & !attr(x,'digits')==7, 
-                            paste0("N",attr(x,'digits')), ""),
-                          ifelse(!is.null(attr(x,'characters')) & !attr(x,'characters')==128, 
-                            paste0("X",attr(x,'characters')), ""),
-                          ifelse(!is.null(attr(x,'truncation')) & !attr(x,'truncation')==128, 
-                            paste0("H",attr(x,'truncation')), ""),
-                          sep = ",", collapse=""),
-                    if((!is.null(attr(x,'digits')) & !attr(x,'digits')==7) |
-                       (!is.null(attr(x,'characters')) & !attr(x,'characters')==128) | 
-                       (!is.null(attr(x,'truncation')))  & !attr(x,'truncation')==128) {
-                        paste0(':', x$unf)
-                    } else {
-                        x$unf
-                    })
+                digits <- ifelse(!is.null(attr(x, "digits")), attr(x, "digits"), 7)
+                characters <- ifelse(!is.null(attr(x, "characters")), attr(x, "characters"), 128)
+                truncation <- ifelse(!is.null(attr(x, "truncation")), attr(x, "truncation"), 128)
+                header <- paste(if(digits != 7) paste0("N", digits) else NULL,
+                                if(characters != 128) paste0("X", characters) else NULL,
+                                if(truncation != 128) paste0("H", truncation) else NULL,
+                                sep = ",", collapse="")
+                header <- ifelse(length(header), gsub("^[[:punct:]]+", "", header), "")
+                header <- ifelse(length(header), gsub("[[:punct:]]+$", "", header), "")
+                header <- ifelse(length(header), gsub("[[:punct:]]{2}", ",", header), "")
+                out <- paste0('UNF6:', ifelse(header == "", x$unf, paste0(header,':', x$unf)))
             } else if(attr(x, 'version') %in% c(3,4,4.1,5)) {
                 out <- paste0('UNF',version,':',
                     if((!is.null(attr(x,'digits')) & attr(x,'digits')!=7) |

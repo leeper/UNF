@@ -10,7 +10,7 @@ test_that("Tails of long characters irrelevant", {
 
 test_that("Tails of long characters optionally relevant", {
     lorem_ipsum <- c("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.", "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.")
-    expect_false(identical(unf6(lorem_ipsum), unf6(lorem_ipsum, chars=200, truncation=256)))
+    expect_false(identical(unf6(lorem_ipsum), unf6(lorem_ipsum, characters=200, truncation=256)))
 })
 
 test_that("Numerics stored as character not same as numeric", {
@@ -21,6 +21,6 @@ test_that("Numerics stored as factors same as numeric stored as character", {
     expect_equal(unf6(c('1','2','3'))$unf, unf6(factor(c('1','2','3')))$unf)
 })
 
-test_that("truncation less than chars throws error", {
-    expect_error(unf6(c('1','2','3'), truncation=5))
+test_that("truncation less than characters throws error", {
+    expect_error(unf6(c('1','2','3'), characters = 128, truncation=5))
 })

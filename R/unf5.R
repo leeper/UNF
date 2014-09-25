@@ -1,7 +1,7 @@
 unf5 <- 
 function(x, 
          digits = 7L, 
-         chars = 128L, 
+         characters = 128L, 
          truncation = 128L,
          raw_as_character = TRUE,
          factor_as_character = TRUE,
@@ -13,8 +13,8 @@ function(x,
          ...){
     if(!truncation %in% c(128,192,196,256))
         stop("'truncation' must be in 128, 192, 196, 256")
-    if(truncation < chars)
-        stop("'truncation' must be greater than or equal to 'chars'")
+    if(truncation < characters)
+        stop("'truncation' must be greater than or equal to 'characters'")
     if(inherits(x, 'AsIs')){
         x <- as.character(x)
     }
@@ -64,7 +64,7 @@ function(x,
         options("digits.secs" = d)
     } else if(is.character(x)){
         # CHARACTER: truncate strings to k
-        char <- paste(substring(x, 1, chars),'\n',sep='')
+        char <- paste(substring(x, 1, characters),'\n',sep='')
         if(empty_character_as_missing)
             char <- ifelse(x=='',NA,char)
     } else if(is.numeric(x)){
@@ -94,8 +94,8 @@ function(x,
     short <- base64encode(hash[1:(truncation/8L)]) # truncated UNF
     
     formatted <- paste0('UNF5:',
-        if((digits != 7) | (chars != 128)) {
-            paste0(paste(digits, chars, sep=','), ':', as.character(short))
+        if((digits != 7) | (characters != 128)) {
+            paste0(paste(digits, characters, sep=','), ':', as.character(short))
         } else {
             as.character(short)
         })
@@ -107,7 +107,7 @@ function(x,
     class(out) <- c('UNF')
     attr(out, 'version') <- 5
     attr(out, 'digits') <- digits
-    attr(out, 'characters') <- chars
+    attr(out, 'characters') <- characters
     attr(out, 'truncation') <- truncation
     return(out)
 }

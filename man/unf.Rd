@@ -10,7 +10,7 @@
 \usage{
 unf(x, version = 6, ...)
 
-unf6(x, digits = 7L, chars = 128L, truncation = 128L, 
+unf6(x, digits = 7L, characters = 128L, truncation = 128L, 
      raw_as_character = TRUE,
      factor_as_character = TRUE,
      complex_as_character = TRUE,
@@ -19,7 +19,7 @@ unf6(x, digits = 7L, chars = 128L, truncation = 128L,
      date_format = "\%F",
      ...)
 
-unf5(x, digits = 7L, chars = 128L, truncation = 128L,
+unf5(x, digits = 7L, characters = 128L, truncation = 128L,
      raw_as_character = TRUE,
      factor_as_character = TRUE,
      nonfinites_as_missing = FALSE, 
@@ -29,14 +29,14 @@ unf5(x, digits = 7L, chars = 128L, truncation = 128L,
      date_format = "\%F",
      ...)
 
-unf4(x, digits = 7L, chars = 128L, truncation = 128L, version = 4, 
+unf4(x, digits = 7L, characters = 128L, truncation = 128L, version = 4, 
      factor_as_character = TRUE,
      nonfinites_as_missing = FALSE, 
      empty_character_as_missing = FALSE,
      dvn_zero = FALSE,
      ...)
 
-unf3(x, digits = 7L, chars = 128L, 
+unf3(x, digits = 7L, characters = 128L, 
      factor_as_character = TRUE,
      nonfinites_as_missing = FALSE, 
      empty_character_as_missing = FALSE,
@@ -48,7 +48,7 @@ unf3(x, digits = 7L, chars = 128L,
 	\item{x}{For \code{unf}, a vector, matrix, dataframe, or list; for \code{unf3}, \code{unf4}, \code{unf5}, a vector. If \code{x} is a dataframe or list with one variable or one vector element, respectively, \code{unf} returns the UNF for the single vector (which is consistent with the Dataverse implementation but ambiguous in the UNF standard). For algorithm versions < 5, all non-numeric vectors are treated as character.}
 	\item{version}{Version of the UNF algorithm. Allowed values are 3, 4, 4.1, 5, and 6. Always use the same version of the algorithm to check a UNF. Default for \code{unf} is 6 and default for \code{unf4} is 4 (but can also be set to 4.1, which is identical except for using SHA256 instead of MD5).}
 	\item{digits}{The number of significant digits for rounding for numeric values. Default is 7L. Must be between 1 and 15.}
-	\item{chars}{The number of characters for truncation. Default is 128L. Must be greater than 1.}
+	\item{characters}{The number of characters for truncation. Default is 128L. Must be greater than 1.}
     \item{truncation}{The number of bits to truncate the UNF signature to. Default is 128L. Must be one of: 128,192,196,256.}
     \item{factor_as_character}{A logical indicating whether to treat an factors as character. If \code{FALSE}, factor variables are treated as integer (and thus handled as any numeric value).}
     \item{raw_as_character}{A logical indicating whether to format raw vectors as character.}
