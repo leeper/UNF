@@ -1,6 +1,6 @@
 context("UNFv6: UNF Class Object")
-test_that("Object is 'unf' class", {
-    expect_equal(class(unf6(1)), "unf")
+test_that("Object is 'UNF' class", {
+    expect_equal(class(unf6(1)), "UNF")
 })
 test_that("Object slots", {
     expect_equal(names(unf6(1)), c("unf","hash","unflong","formatted"), label = "object names correct")
