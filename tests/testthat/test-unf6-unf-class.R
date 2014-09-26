@@ -10,7 +10,7 @@ test_that("Object slots", {
     expect_equal(class(unf6(1)$formatted), "character", label = "formatted is character")
 })
 test_that("Attributes", {
-    expect_equal(attr(unf6(1), "class"), "unf", label = "class")
+    expect_equal(attr(unf6(1), "class"), "UNF", label = "class")
     expect_equal(attr(unf6(1), "version"), 6, label = "version")
     expect_equal(attr(unf6(1), "digits"), 7, label = "digits")
     expect_equal(attr(unf6(1), "characters"), 128, label = "characters")
