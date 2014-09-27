@@ -26,8 +26,11 @@ test_that("Character strings", {
     expect_equal(unf6("A quite long character string, so long that the number of characters in it happens to be more than the default cutoff limit of 128.")$unf,
                  unf6("A quite long character string, so long that the number of characters in it happens to be more than the default cutoff limit of 1")$unf,
                  "/BoSlfcIlsmQ+GHu5gxwEw==", label = "Long character string")
-    expect_equal(unf6("på Færøerne")$unf, 
-                 unf6("p\303\245 F\303\246r\303\270erne")$unf,
+    x1 <- "på Færøerne"
+    x2 <- x3 <- "p\303\245 F\303\246r\303\270erne"
+    Encoding(x3) <- "UTF-8"
+    expect_equal(unf6(x1)$unf, 
+                 unf6(x3)$unf,
                  "KHM6bKVaVaxWDDsmyerfDA==", label = "Non-ASCII characters in string")
     expect_equal(unf6("")$unf, "ECtRuXZaVqPomffPDuOOUg==", label = "Empty character string")
     expect_equal(unf6(NA)$unf, "cJ6AyISHokEeHuTfufIqhg==", label = "Missing value")

@@ -4,6 +4,20 @@ test_that("Examples from original R package documentation", {
     expect_equal(unf(-3:3)$unf, "7FsSuKWGIp6i7b0NFjckZQ==") # w/ dvn_zero: "pwzm1tdPaqypPWRWDeW6Jw=="
 })
 
+test_that("Large values rounded to correct digits", {
+    expect_equal(unf6(1111111500)$unf,
+                 unf6(1111111600)$unf,
+                 unf6(1111112400)$unf,
+                 unf6(1111112500)$unf)
+})
+
+test_that("Small decimal values rounded to correct digits", {
+    expect_equal(unf6(.11111115)$unf,
+                 unf6(.11111116)$unf,
+                 unf6(.11111124)$unf,
+                 unf6(.11111125)$unf)
+})
+
 test_that("Examples from v6 Specification", {
     expect_equal(unf6(c("+1.234568e+",NA,"+0.e+")), unf(c(1.23456789,NA,0)))
     expect_equal(unf(c(1.23456789,NA,0))$unf, "Do5dfAoOOFt4FSj0JcByEw==")
@@ -28,10 +42,3 @@ test_that("Numeric representations match appropriate character representations",
     expect_equal(unf6("+7.3e-4"), unf6(0.00073))
     expect_equal(unf6("+1.234568e+"), unf(1.23456789))
 })
-
-
-
-
-
-
-

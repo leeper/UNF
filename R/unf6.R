@@ -66,7 +66,7 @@ function(x,
         char <- paste(substring(x, 1, characters),'\n',sep='')
     } else if(is.numeric(x)){
         # NUMERICS: round to nearest, ties to even (use `round` rather than `signif` or `signifz`)
-        char <- round(x, digits-1)
+        char <- signif(x, digits)
         char <- .expform(char, digits-1)
     } else if(is.logical(x)){
         # LOGICAL: normalize boolean to 0, 1, or missing, then treat as numeric
