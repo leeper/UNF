@@ -65,9 +65,8 @@ function(x,
         # CHARACTER: truncate strings to k
         char <- paste(substring(x, 1, characters),'\n',sep='')
     } else if(is.numeric(x)){
-        # NUMERICS: round to nearest, ties to even (use `round` rather than `signif` or `signifz`)
-        char <- signif(x, digits)
-        char <- .expform(char, digits-1)
+        # NUMERICS: round to nearest, ties to even (use `signif` or `signifz`)
+        char <- .expform(signif(x, digits), digits-1)
     } else if(is.logical(x)){
         # LOGICAL: normalize boolean to 0, 1, or missing, then treat as numeric
         char <- .expform(as.integer(x), digits-1)

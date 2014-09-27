@@ -68,9 +68,8 @@ function(x,
         if(empty_character_as_missing)
             char <- ifelse(x=='',NA,char)
     } else if(is.numeric(x)){
-        # NUMERICS: round to nearest, ties to even (use `round` rather than `signif` or `signifz`)
-        char <- round(x, digits-1)
-        char <- .expform(char, digits-1)
+        # NUMERICS: round to nearest, ties to even (use `signif` or `signifz`)
+        char <- .expform(signif(x, digits), digits-1)
         if(dvn_zero)
             char <- ifelse(x==0, '+0.e-6\n', char) # https://redmine.hmdc.harvard.edu/issues/3085
     } else if(is.logical(x)){
