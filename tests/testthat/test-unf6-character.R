@@ -1,6 +1,6 @@
 context("UNFv6: Characters")
 test_that("Examples from original R package documentation", {
-    expect_equal(unf(c('test','1','2','3'))$unf, "fH4NJMYkaAJ16OWMEE+zpQ==")
+    expect_equal(unf6(c('test','1','2','3'))$unf, "fH4NJMYkaAJ16OWMEE+zpQ==")
 })
 
 test_that("Tails of long characters irrelevant", {
