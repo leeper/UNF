@@ -1,4 +1,4 @@
-context("UNFv6: Character Encoding")
+﻿context("UNFv6: Character Encoding")
 
 test_that("Characters with known encoding coerced to UTF-8", {
     # x <- c("æ","å","ø")
