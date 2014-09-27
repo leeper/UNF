@@ -89,6 +89,34 @@ While file checksums are a common strategy for verifying a file (e.g., md5 sums 
 
  - `unf`: The core `unf` function calculates the UNF signature for almost any R object for UNF algorithm versions 3, 4, 4.1, 5, or 6, with options to control the rounding of numeric values, truncation of character strings, and some idiosyncratic details of the UNFv5 algorithm as implemented by Dataverse. `unf` is a wrapper for functions `unf6`, `unf5`, `unf4`, and `unf3`, which calculate vector-level UNF signatures.
  
+    
+    ```r
+    unf(iris)
+    ```
+    
+    ```
+    ## UNF6:6oVTvlCR+F1W1HTJ/QUmkA==
+    ```
+    
+    ```r
+    str(unf(iris))
+    ```
+    
+    ```
+    ## List of 5
+    ##  $ unf      : chr "6oVTvlCR+F1W1HTJ/QUmkA=="
+    ##  $ hash     : raw [1:32] ea 85 53 be ...
+    ##  $ unflong  : chr "6oVTvlCR+F1W1HTJ/QUmkHEAyPC4LZiHnI1s2rURxbs="
+    ##  $ formatted: chr "UNF6:6oVTvlCR+F1W1HTJ/QUmkA=="
+    ##  $ variables: Named chr [1:5] "FnQvOCZE9tcn64bP78wLag==" "epaV+rjvURem8qIo0r9LBQ==" "KP6tL8gFSqnG3FLJ887o/g==" "TN39UY6H/vRGv4ARWQTXrw==" ...
+    ##   ..- attr(*, "names")= chr [1:5] "Sepal.Length" "Sepal.Width" "Petal.Length" "Petal.Width" ...
+    ##  - attr(*, "class")= chr "UNF"
+    ##  - attr(*, "version")= num 6
+    ##  - attr(*, "digits")= int 7
+    ##  - attr(*, "characters")= int 128
+    ##  - attr(*, "truncation")= int 128
+    ```
+ 
  - `%unf%`: `%unf%` is a binary operator that can compare two R objects, or an R object against a "UNF" class summary (e.g., as stored in a study metadata record, or returned by `unf`). The function tests whether the objects are identical and, if they are not, provides object- and variable-level UNF comparisons between the two objects, checks for difference in the sorting of the two objects, and (for dataframes) reports indices for rows seemingly present in one object but missing from the other based on row-level hashes of variables common to both dataframes. This can be used both to compare two objects in general (e.g., to see whether two dataframes differ) as well as to debug incongruent UNFs. Two UNFs can differ dramatically due to minor changes like rounding, the deletion of an observation, addition of a variable, etc., so `%unf%` provides a useful tool for looking under the hood at the differences between data objects that might produce different UNF signatures.
 
     
