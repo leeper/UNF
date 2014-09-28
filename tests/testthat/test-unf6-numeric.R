@@ -6,16 +6,24 @@ test_that("Examples from original R package documentation", {
 
 test_that("Large values rounded to correct digits", {
     expect_equal(unf6(1111111500)$unf,
-                 unf6(1111111600)$unf,
-                 unf6(1111112400)$unf,
+                 unf6(1111111600)$unf)
+    expect_equal(unf6(1111112400)$unf,
                  unf6(1111112500)$unf)
+    expect_equal(unf6(-1111111500)$unf,
+                 unf6(-1111111600)$unf)
+    expect_equal(unf6(-1111112400)$unf,
+                 unf6(-1111112500)$unf)
 })
 
 test_that("Small decimal values rounded to correct digits", {
     expect_equal(unf6(.11111115)$unf,
-                 unf6(.11111116)$unf,
-                 unf6(.11111124)$unf,
+                 unf6(.11111116)$unf)
+    expect_equal(unf6(.11111124)$unf,
                  unf6(.11111125)$unf)
+    expect_equal(unf6(-.11111115)$unf,
+                 unf6(-.11111116)$unf)
+    expect_equal(unf6(-.11111124)$unf,
+                 unf6(-.11111125)$unf)
 })
 
 test_that("Examples from v6 Specification", {
