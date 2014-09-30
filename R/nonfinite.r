@@ -18,7 +18,7 @@ function(x, char,
             intToBits(0)[1:3] 
         } else {
             # append EOL and null bit
-            c(i[[1]],charToRaw("\n"),intToBits(0)[1])
+            c(i,charToRaw("\n"),intToBits(0)[1])
         }
     }))
     return(out)
