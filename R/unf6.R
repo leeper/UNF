@@ -69,7 +69,7 @@ function(x,
     }
     
     # deal with non-finite and missing values
-    unicode <- .nonfinite(x, char, nonfinites_as_missing, encoding = "UTF-8", characters = characters)
+    out <- .nonfinite(x, char, nonfinites_as_missing, encoding = "UTF-8", characters = characters)
     
     hash <- digest(out, algo='sha256', serialize=FALSE, raw=TRUE)
     long <- base64encode(hash)
