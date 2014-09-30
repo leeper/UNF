@@ -45,9 +45,9 @@ function(x,
     }
     if(is.complex(x) & !complex_as_character){
         # COMPLEX numbers: format as `A,iB`
-        re <- .expform(round(Re(x), digits-1), digits-1)
-        co <- .expform(round(Im(x), digits-1), digits-1)
-        char <- paste(substring(re, 1, nchar(re)-1), co, sep=",i")
+        re <- .expform(signif(Re(x), digits), digits-1)
+        co <- .expform(signif(Im(x), digits), digits-1)
+        char <- paste(re, co, sep=",i")
     } else if(inherits(x, 'Date')){
         # DATE: Dates are converted to character strings in the form "YYYY-MM-DD", but partial dates ("YYYY" and "YYYY-MM") are permitted.
         if(!date_format %in% c('%Y-%m-%d', '%Y-%m', '%Y', '%F'))
