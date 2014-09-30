@@ -63,6 +63,7 @@ function(x,
                        ifelse(timezone=="UTC", "Z", ""))
     } else if(is.character(x)){
         # CHARACTER
+        char <- as.character(x)
         if(empty_character_as_missing)
             char <- ifelse(x=='',NA,char)
     } else if(is.numeric(x)){

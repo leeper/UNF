@@ -66,6 +66,8 @@ function(x,
     } else if(is.logical(x)){
         # LOGICAL: normalize boolean to 0, 1, or missing, then treat as numeric
         char <- .expform(as.integer(x), digits-1)
+    } else {
+        char <- as.character(x)
     }
     
     # deal with non-finite and missing values

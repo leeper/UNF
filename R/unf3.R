@@ -32,6 +32,7 @@ function(x,
         char <- ifelse(x==0, '+0.e+', char) # dvn introduced 0-value bug after v3, apparently
     } else if(is.character(x)){
         # CHARACTER
+        char <- as.character(x)
         if(empty_character_as_missing)
             char <- ifelse(x=='',NA,char)
     } 
