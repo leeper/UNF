@@ -34,23 +34,18 @@ function(x,
         rounded <- signifz(x, digits) # uses non-standard signifz rounding
         char <- .expform(rounded, digits)
         if(dvn_zero)
-            char <- ifelse(x==0, '+0.e-6\n', char) # https://redmine.hmdc.harvard.edu/issues/3085
+            char <- ifelse(x==0, '+0.e-6', char) # https://redmine.hmdc.harvard.edu/issues/3085
     } else if(is.character(x)){
-        # CHARACTER: truncate strings to k
-        char <- paste(substring(x, 1, characters),'\n',sep='')
+        # CHARACTER
         if(empty_character_as_missing)
             char <- ifelse(x=='',NA,char)
     } 
     
     # deal with non-finite and missing values
-    char <- .nonfinite(x, char, nonfinites_as_missing)
-    
-    eol <- intToBits(0)[1]
     if(version==4)
-        unicode <- iconv(char, to='UTF-32BE', toRaw=TRUE) # v4 uses UTF-32BE
+        out <- .nonfinite(x, char, nonfinites_as_missing, encoding='UTF-32BE', characters = characters) # v4 uses UTF-32BE
     else
-        unicode <- iconv(char, to='UTF-8', toRaw=TRUE) # v4.1 uses UTF-8
-    out <- unlist(lapply(unicode, function(i) if(is.null(i)) intToBits(0)[1:3] else c(i,eol))) # NA handling and nul byte appending
+        out <- .nonfinite(x, char, nonfinites_as_missing, encoding='UTF-8', characters = characters) # v4.1 uses UTF-8
     
     hash <- digest(out, algo='sha256', serialize=FALSE, raw=TRUE)
     

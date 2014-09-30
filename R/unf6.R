@@ -37,7 +37,6 @@ function(x,
                 r <- raw()
                 as.character(writeBin(i, r, endian='big'))
             })
-            char <- paste(char,'\n',sep='')
             warning('UNF is untested on raw vectors')
         }
     }
@@ -53,17 +52,14 @@ function(x,
         # DATE: Dates are converted to character strings in the form "YYYY-MM-DD", but partial dates ("YYYY" and "YYYY-MM") are permitted.
         if(!date_format %in% c('%Y-%m-%d', '%Y-%m', '%Y', '%F'))
             stop("'date_format' must be '%Y-%m-%d', '%Y-%m', '%Y', or '%F'")
-        char <- paste0(format(x, fmt = date_format),'\n')
+        char <- format(x, fmt = date_format)
     } else if(inherits(x, 'POSIXt')){
         # DATE-TIME: Encoded as: `"2014-08-22T16:51:05Z"`.
         if(inherits(x, 'POSIXlt'))
             x <- as.POSIXct(x)
         char <- paste0(format(x, "%FT%H:%M:", timezone), 
                        gsub("\\.?0+$","",format(x, paste0("%OS",decimal_seconds), timezone)), 
-                       ifelse(timezone=="UTC", "Z\n", "\n"))
-    } else if(is.character(x)){
-        # CHARACTER: truncate strings to k
-        char <- paste(substring(x, 1, characters),'\n',sep='')
+                       ifelse(timezone=="UTC", "Z", ""))
     } else if(is.numeric(x)){
         # NUMERICS: round to nearest, ties to even (use `signif` or `signifz`)
         char <- .expform(signif(x, digits), digits-1)
@@ -73,12 +69,7 @@ function(x,
     }
     
     # deal with non-finite and missing values
-    char <- .nonfinite(x, char, nonfinites_as_missing)
-    
-    eol <- intToBits(0)[1]
-    unicode <- iconv(char, to='UTF-8', toRaw=TRUE)
-    # NA handling and null byte appending
-    out <- unlist(lapply(unicode, function(i) if(is.null(i)) intToBits(0)[1:3] else c(i,eol)))
+    unicode <- .nonfinite(x, char, nonfinites_as_missing, encoding = "UTF-8", characters = characters)
     
     hash <- digest(out, algo='sha256', serialize=FALSE, raw=TRUE)
     long <- base64encode(hash)

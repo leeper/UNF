@@ -20,8 +20,8 @@
         e[neg] <- as.numeric(sapply(y[neg], function(i) strsplit(i, 'e-', fixed=TRUE)[[1]][2]))
     
     char <- character(length=length(y))
-    char[plus] <- ifelse(e[plus]==0, paste(b[plus],'e+\n',sep=''), paste(b[plus],'e+',e[plus],'\n',sep=''))
-    char[neg] <- ifelse(e[neg]==0, paste(b[neg],'e-\n',sep=''), paste(b[neg],'e-',e[neg],'\n',sep=''))
+    char[plus] <- ifelse(e[plus]==0, paste(b[plus],'e+\n',sep=''), paste(b[plus],'e+',e[plus],sep=''))
+    char[neg] <- ifelse(e[neg]==0, paste(b[neg],'e-\n',sep=''), paste(b[neg],'e-',e[neg],sep=''))
     char[nas] <- NA
     return(char)
 }

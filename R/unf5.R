@@ -43,7 +43,6 @@ function(x,
                 r <- raw()
                 as.character(writeBin(i, r, endian='big'))
             })
-            char <- paste(char,'\n',sep='')
             warning('UNF is untested on raw vectors')
         }
     }
@@ -54,39 +53,34 @@ function(x,
         # https://redmine.hmdc.harvard.edu/issues/2997
         if(!date_format %in% c('%Y-%m-%d', '%Y-%m', '%Y', '%F'))
             stop("'date_format' must be '%Y-%m-%d', '%Y-%m', '%Y', or '%F'")
-        char <- paste0(format(x, fmt = date_format),'\n')
+        char <- format(x, fmt = date_format)
     } else if(inherits(x, 'POSIXt')){
         # DATE-TIME: Time representation is based on the ISO 8601 extended format, hh:mm:ss.fffff. When .fffff represents fractions of a second, it must contain no trailing (non-significant) zeroes, and is omitted if valued at zero. Other fractional representations, such as fractional minutes and hours, are not permitted. If the time zone of the observation is known, convert the time value to the UTC time zone and append a "Z" to the time representation.
         if(inherits(x, 'POSIXlt'))
             x <- as.POSIXct(x)
         char <- paste0(format(x, "%FT%H:%M:", timezone), 
                        gsub("\\.?0+$","",format(x, paste0("%OS",decimal_seconds), timezone)), 
-                       ifelse(timezone=="UTC", "Z\n", "\n"))
+                       ifelse(timezone=="UTC", "Z", ""))
     } else if(is.character(x)){
-        # CHARACTER: truncate strings to k
-        char <- paste(substring(x, 1, characters),'\n',sep='')
+        # CHARACTER
         if(empty_character_as_missing)
             char <- ifelse(x=='',NA,char)
     } else if(is.numeric(x)){
         # NUMERICS: round to nearest, ties to even (use `signif` or `signifz`)
         char <- .expform(signif(x, digits), digits-1)
         if(dvn_zero)
-            char <- ifelse(x==0, '+0.e-6\n', char) # https://redmine.hmdc.harvard.edu/issues/3085
+            char <- ifelse(x==0, '+0.e-6', char) # https://redmine.hmdc.harvard.edu/issues/3085
     } else if(is.logical(x)){
         # LOGICAL: normalize boolean to 0, 1, or missing, then treat as numeric
         char <- .expform(as.integer(x), digits-1)
         if(dvn_zero)
-            char <- ifelse(x, char, '+0.e-6\n') # https://redmine.hmdc.harvard.edu/issues/3085
+            char <- ifelse(x, char, '+0.e-6') # https://redmine.hmdc.harvard.edu/issues/3085
     }
     
     # replace non-finite and missing values with NA
     # https://redmine.hmdc.harvard.edu/issues/2867
     # https://redmine.hmdc.harvard.edu/issues/2960
-    char <- .nonfinite(x, char, nonfinites_as_missing)
-    
-    eol <- intToBits(0)[1]
-    unicode <- iconv(char, to='UTF-8', toRaw=TRUE)
-    out <- unlist(lapply(unicode, function(i) if(is.null(i)) intToBits(0)[1:3] else c(i,eol))) # NA handling and nul byte appending
+    out <- .nonfinite(x, char, nonfinites_as_missing, encoding="UTF-8", characters = characters)
     
     hash <- digest(out, algo='sha256', serialize=FALSE, raw=TRUE)
     long <- base64encode(hash)

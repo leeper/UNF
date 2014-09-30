@@ -25,24 +25,19 @@ function(x,
     if(is.integer(x)){
         rounded <- signif(x, digits) # uses standard signif rounding, despite standard
         char <- .expform(rounded, digits)
-        char <- ifelse(x==0, '+0.e+\n', char) # dvn introduced 0-value bug after v3, apparently
+        char <- ifelse(x==0, '+0.e+', char) # dvn introduced 0-value bug after v3, apparently
     } else if(is.numeric(x)){
         rounded <- signif(x, digits) # uses standard signif rounding, despite standard
         char <- .expform(rounded, digits)
-        char <- ifelse(x==0, '+0.e+\n', char) # dvn introduced 0-value bug after v3, apparently
+        char <- ifelse(x==0, '+0.e+', char) # dvn introduced 0-value bug after v3, apparently
     } else if(is.character(x)){
-        # CHARACTER: truncate strings to k
-        char <- paste(substring(x, 1, characters),'\n',sep='')
+        # CHARACTER
         if(empty_character_as_missing)
             char <- ifelse(x=='',NA,char)
     } 
     
     # deal with non-finite and missing values
-    char <- .nonfinite(x, char, nonfinites_as_missing)
-    
-    eol <- intToBits(0)[1]
-    unicode <- iconv(char, to='UTF-32BE', toRaw=TRUE)
-    out <- unlist(lapply(unicode, function(i) if(is.null(i)) intToBits(0)[1:3] else c(i,eol))) # NA handling and nul byte appending
+    out <- .nonfinite(x, char, nonfinites_as_missing, encoding = 'UTF-32BE', characters = characters)
     
     hash <- digest(out, algo='md5', serialize=FALSE, raw=TRUE)
     encoded <- base64encode(hash)
