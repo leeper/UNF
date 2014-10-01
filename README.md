@@ -1,6 +1,7 @@
 # Universal Numeric Fingerprint #
 
 [![Build Status](https://travis-ci.org/leeper/UNF.png?branch=master)](https://travis-ci.org/leeper/UNF)
+[![Build status](https://ci.appveyor.com/api/projects/status/tx3dkw1rsr9kijm4)](https://ci.appveyor.com/project/leeper/unf)
 
 UNF is a cryptographic hash or signature that can be used to uniquely identify (a version of) a rectangular dataset, or a subset thereof. UNF can be used, in tandem with a DOI or Handle, to form a persistent citation to a versioned dataset. A UNF signature is printed in the following form:
 

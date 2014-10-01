@@ -38,11 +38,11 @@ test_that("non-ASCII characters unaffected by correct UTF-8 encoding during file
     rm("d2")
 })
 
-test_that("non-ASCII characters affected by incorrect encoding during file I/O", {
+test_that("non-ASCII characters unaffected by incorrect encoding during file I/O", {
     d <- data.frame(x = c("\u00E6","\u00E5","\u00F8"))
     write.csv(d, file="temp.csv", row.names=FALSE, fileEncoding="UTF-8")
     d2 <- read.csv("temp.csv", fileEncoding="latin1", stringsAsFactors=FALSE)
-    expect_false(identical(unf(d), unf(d2)))
+    expect_equal(unf(d)$unf, unf(d2)$unf)
     unlink("temp.csv")
     rm("d")
     rm("d2")
