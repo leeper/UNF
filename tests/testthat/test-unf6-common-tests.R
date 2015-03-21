@@ -43,7 +43,7 @@ test_that("Character strings", {
     #x2 <- "p\303\245 F\303\246r\303\270erne"
     #expect_equal(unf6(x2)$unf, "KHM6bKVaVaxWDDsmyerfDA==", label = "Non-ASCII characters in string 2")
     #x3 <- `Encoding<-`(x2, "UTF-8")
-    expect_equal(unf6(x3)$unf, "KHM6bKVaVaxWDDsmyerfDA==", label = "Non-ASCII characters in string 3")
+    #expect_equal(unf6(x3)$unf, "KHM6bKVaVaxWDDsmyerfDA==", label = "Non-ASCII characters in string 3")
     expect_equal(unf6("")$unf, "ECtRuXZaVqPomffPDuOOUg==", label = "Empty character string")
     expect_equal(unf6(NA)$unf, "cJ6AyISHokEeHuTfufIqhg==", label = "Missing value")
 })
