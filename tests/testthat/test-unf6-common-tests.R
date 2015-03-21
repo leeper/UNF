@@ -1,4 +1,4 @@
-﻿context("UNFv6: UNF Common Tests")
+context("UNFv6: UNF Common Tests")
 
 test_that("Numerics", {
     expect_equal(unf6(0)$unf, 
