@@ -31,7 +31,10 @@ function(x,
     if(is.raw(x)){
         if(raw_as_character) # DVN ingests raw as character
             x <- as.character(x)
-        # BIT: Normalize bit fields by converting to big-endian form, truncating all leading empty bits, aligning to a byte boundary by re-padding with leading zero bits, and base64 encoding to form a character string representation.
+        # BIT: Normalize bit fields by converting to big-endian form,
+        #      truncating all leading empty bits, 
+        #      aligning to a byte boundary by re-padding with leading zero bits, and 
+        #      base64 encoding to form a character string representation
         else {
             char <- sapply(x, function(i){
                 r <- raw()
@@ -70,7 +73,7 @@ function(x,
         char <- as.character(x)
     }
     
-    # deal with non-finite and missing values
+    # deal with non-finite and missing values; convert to raw
     out <- .nonfinite(x, char, nonfinites_as_missing, encoding = "UTF-8", characters = characters)
     
     hash <- digest(out, algo='sha256', serialize=FALSE, raw=TRUE)
