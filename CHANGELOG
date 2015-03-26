@@ -1,5 +1,10 @@
+2.0.1 - Thomas J. Leeper
+
+- Fix error in datetime tests due to use `%F` (not supported on Windows for R3.0.3). (#13)
+
 2.0 - Thomas J. Leeper
 
+- Support UNF version 6. (#2)
 - Entirely rewrite codebase in R using `digest`.
 
 1.02 - Micah Altman

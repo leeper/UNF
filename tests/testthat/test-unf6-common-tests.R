@@ -50,9 +50,9 @@ test_that("Character strings", {
 
 test_that("Datetimes", {
     expect_equal(unf6("2014-01-13T20:47:18")$unf, "eaMxex5EHi2LunomVc0SDw==")
-    expect_equal(unf6(strptime("2014-01-13T20:47:18", format = "%FT%H:%M:%S"))$unf, "eaMxex5EHi2LunomVc0SDw==")
+    expect_equal(unf6(strptime("2014-01-13T20:47:18", format = "%Y-%m-%dT%H:%M:%S"))$unf, "eaMxex5EHi2LunomVc0SDw==")
     expect_equal(unf6("2014-01-14T01:47:18Z")$unf, "1Pku/Z/EIRtmpdEepAb1MA==")
-    expect_equal(unf6(strptime("2014-01-14T01:47:18Z", format = "%FT%H:%M:%S", tz = "UTC"), timezone = "UTC")$unf, "1Pku/Z/EIRtmpdEepAb1MA==")
+    expect_equal(unf6(strptime("2014-01-14T01:47:18Z", format = "%Y-%m-%dT%H:%M:%S", tz = "UTC"), timezone = "UTC")$unf, "1Pku/Z/EIRtmpdEepAb1MA==")
 })
 
 test_that("Boolean/logical values", {
