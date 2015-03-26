@@ -8,7 +8,7 @@ function(x,
          complex_as_character = TRUE,
          nonfinites_as_missing = FALSE, 
          timezone = "",
-         date_format = "%F",
+         date_format = "%Y-%m-%d",
          decimal_seconds = 5,
          ...){
     if(!truncation %in% c(128,192,196,256))
@@ -60,7 +60,7 @@ function(x,
         # DATE-TIME: Encoded as: `"2014-08-22T16:51:05Z"`.
         if(inherits(x, 'POSIXlt'))
             x <- as.POSIXct(x)
-        char <- paste0(format(x, "%FT%H:%M:", timezone), 
+        char <- paste0(format(x, "%Y-%m-%dT%H:%M:", timezone), 
                        gsub("\\.?0+$","",format(x, paste0("%OS",decimal_seconds), timezone)), 
                        ifelse(timezone=="UTC", "Z", ""))
     } else if(is.numeric(x)){

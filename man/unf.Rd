@@ -16,7 +16,7 @@ unf6(x, digits = 7L, characters = 128L, truncation = 128L,
      complex_as_character = TRUE,
      nonfinites_as_missing = FALSE, 
      timezone = "",
-     date_format = "\%F",
+     date_format = "\%Y-\%m-\%d",
      decimal_seconds = 5,
      ...)
 
@@ -27,7 +27,7 @@ unf5(x, digits = 7L, characters = 128L, truncation = 128L,
      empty_character_as_missing = FALSE,
      dvn_zero = FALSE,
      timezone = "",
-     date_format = "\%F",
+     date_format = "\%Y-\%m-\%d",
      decimal_seconds = 5,
      ...)
 
@@ -59,7 +59,7 @@ unf3(x, digits = 7L, characters = 128L,
     \item{empty_character_as_missing}{A logical indicating whether to treat an empty character string as a missing value. This is supplied to create compatibility with a Dataverse UNFv5 implementation.}
     \item{dvn_zero}{A logical indicating whether to format a zero (0) numeric value as \code{+0.e-6} instead of the default \code{+0.e+}. This is supplied to create compatibility with a Dataverse UNFv5 implementation, backwards compatibility with v1.0 of the UNF package (for UNFv3, UNFv4, UNFv4.1).}
     \item{timezone}{A character string containing a valid timezone. This is used for formatting \dQuote{Date} and \dQuote{POSIXt} class variables. Because of different implementations of datetime classes across computer applications, UNF signatures may vary due to the timezone in which they are calculated. This parameter allows for the comparison of UNFs calculated in different timezones.}
-    \item{date_format}{A character string containing a formatting pattern for \dQuote{Date} class variables. One of \code{'\%Y-\%m-\%d'}, \code{'\%Y-\%m'}, \code{'\%Y'}, \code{'\%F'} (the default).}
+    \item{date_format}{A character string containing a formatting pattern for \dQuote{Date} class variables. One of \code{'\%Y-\%m-\%d'} (the default), \code{'\%Y-\%m'}, \code{'\%Y'}, \code{'\%F'}.}
     \item{decimal_seconds}{A number indicating the number of decimal places to round fractional seconds to. The UNF specification (and default) is 5.}
     \item{\ldots}{Additional arguments passed to specific algorithm functions. Ignored.}
 }
@@ -120,7 +120,6 @@ unf5(as.factor(c('test','1','2','3'))) # UNF:5:fH4NJMYkaAJ16OWMEE+zpQ==
 unf5(c(TRUE,TRUE,FALSE), dvn_zero=TRUE)# UNF:5:DedhGlU7W6o2CBelrIZ3iw==
 
 ### dates
-# ????
 
 ### bit-type
 

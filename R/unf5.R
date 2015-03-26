@@ -9,7 +9,7 @@ function(x,
          empty_character_as_missing = FALSE,
          dvn_zero = FALSE,
          timezone = "",
-         date_format = "%F",
+         date_format = "%Y-%m-%d",
          decimal_seconds = 5,
          ...){
     if(!truncation %in% c(128,192,196,256))
@@ -58,7 +58,7 @@ function(x,
         # DATE-TIME: Time representation is based on the ISO 8601 extended format, hh:mm:ss.fffff. When .fffff represents fractions of a second, it must contain no trailing (non-significant) zeroes, and is omitted if valued at zero. Other fractional representations, such as fractional minutes and hours, are not permitted. If the time zone of the observation is known, convert the time value to the UTC time zone and append a "Z" to the time representation.
         if(inherits(x, 'POSIXlt'))
             x <- as.POSIXct(x)
-        char <- paste0(format(x, "%FT%H:%M:", timezone), 
+        char <- paste0(format(x, "%Y-%m-%dT%H:%M:", timezone), 
                        gsub("\\.?0+$","",format(x, paste0("%OS",decimal_seconds), timezone)), 
                        ifelse(timezone=="UTC", "Z", ""))
     } else if(is.character(x)){
