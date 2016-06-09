@@ -1,3 +1,9 @@
+2.0.2 - Thomas J. Leeper
+
+- Converted `unf()` to an S3 generic, with matrix, list, and data.frame methods.
+- Exposed new function `as.unfvector()`, which coerces data types to UNF character vector specifications. (#15)
+- Added base package imports to NAMESPACE. (#14)
+
 2.0.1 - Thomas J. Leeper
 
 - Fix error in datetime tests due to use `%F` (not supported on Windows for R3.0.3). (#13)

@@ -1,13 +1,5 @@
 `%unf%` <- function(x, y, ...){
-    i <- identical(x,y)
-    if (is.matrix(x)) {
-        x <- as.data.frame(x)
-        warning('Coercing x to dataframe')
-    }
-    if (is.matrix(y)) {
-        y <- as.data.frame(y)
-        warning('Coercing y to dataframe')
-    }
+    i <- identical(x, y)
     if (inherits(x, 'UNF')) {
         unfx <- x
         if (!inherits(y, 'UNF')) {

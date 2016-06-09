@@ -1,50 +1,59 @@
-unf <- function(x, version = 6, ...){
-    if (is.matrix(x)) {
-        x <- as.data.frame(x)
-    }
-    if ((is.data.frame(x) | is.list(x)) & length(x)==1) {
-        x <- x[[1]]
-    }
-    if (is.data.frame(x) | is.list(x)) {
-        locale <- Sys.getlocale(category="LC_COLLATE")
-        Sys.setlocale(category="LC_COLLATE", "C")
-        on.exit(Sys.setlocale(category="LC_COLLATE", locale))
-        if (version == 3) {
-            vars <- sapply(x, function(i) unf3(i, ...)$unf)
-            out <- unf3(sort(vars), ...)
-        } else if (version == 4) {
-            vars <- sapply(x, function(i) unf4(i, ...)$unf)
-            out <- unf4(sort(vars), ...)
-        } else if (version == 4.1) {
-            vars <- sapply(x, function(i) unf4(i, version = 4.1, ...)$unf)
-            out <- unf4(sort(vars), version = 4.1, ...)
-        } else if (version == 5) {
-            vars <- sapply(x, function(i) unf5(i, ...)$unf)
-            out <- unf5(sort(vars), ...)
-        } else if (version == 6) {
-            vars <- sapply(x, function(i) unf6(i, ...)$unf)
-            out <- unf6(sort(vars), ...)
-        } else {
-            stop("Unrecognized UNF version: must be 3, 4, 4.1, 5, or 6.")
-        }
-        out$variables <- vars
-        return(out)
+unf <- function(x, version = 6, ...) {
+    UseMethod("unf")
+}
+
+unf.default <- function(x, version = 6, ...) {
+    if (version == 3) {
+        out <- unf3(x, ...)
+    } else if (version == 4) {
+        out <- unf4(x, ...)
+    } else if (version == 4.1) {
+        out <- unf4(x, version = 4.1, ...)
+    } else if (version == 5) {
+        out <- unf5(x, ...)
+    } else if (version == 6) {
+        out <- unf6(x, ...)
     } else {
-        if (version == 3) {
-            out <- unf3(x, ...)
-        } else if (version == 4) {
-            out <- unf4(x, ...)
-        } else if (version == 4.1) {
-            out <- unf4(x, version = 4.1, ...)
-        } else if (version == 5) {
-            out <- unf5(x, ...)
-        } else if (version == 6) {
-            out <- unf6(x, ...)
-        } else {
-            stop("Unrecognized UNF version: must be 3, 4, 4.1, 5, or 6.")
-        }
-        return(out)
+        stop("Unrecognized UNF version: must be 3, 4, 4.1, 5, or 6.")
     }
+    return(out)
+}
+
+unf.data.frame <- function(x, version = 6, ...){
+    if (length(x) == 1) {
+        return(unf(x[[1]], version = version, ...))
+    }
+    locale <- Sys.getlocale(category="LC_COLLATE")
+    Sys.setlocale(category="LC_COLLATE", "C")
+    on.exit(Sys.setlocale(category="LC_COLLATE", locale))
+    if (version == 3) {
+        vars <- sapply(x, function(i) unf3(i, ...)$unf)
+        out <- unf3(sort(vars), ...)
+    } else if (version == 4) {
+        vars <- sapply(x, function(i) unf4(i, ...)$unf)
+        out <- unf4(sort(vars), ...)
+    } else if (version == 4.1) {
+        vars <- sapply(x, function(i) unf4(i, version = 4.1, ...)$unf)
+        out <- unf4(sort(vars), version = 4.1, ...)
+    } else if (version == 5) {
+        vars <- sapply(x, function(i) unf5(i, ...)$unf)
+        out <- unf5(sort(vars), ...)
+    } else if (version == 6) {
+        vars <- sapply(x, function(i) unf6(i, ...)$unf)
+        out <- unf6(sort(vars), ...)
+    } else {
+        stop("Unrecognized UNF version: must be 3, 4, 4.1, 5, or 6.")
+    }
+    out$variables <- vars
+    return(out)
+}
+
+unf.list <- function(x, version = 6, ...) {
+    unf(as.data.frame(x), version = version, ...)
+}
+
+unf.matrix <- function(x, version = 6, ...) {
+    unf(as.data.frame(x), version = version, ...)
 }
 
 print.UNF <- function(x, ...){

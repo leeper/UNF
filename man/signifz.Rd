@@ -5,8 +5,8 @@
 \usage{signifz(x, digits=6)}
 
 \arguments{
-	\item{x}{A numeric vector.}	
-	\item{digits}{integer indicating the precision to be used}
+    \item{x}{A numeric vector.}	
+    \item{digits}{integer indicating the precision to be used}
 }
 
 \details{
