@@ -103,3 +103,7 @@ as.unfvector.zoo <- function(x, ...) {
 as.unfvector.difftime <- function(x, ...) {
     as.unfvector(as.numeric(x), ...)
 }
+
+print.unfvector <- function(x, ...) {
+    print(unclass(x), ...)
+}
