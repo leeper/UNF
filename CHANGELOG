@@ -1,5 +1,6 @@
 2.0.2 - Thomas J. Leeper
 
+- Allow `%unf%` to be used to compare against a character string containing a UNF signature (#16, h/t Dominik Vogel)
 - Converted `unf()` to an S3 generic, with matrix, list, and data.frame methods.
 - Exposed new function `as.unfvector()`, which coerces data types to UNF character vector specifications. (#15)
 - Added base package imports to NAMESPACE. (#14)

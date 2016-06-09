@@ -1,5 +1,5 @@
 `%unf%` <- function(x, y, ...){
-    i <- identical(x, y)
+    ident <- identical(x, y)
     if (inherits(x, 'UNF')) {
         unfx <- x
         if (!inherits(y, 'UNF')) {
@@ -27,14 +27,43 @@
     dimx <- dimy <- NULL
     x.rows <- y.rows <- NULL
     if (is.vector(x) | is.vector(y)) {
-        if (is.vector(x) & !inherits(x, 'UNF')) {
-            dimx <- c(length(x),1)
-        }
-        if (is.vector(y) & !inherits(y, 'UNF')) {
-            dimy <- c(length(y),1)
-        }
-        if (is.vector(x) & is.vector(y) & (!is.list(x) & !is.list(y))) {
-            sorted <- identical(sort(x),sort(y))
+        if ((is.character(x) && length(x) == 1) || (is.character(y) && length(y) == 1)) {
+            if (is.character(x) && length(x) == 1) {
+                unfx <- structure(list(), class = "UNF")
+                if (grepl("^UNF", x)) {
+                    s <- strsplit(x, ":")[[1]]
+                    unfx$unf <- s[length(s)]
+                    unfx$formatted <- x
+                } else {
+                    unfx$unf <- x
+                }
+            }
+            if (is.character(y) && length(y) == 1) {
+                unfy <- structure(list(), class = "UNF")
+                if (grepl("^UNF", y)) {
+                    s <- strsplit(y, ":")[[1]]
+                    unfy$unf <- s[length(s)]
+                    unfy$formatted <- y
+                } else {
+                    unfy$unf <- y
+                }
+            }
+            if (identical(unfx$unf, unfy$unf)) {
+                ident <- TRUE
+            }
+            dimx <- NULL
+            dimy <- NULL
+            sorted <- NULL
+        } else {
+            if (is.vector(x) & !inherits(x, 'UNF')) {
+                dimx <- c(length(x),1)
+            }
+            if (is.vector(y) & !inherits(y, 'UNF')) {
+                dimy <- c(length(y),1)
+            }
+            if (is.vector(x) & is.vector(y) & (!is.list(x) & !is.list(y))) {
+                sorted <- identical(sort(x),sort(y))
+            }
         }
     } else if ((is.data.frame(x) & is.data.frame(y)) & (!inherits(x, 'UNF') & !inherits(y, 'UNF'))) {
         sorted <- identical(x[do.call(order, x), ,drop=FALSE], y[do.call(order, y), ,drop=FALSE])
@@ -49,7 +78,7 @@
         dimy <- dim(y)
     }
     
-    structure(list(identical = i,
+    structure(list(identical = ident,
          sorted = sorted,
          dim.x = dimx,
          dim.y = dimy,
