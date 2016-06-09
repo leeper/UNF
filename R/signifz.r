@@ -1,4 +1,4 @@
-signifz<-function(x, digits=6) {
+signifz <- function(x, digits=6) {
     magnitude <- floor(log10(abs(x)))
     scale <- 10^(digits-magnitude-1)
     signs <- sign(x)
