@@ -14,11 +14,12 @@
     })
     
     e <- numeric(length=length(z))
-    if(length(plus))
+    if (length(plus)) {
         e[plus] <- as.numeric(sapply(y[plus], function(i) strsplit(i, 'e+', fixed=TRUE)[[1]][2]))
-    if(length(neg))
+    }
+    if (length(neg)) {
         e[neg] <- as.numeric(sapply(y[neg], function(i) strsplit(i, 'e-', fixed=TRUE)[[1]][2]))
-    
+    }
     char <- character(length=length(y))
     char[plus] <- ifelse(e[plus]==0, paste(b[plus],'e+',sep=''), paste(b[plus],'e+',e[plus],sep=''))
     char[neg] <- ifelse(e[neg]==0, paste(b[neg],'e-',sep=''), paste(b[neg],'e-',e[neg],sep=''))

@@ -3,7 +3,7 @@ function(x, char,
          nonfinites_as_missing = FALSE, 
          encoding = "",
          characters = 128L){
-    if(nonfinites_as_missing){
+    if (nonfinites_as_missing) {
         char <- ifelse(!is.finite(x), NA, char)
     } else {
         char <- ifelse((!is.finite(x) & !is.character(x)), tolower(as.character(x)), char)
@@ -13,7 +13,7 @@ function(x, char,
     char <- ifelse(is.na(x) & !is.nan(x), NA, char)
     unicode <- iconv(substring(char,1,characters), to = encoding, toRaw=TRUE)
     out <- unlist(lapply(unicode, function(i) {
-        if(is.null(i)) {
+        if (is.null(i)) {
             # append three null bits
             intToBits(0)[1:3] 
         } else {
