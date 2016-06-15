@@ -20,8 +20,11 @@ function(x,
     if (inherits(x, "POSIXlt")) {
         x <- as.POSIXct(x)
     }
+    # standardize to character
+    # and deal with non-finite and missing values
     char <- as.unfvector(x, digits = digits,
                             characters = characters,
+                            encoding = "UTF-8", 
                             truncation = truncation,
                             raw_as_character = raw_as_character, 
                             factor_as_character = factor_as_character,
@@ -32,8 +35,8 @@ function(x,
                             decimal_seconds = decimal_seconds,
                             ...)
     
-    # deal with non-finite and missing values; convert to raw
-    out <- .nonfinite(x, char, nonfinites_as_missing, encoding = "UTF-8", characters = characters)
+    # convert to raw
+    out <- unfvector_to_raw(char, encoding = "UTF-8", characters = characters)
     
     hash <- digest(out, algo = 'sha256', serialize = FALSE, raw = TRUE)
     long <- base64encode(hash)

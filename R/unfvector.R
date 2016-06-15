@@ -7,18 +7,32 @@ as.unfvector.default <- function(x, ...) {
 }
 
 as.unfvector.character <- function(x, ...) {
-    structure(x, class = "unfvector")
+    structure(x, class = c("unfvector", "character"))
 }
 
-as.unfvector.numeric <- function(x, digits = 7L, ...) {
+as.unfvector.numeric <- function(x, digits = 7L, nonfinites_as_missing = FALSE, ...) {
     # NUMERICS: round to nearest, ties to even (use `signif` or `signifz`)
     char <- .expform(signif(x, digits), digits-1)
+    if (nonfinites_as_missing) {
+        char <- ifelse(!is.finite(x), NA_character_, char)
+    } else {
+        char <- ifelse(!is.finite(x), tolower(x), char)
+        char <- ifelse(char == 'inf', '+inf', char)
+        char <- ifelse(is.na(x) & !is.nan(x), NA_character_, ifelse(is.nan(x), '+nan', char))
+    }
     as.unfvector(char, ...)
 }
 
-as.unfvector.integer <- function(x, digits = 7L, ...) {
+as.unfvector.integer <- function(x, digits = 7L, nonfinites_as_missing = FALSE, ...) {
     # NUMERICS: round to nearest, ties to even (use `signif` or `signifz`)
     char <- .expform(signif(x, digits), digits-1)
+    if (nonfinites_as_missing) {
+        char <- ifelse(!is.finite(x), NA_character_, char)
+    } else {
+        char <- ifelse(!is.finite(x), tolower(x), char)
+        char <- ifelse(char == 'inf', '+inf', char)
+        char <- ifelse(is.nan(x), ifelse(is.na(x), NA_character_, '+nan'), char)
+    }
     as.unfvector(char, ...)
 }
 
@@ -49,7 +63,7 @@ as.unfvector.raw <- function(x, raw_as_character = TRUE, ...) {
         #      base64 encoding to form a character string representation
         char <- sapply(x, function(i){
             r <- raw()
-            as.character(writeBin(i, r, endian='big'))
+            as.character(writeBin(i, r, endian = 'big'))
         })
         warning('UNF is untested on raw vectors')
     }
