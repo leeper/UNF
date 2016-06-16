@@ -1,3 +1,8 @@
+2.0.4 - Thomas J. Leeper
+
+- Added a `unfmatch` element to the return value of `%unf%`.
+- Expanded test suite to cover `%unf%` (#17)
+
 2.0.3 - Thomas J. Leeper
 
 - Expanded test suite to cover `as.unfvector()`. (#2)

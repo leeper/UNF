@@ -53,14 +53,14 @@ function(x,
     formatted <- paste0('UNF6:', ifelse(header == "", 
                                         as.character(short), 
                                         paste0(header,':', as.character(short))))
-    out <- list(unf = as.character(short),
+    # return UNF-class structure
+    structure(list(unf = as.character(short),
                 hash = hash,
                 unflong = as.character(long),
-                formatted = formatted)
-    class(out) <- c('UNF')
-    attr(out, 'version') <- 6
-    attr(out, 'digits') <- digits
-    attr(out, 'characters') <- characters
-    attr(out, 'truncation') <- truncation
-    return(out)
+                formatted = formatted),
+              class = "UNF",
+              version = 6,
+              digits = digits,
+              characters = characters,
+              truncation = truncation)
 }

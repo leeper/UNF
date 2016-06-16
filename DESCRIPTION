@@ -1,12 +1,11 @@
 Package: UNF
-Version: 2.0.3
+Version: 2.0.4
 Title: Tools for Creating Universal Numeric Fingerprints for Data
-Date: 2016-06-15
+Date: 2016-06-16
 Authors@R: c(person("Thomas", "Leeper", role = c("aut","cre"),
                     email = "thosjleeper@gmail.com"),
              person("Micah", "Altman", role = c("aut")))
 Description: Computes a universal numeric fingerprint (UNF) for an R data object. UNF is a cryptographic hash or signature that can be used to uniquely identify (a version of) a rectangular dataset, or a subset thereof. UNF can be used, in tandem with a DOI, to form a persistent citation to a versioned dataset.
-Depends: R (>= 2.0)
 Imports: stats, utils, tools, base64enc, digest
 Suggests: knitr, testthat
 License: GPL-2

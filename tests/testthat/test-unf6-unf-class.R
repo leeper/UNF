@@ -4,7 +4,7 @@ test_that("Object is 'UNF' class", {
 })
 
 test_that("'UNF' class object prints", {
-    expect_equal(print(unf6(1)), "UNF")
+    expect_equal(class(print(unf6(1))), "UNF")
 })
 
 test_that("Object slots", {

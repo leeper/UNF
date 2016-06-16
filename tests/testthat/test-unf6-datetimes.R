@@ -1,8 +1,17 @@
 context("UNFv6: Dates")
-test_that("Partial dates (year-only) supported", {})
-test_that("Partial dates (year-month) supported", {})
+
+test_that("Full dates supported", {
+    expect_true(as.unfvector(structure(0, class = "Date")) == "1970-01-01")
+})
+
+test_that("Partial dates (year-only) supported", {
+    # note: R does not have a year-only or year/month-only Date class
+    expect_true(as.unfvector("1970") == "1970", label = "year-only dates")
+    expect_true(as.unfvector("1970-01") == "1970-01", label = "year-only dates")
+})
 
 context("UNFv6: Datetimes")
+
 test_that("Examples from v6 specification",{
     expect_equal(unf6("2014-08-22T16:51:05Z"), 
                  unf6(strptime("2014-08-22T16:51:05Z", "%Y-%m-%dT%H:%M:%OSZ", tz="UTC"), timezone="UTC"))
@@ -18,7 +27,7 @@ test_that("UNFs differ by timezone", {
     
 })
 
-test_that("Correct UNF for UTC timezones", {})
+#test_that("Correct UNF for UTC timezones", {})
 
 test_that("Tests of `decimal_seconds` rounding parameter", {
     expect_equal(unf6(as.POSIXct(1408726265.12345, origin="1970-01-01"), decimal_seconds=0),
@@ -31,4 +40,11 @@ test_that("Tests of `decimal_seconds` rounding parameter", {
                  unf6(as.POSIXct(1408726265.012345, origin="1970-01-01"), decimal_seconds=1))
     expect_false(identical(unf6(as.POSIXct(1408726265.12345, origin="1970-01-01"), decimal_seconds=0),
                            unf6(as.POSIXct(1408726265.12345, origin="1970-01-01"), decimal_seconds=1)))
+})
+
+context("UNFv6: difftimes")
+
+test_that("difftimes formatted correctly", {
+    expect_true(as.unfvector(Sys.Date() - (Sys.Date() + 1)) == "-1.e+")
+    expect_true(as.unfvector(Sys.Date() - (Sys.Date() - 7.5)) == "+7.5e+")
 })

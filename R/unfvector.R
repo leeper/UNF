@@ -115,6 +115,10 @@ as.unfvector.zoo <- function(x, ...) {
 }
 
 as.unfvector.difftime <- function(x, ...) {
+    a <- attributes(x)
+    if (is.null(a[["units"]]) || a[["units"]] != "days") {
+        warnings("units for difftime assumed to be days")
+    }
     as.unfvector(as.numeric(x), ...)
 }
 

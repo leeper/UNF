@@ -79,6 +79,7 @@
     }
     
     structure(list(identical = ident,
+         unfmatch = (unfx$unf == unfy$unf),
          sorted = sorted,
          dim.x = dimx,
          dim.y = dimy,
@@ -110,7 +111,7 @@ print.UNFtest <- function(x, ...){
         cat('Objects use different UNF versions\n\n')
         printxvars <- printyvars <- FALSE
         printxrows <- printyrows <- FALSE
-    } else if (x$unf.x$unf==x$unf.y$unf) {
+    } else if (x$unfmatch) {
         a <- attributes(x$unf.x)
         cat('Objects are a UNF (v',
             paste(a$version,':',a$digits,',',a$characters,sep=''),
@@ -175,4 +176,5 @@ print.UNFtest <- function(x, ...){
             print(misy)
         }
     }
+    invisible(x)
 }

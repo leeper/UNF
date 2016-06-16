@@ -1,4 +1,5 @@
 context("UNFv6: Characters")
+
 test_that("Examples from original R package documentation", {
     expect_equal(unf6(c('test','1','2','3'))$unf, "fH4NJMYkaAJ16OWMEE+zpQ==")
 })
@@ -23,4 +24,8 @@ test_that("Numerics stored as factors same as numeric stored as character", {
 
 test_that("truncation less than characters throws error", {
     expect_error(unf6(c('1','2','3'), characters = 128, truncation=5))
+})
+
+test_that("Requesting short truncation fails", {
+    expect_error(unf6(c('test','1','2','3'), truncation = 1L))
 })
