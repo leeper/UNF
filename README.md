@@ -1,9 +1,4 @@
-# Universal Numeric Fingerprint #
-
-[![Build Status](https://travis-ci.org/leeper/UNF.svg?branch=master)](https://travis-ci.org/leeper/UNF)
-[![Build status](https://ci.appveyor.com/api/projects/status/tx3dkw1rsr9kijm4?svg=true)](https://ci.appveyor.com/project/leeper/unf)
-[![codecov.io](http://codecov.io/github/leeper/UNF/coverage.svg?branch=master)](http://codecov.io/github/leeper/UNF?branch=master)
-![Downloads](http://cranlogs.r-pkg.org/badges/UNF)
+# Universal Numeric Fingerprint
 
 UNF is a cryptographic hash or signature that can be used to uniquely identify (a version of) a rectangular dataset, or a subset thereof. UNF can be used, in tandem with a DOI or Handle, to form a persistent citation to a versioned dataset. A UNF signature is printed in the following form:
 
@@ -15,7 +10,7 @@ This allows a data consumer to quickly, easily, and definitively verify an in-ha
 
 Please report any mismatches between this implementation and any other implementation (including Dataverse's) on [the issues page](https://github.com/leeper/UNF/issues)!
 
-## Why UNFs? ##
+## Why UNFs?
 
 While file checksums are a common strategy for verifying a file (e.g., md5 sums are available for validating R packages), they are not well-suited to being used as global signatures for a dataset. A UNF differs from an ordinary file checksum in several important ways:
 
@@ -88,9 +83,9 @@ While file checksums are a common strategy for verifying a file (e.g., md5 sums 
 
 4. *UNFs are strongly tamper resistant.* Any accidental or intentional changes to data values will change the resulting UNF. Most file checksums and descriptive statistics detect only certain types of changes.
 
-## Package Functionality ##
+## Package Functionality
 
- - `unf`: The core `unf` function calculates the UNF signature for almost any R object for UNF algorithm versions 3, 4, 4.1, 5, or 6, with options to control the rounding of numeric values, truncation of character strings, and some idiosyncratic details of the UNFv5 algorithm as implemented by Dataverse. `unf` is a wrapper for functions `unf6`, `unf5`, `unf4`, and `unf3`, which calculate vector-level UNF signatures.
+ - `unf()`: The core `unf()` function calculates the UNF signature for almost any R object for UNF algorithm versions 3, 4, 4.1, 5, or 6, with options to control the rounding of numeric values, truncation of character strings, and some idiosyncratic details of the UNFv5 algorithm as implemented by Dataverse. `unf()` is a wrapper for functions `unf6()`, `unf5()`, `unf4()`, and `unf3()`, which calculate vector-level UNF signatures.
  
     
     ```r
@@ -172,3 +167,72 @@ While file checksums are a common strategy for verifying a file (e.g., md5 sums 
     ## Sepal.Width: e6etgUxSU/7XccLSwNzHVQ==
     ## Petal.Length: oSk42LS4+joAOdTAr9OChQ==
     ```
+
+ - `as.unfvector()` is an S3 generic method that standardizes any R vector into the standardized character representation described by the UNF specification. While this functionality is primarily for internal use, it can be helpful for clarifying the difference (or lack thereof) between floating point numbers or between objects with identical meaning but different class representations that perhaps resulted for flawed data importing:
+ 
+    
+    ```r
+    # floating point ambiguity
+    .14*10 == 1.4
+    ```
+    
+    ```
+    ## [1] FALSE
+    ```
+    
+    ```r
+    as.unfvector(.14*10) == as.unfvector(1.4)
+    ```
+    
+    ```
+    ## [1] TRUE
+    ```
+    
+    ```r
+    # substantively irrelevant class differences
+    c(0L, 1L) == c(FALSE, TRUE)
+    ```
+    
+    ```
+    ## [1] TRUE TRUE
+    ```
+    
+    ```r
+    as.unfvector(c(0L, 1L))
+    ```
+    
+    ```
+    ## [1] "+0.e+" "+1.e+"
+    ```
+    
+    ```r
+    as.unfvector(c(FALSE, TRUE))
+    ```
+    
+    ```
+    ## [1] "+0.e+" "+1.e+"
+    ```
+
+## Installation
+
+[![Build Status](https://travis-ci.org/leeper/UNF.svg?branch=master)](https://travis-ci.org/leeper/UNF)
+[![Build status](https://ci.appveyor.com/api/projects/status/tx3dkw1rsr9kijm4?svg=true)](https://ci.appveyor.com/project/leeper/unf)
+[![codecov.io](http://codecov.io/github/leeper/UNF/coverage.svg?branch=master)](http://codecov.io/github/leeper/UNF?branch=master)
+![Downloads](http://cranlogs.r-pkg.org/badges/UNF)
+
+UNF is on CRAN. To install the latest version, simply use:
+
+```R
+install.packages("UNF")
+```
+
+To install the latest development version of **UNF** from GitHub:
+
+```R
+# latest (potentially unstable) version from GitHub
+if (!require("ghit")) {
+    install.packages("ghit")
+}
+ghit::install_github("leeper/UNF")
+```
+
