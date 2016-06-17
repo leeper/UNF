@@ -4,7 +4,14 @@ test_that("Object is 'UNF' class", {
 })
 
 test_that("'UNF' class object prints", {
-    expect_equal(class(print(unf6(1))), "UNF")
+    u <- unf6(1)
+    expect_equal(class(print(u)), "UNF", label = "print UNF")
+    attr(u, "formatted") <- NULL
+    expect_equal(class(print(u)), "UNF", label = "print UNF without 'formatted' attribute")
+    attr(u, "version") <- NULL
+    expect_equal(class(print(u)), "UNF", label = "print UNF without 'formatted' or 'version' attributes")
+    u2 <- unf5(1)
+    expect_equal(class(print(u2)), "UNF", label = "print UNF version < 6")
 })
 
 test_that("Object slots", {
