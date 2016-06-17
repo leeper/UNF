@@ -13,13 +13,17 @@
 #' b <- data.frame(x1=1:10, x2=11:20+.0005)
 #' a %unf% a
 #' a %unf% b
-#' `%unf%`(a,b, digits = 3)
+#' unf_equal(a, b, digits = 3)
 #' 
 #' unf(a) %unf% "UNF6:aKW4lAFNBH8vfrnrDbQZjg=="
 #'
 #' @seealso \code{\link{unf}}
 #' @export
-`%unf%` <- function(x, y, ...) {
+`%unf%` <- function(x, y) unf_equal(x, y)
+
+#' @rdname equal
+#' @export
+unf_equal <- function(x, y, ...) {
     ident <- identical(x, y)
     if (inherits(x, 'UNF')) {
         unfx <- x

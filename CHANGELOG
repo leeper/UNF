@@ -1,5 +1,6 @@
 2.0.5 - Thomas J. Leeper
 
+- Exported new function `unf_equal()` to better comply with R CMD check.
 - Converted package to use roxygen documentation.
 - Improved implementation of raw vector handling.
 - Expanded test suite to cover raw, AsIs, and time-series vectors. (#17)
