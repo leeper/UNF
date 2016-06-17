@@ -1,3 +1,5 @@
+#' @rdname unf
+#' @export
 unf6 <-
 function(x, 
          digits = 7L, 

@@ -1,4 +1,25 @@
-`%unf%` <- function(x, y, ...){
+#' @rdname equal
+#' @title Compare two objects
+#' @aliases print.UNFtest
+#' @description Function to compare the size, structure, arrangement, and UNFs of two objects.
+#' @param x A vector, matrix, dataframe, list, or object of class \dQuote{UNF}, or a one-element character vector containing a UNF signature.
+#' @param y A vector, matrix, dataframe, list, or object of class \dQuote{UNF}, or a one-element character vector containing a UNF signature.
+#' @param \ldots Additional arguments passed to \code{\link{unf}}.
+#' @details Compares two objects using \code{all.equal} and additional details based on the UNF of the two objects (and, for lists, dataframes, and matrices) the constituent vectors thereof. The print method for class \code{UNFtest} prints the UNFs for both objects and summarizes any differences between the objects. This is helpful for identifying mismatching variables.
+#' @return An object of class \code{UNFtest} containing the results of \code{unf} for both objects and both \code{identical} and \code{all.equal} for the comparison of the two.
+#' @author Thomas J. Leeper
+#' @examples
+#' a <- data.frame(x1=1:10, x2=11:20)
+#' b <- data.frame(x1=1:10, x2=11:20+.0005)
+#' a %unf% a
+#' a %unf% b
+#' `%unf%`(a,b, digits = 3)
+#' 
+#' unf(a) %unf% "UNF6:aKW4lAFNBH8vfrnrDbQZjg=="
+#'
+#' @seealso \code{\link{unf}}
+#' @export
+`%unf%` <- function(x, y, ...) {
     ident <- identical(x, y)
     if (inherits(x, 'UNF')) {
         unfx <- x

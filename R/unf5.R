@@ -1,3 +1,6 @@
+#' @rdname unf
+#' @importFrom stats is.ts
+#' @export
 unf5 <- 
 function(x, 
          digits = 7L, 
