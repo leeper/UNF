@@ -5,9 +5,9 @@
 
 # The UNF Algorithm #
 
-This vignette describes the UNF algorithm (Altman, Gill, McDonald 2003; Altman and King 2007; Altman 2008) and the R implementation thereof, which includes some peculiarities. The official specifications for various versions of UNF can be found elsewhere online. The algorithm is described in general terms [here](http://thedata.org/book/universal-numerical-fingerprint) and one can also find more specific descriptions of the [Version 3/4](http://thedata.org/book/unf-version-3-0), [Version 5](http://thedata.org/book/unf-version-5-0) and [Version 6](http://thedata.org/book/unf-version-6) algorithms.
+This vignette describes the UNF algorithm (Altman, Gill, McDonald 2003; Altman and King 2007; Altman 2008) and the R implementation thereof, which includes some peculiarities. The official specifications for various versions of UNF can be found elsewhere online. The algorithm is described in general terms [here](http://guides.dataverse.org/en/latest/developers/unf/index.html) and one can also find more specific descriptions of the [Version 3/4](http://guides.dataverse.org/en/latest/developers/unf/unf-v3.html), [Version 5](http://guides.dataverse.org/en/latest/developers/unf/unf-v5.html) and [Version 6](http://guides.dataverse.org/en/latest/developers/unf/unf-v6.html) algorithms.
 
-The current version of this package is an R implementation that relies on general implementations of the relevant hash functions provided by [digest](http://cran.r-project.org/web/packages/digest/index.html) and base64 encoding provided by [RCurl](http://cran.r-project.org/web/packages/RCurl/index.html). Versions 1 and 2 were available in an earlier version of the UNF package authored by Micah Altman, which was built on custom C libraries, and is included in the version logs on GitHub. That package was orphaned by CRAN in 2009. The package retains the core `unf` function from the earlier versions of the UNF package, but simplifies its use considerably. The package additionally implements some new helper functions.
+The current version of this package is an R implementation that relies on general implementations of the relevant hash functions provided by [digest](https://cran.r-project.org/package=digest) and base64 encoding provided by [base64enc](https://cran.r-project.org/package=base64enc). Versions 1 and 2 were available in an earlier version of the UNF package authored by Micah Altman, which was built on custom C libraries, and is included in the version logs on GitHub. That package was orphaned by CRAN in 2009. The package retains the core `unf()` function from the earlier versions of the UNF package, but simplifies its use considerably. The package additionally implements some new helper functions.
 
 ## (1) Numerics ##
 
@@ -23,9 +23,9 @@ Round numerics to *k* digits, where the default value of *k* is 7. (Note: In UNF
     
   Note (a): Zero can be positive ("+0.e+") or negative ("-0.e+").
   
-  Note (b): `Inf`, `-Inf`, and `NaN` are represented as: "+inf", "-inf", and "+nan", respectively. At some point in time, Dataverse handled non-finites by treating them as missing. See [here](https://redmine.hmdc.harvard.edu/issues/2960) for some notes.
+  Note (b): `Inf`, `-Inf`, and `NaN` are represented as: "+inf", "-inf", and "+nan", respectively. At some point in time, Dataverse handled non-finites by treating them as missing.
     
-  Note (c): The [Dataverse](http://thedata.org) implementation of UNFv5 represents zero values (and logical `FALSE`) values as "+0.e-6" rather than the implied "+0.e+" (like logical `TRUE` values: "+1.e+"). The issue is described [here](https://redmine.hmdc.harvard.edu/issues/3085). This can be replicated in `unf5` by adding the argument `dvn_zero = TRUE`.
+  Note (c): The [Dataverse](http://dataverse.org/) implementation of UNFv5 represents zero values (and logical `FALSE`) values as "+0.e-6" rather than the implied "+0.e+" (like logical `TRUE` values: "+1.e+"). This can be replicated in `unf5()` by adding the argument `dvn_zero = TRUE`.
 
 ## (2) Character Strings ##
 
@@ -117,7 +117,7 @@ The package prints each UNF in the appropriate format, including any non-default
 
 ## References ##
 
-Altman, Micah, Jeff Gill and Michael P. McDonald.  2003. *Numerical Issues in Statistical Computing for the Social Scientist*.  John Wiley \& Sons. http://www.hmdc.harvard.edu/numerical_issues/. *(Describes version 3 of the algorithm)*
+Altman, Micah, Jeff Gill and Michael P. McDonald.  2003. *Numerical Issues in Statistical Computing for the Social Scientist*.  John Wiley \& Sons. *(Describes version 3 of the algorithm)*
 
 Altman, Micah, \& Gary King. 2007. A Proposed Standard for the Scholarly Citation of Quantitative Data. *D-Lib* 13(3/4). http://dlib.org/dlib/march07/altman/03altman.html.
 

@@ -3,10 +3,10 @@
 UNF is a cryptographic hash or signature that can be used to uniquely identify (a version of) a rectangular dataset, or a subset thereof. UNF can be used, in tandem with a DOI or Handle, to form a persistent citation to a versioned dataset. A UNF signature is printed in the following form:
 
 ```
-UNF:[UNF version]:[UNF header options]:[UNF hash]
+UNF:[UNF version][:UNF header options]:[UNF hash]
 ```
 
-This allows a data consumer to quickly, easily, and definitively verify an in-hand data file against a data citation or to test for the equality of two datasets, regardless of their variable order or file format. UNF is used by [The Dataverse Network](http://www.thedata.org) archiving software for data citation (making the UNF package a logical companion to the [dvn](http://cran.r-project.org/web/packages/dvn/) package). This package implements UNF versions 3 and up (current version is 6). Some details on the UNF algorithm and the R implementation thereof are included in a package vignette ("The UNF Algorithm") and details on use of UNF in data citation is available in another vignette ("Data Citation with UNF").
+This allows a data consumer to quickly, easily, and definitively verify an in-hand data file against a data citation or to test for the equality of two datasets, regardless of their variable order or file format. UNF is used by [The Dataverse Network](http://www.thedata.org) archiving software for data citation (making the UNF package a logical companion to the [dvn](https://cran.r-project.org/package=dvn) package). This package implements UNF versions 3 and up (current version is 6). Some details on the UNF algorithm and the R implementation thereof are included in a package vignette ("The UNF Algorithm") and details on use of UNF in data citation is available in another vignette ("Data Citation with UNF").
 
 Please report any mismatches between this implementation and any other implementation (including Dataverse's) on [the issues page](https://github.com/leeper/UNF/issues)!
 
@@ -115,7 +115,7 @@ While file checksums are a common strategy for verifying a file (e.g., md5 sums 
     ##  - attr(*, "truncation")= int 128
     ```
  
- - `%unf%`: `%unf%` is a binary operator that can compare two R objects, or an R object against a "UNF" class summary (e.g., as stored in a study metadata record, or returned by `unf`). The function tests whether the objects are identical and, if they are not, provides object- and variable-level UNF comparisons between the two objects, checks for difference in the sorting of the two objects, and (for dataframes) reports indices for rows seemingly present in one object but missing from the other based on row-level hashes of variables common to both dataframes. This can be used both to compare two objects in general (e.g., to see whether two dataframes differ) as well as to debug incongruent UNFs. Two UNFs can differ dramatically due to minor changes like rounding, the deletion of an observation, addition of a variable, etc., so `%unf%` provides a useful tool for looking under the hood at the differences between data objects that might produce different UNF signatures.
+ - `%unf%`: `%unf%` is a binary operator that can compare two R objects, or an R object against a "UNF" class summary (e.g., as stored in a study metadata record, or returned by `unf()`). The function tests whether the objects are identical and, if they are not, provides object- and variable-level UNF comparisons between the two objects, checks for difference in the sorting of the two objects, and (for dataframes) reports indices for rows seemingly present in one object but missing from the other based on row-level hashes of variables common to both dataframes. This can be used both to compare two objects in general (e.g., to see whether two dataframes differ) as well as to debug incongruent UNFs. Two UNFs can differ dramatically due to minor changes like rounding, the deletion of an observation, addition of a variable, etc., so `%unf%` provides a useful tool for looking under the hood at the differences between data objects that might produce different UNF signatures.
 
     
     ```r
