@@ -215,6 +215,7 @@ While file checksums are a common strategy for verifying a file (e.g., md5 sums 
 
 ## Installation
 
+[![CRAN](http://www.r-pkg.org/badges/version/UNF)](https://cran.r-project.org/package=UNF)
 [![Build Status](https://travis-ci.org/leeper/UNF.svg?branch=master)](https://travis-ci.org/leeper/UNF)
 [![Build status](https://ci.appveyor.com/api/projects/status/tx3dkw1rsr9kijm4?svg=true)](https://ci.appveyor.com/project/leeper/unf)
 [![codecov.io](http://codecov.io/github/leeper/UNF/coverage.svg?branch=master)](http://codecov.io/github/leeper/UNF?branch=master)
