@@ -141,13 +141,13 @@ unf(cbind(x1,x2), ver=3)
 \references{
 \url{http://guides.dataverse.org/en/latest/developers/unf/index.html}
 
-Altman, M., J. Gill and M. P. McDonald. 2003. \emph{Numerical Issues in Statistical Computing for the Social Scientist}. John Wiley \& Sons. [Describes version 3 of the algorithm]
+Altman, M., J. Gill and M. P. McDonald. 2003. \emph{Numerical Issues in Statistical Computing for the Social Scientist}. John Wiley \& Sons. \url{http://www.hmdc.harvard.edu/numerical_issues/} [Describes version 3 of the algorithm]
 
-Altman, M., \& G. King. 2007. \dQuote{A Proposed Standard for the Scholarly Citation of Quantitative Data.} \emph{D-Lib} 13(3/4). \url{http://dlib.org/dlib/march07/altman/03altman.html} [Describes a citation standard using UNFs]
+Altman, M., \& G. King. 2007. A Proposed Standard for the Scholarly Citation of Quantitative Data. \emph{D-Lib} 13(3/4). \url{http://dlib.org/dlib/march07/altman/03altman.html} [Describes a citation standard using UNFs]
 
-Altman, M. 2008. \dQuote{A Fingerprint Method for Scientific Data Verification.} In T. Sobh, editor, \emph{Advances in Computer and Information Sciences and Engineering}, chapter 57, pages 311--316. Springer Netherlands, Netherlands, 2008. \url{http://link.springer.com/chapter/10.1007/978-1-4020-8741-7_57} [Describes version 5 of the algorithm]
+Altman, M. 2008. A Fingerprint Method for Scientific Data Verification. In T. Sobh, editor, Advances in Computer and Information Sciences and Engineering, chapter 57, pages 311--316. Springer Netherlands, Netherlands, 2008. \url{http://link.springer.com/chapter/10.1007/978-1-4020-8741-7_57} [Describes version 5 of the algorithm]
 
-Data Citation Synthesis Group. 2013. \dQuote{Declaration of Data Citation Principles}. [Describes general principles of data citation, of which UNF is likely to be a part]
+Data Citation Synthesis Group. 2013. Declaration of Data Citation Principles [DRAFT]. \url{http://www.force11.org/datacitation}. [Describes general principles of data citation, of which UNF is likely to be a part]
 }
 \seealso{
 \code{\link{\%unf\%}}

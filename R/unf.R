@@ -164,6 +164,7 @@ unf.matrix <- function(x, version = 6, ...) {
     unf(as.data.frame(x), version = version, ...)
 }
 
+#' @export
 print.UNF <- function(x, ...){
     if ('formatted' %in% names(x)) {
         out <- x$formatted

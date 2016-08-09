@@ -117,6 +117,7 @@ unf_equal <- function(x, y, ...) {
          equal = all.equal(x, y)), class = "UNFtest")
 }
 
+#' @export
 print.UNFtest <- function(x, ...){
     printxvars <- printyvars <- TRUE
     printxrows <- printyrows <- TRUE

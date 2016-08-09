@@ -138,6 +138,7 @@ as.unfvector.difftime <- function(x, ...) {
     as.unfvector(as.numeric(x), ...)
 }
 
+#' @export
 print.unfvector <- function(x, ...) {
     print(unclass(x), ...)
 }
