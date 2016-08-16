@@ -1,6 +1,24 @@
 language: r
-sudo: required
-r_github_packages:
-- jimhester/covr
+sudo: false
+cache: packages
+matrix:
+  include:
+    - os: linux
+      dist: precise
+      sudo: false
+    - os: linux
+      dist: trusty
+    - os: osx
+      osx_image: xcode8
+    - os: osx
+      osx_image: beta-xcode6.2
+r_packages:
+- covr
+after_failure:
+  email: 
+    recipients:
+     - thosjleeper@gmail.com
+    on_success: change
+    on_failure: change
 after_success:
 - Rscript -e 'library(covr);codecov()'
