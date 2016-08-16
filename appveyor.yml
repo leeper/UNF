@@ -5,6 +5,26 @@ init:
         Invoke-WebRequest http://raw.github.com/krlmlr/r-appveyor/master/scripts/appveyor-tool.ps1 -OutFile "..\appveyor-tool.ps1"
         Import-Module '..\appveyor-tool.ps1'
 
+environment:
+  global:
+    WARNINGS_ARE_ERRORS: 1
+    USE_RTOOLS: true
+
+  matrix:
+  - R_VERSION: devel
+    GCC_PATH: mingw_32
+
+  - R_VERSION: devel
+    R_ARCH: x64
+    GCC_PATH: mingw_64
+
+  - R_VERSION: release
+    R_ARCH: x64
+
+  - R_VERSION: oldrel
+    RTOOLS_VERSION: 32
+    CRAN: http://cran.rstudio.com
+
 install:
   ps: Bootstrap
 
