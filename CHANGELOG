@@ -1,3 +1,8 @@
+2.1.0 - Thomas J. Leeper
+
+- Added `unf.array()` method. (#18)
+- Added `sort` argument to `unf()` to optionally not sort column UNF hashes. (#18)
+
 2.0.5 - Thomas J. Leeper
 
 - Exported new function `unf_equal()` to better comply with R CMD check.

@@ -20,10 +20,9 @@ Standardize a vector according to UNF specifications
 \details{
 The UNF specifications describes how to coerce all R data types to a standardized character representation. This S3 method exposes that coercion functionality.
 }
-\author{
-Thomas J. Leeper (\email{thosjleeper@gmail.com})
-}
 \seealso{
 \code{\link{unf}}, \code{\link{unf6}}, \code{\link{\%unf\%}}
 }
-
+\author{
+Thomas J. Leeper (\email{thosjleeper@gmail.com})
+}

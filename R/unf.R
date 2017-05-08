@@ -2,6 +2,7 @@
 #' @description UNF is a cryptographic hash or signature that can be used to uniquely identify (a version of) a dataset, or a subset thereof.
 #' @param x For \code{unf}, a vector, matrix, dataframe, or list; for \code{unf3}, \code{unf4}, \code{unf5}, a vector. If \code{x} is a dataframe or list with one variable or one vector element, respectively, \code{unf} returns the UNF for the single vector (which is consistent with the Dataverse implementation but ambiguous in the UNF standard). For algorithm versions < 5, all non-numeric vectors are treated as character.
 #' @param version Version of the UNF algorithm. Allowed values are 3, 4, 4.1, 5, and 6. Always use the same version of the algorithm to check a UNF. Default for \code{unf} is 6 and default for \code{unf4} is 4 (but can also be set to 4.1, which is identical except for using SHA256 instead of MD5).
+#' @param sort A logical indicating whether to sort the columns/variables of a matrix or data frame. The default is \code{TRUE}. If \code{FALSE}, column order is respected when calculating the final UNF hash. This can be useful for distinguishing two matrices from one another.
 #' @param digits The number of significant digits for rounding for numeric values. Default is 7L. Must be between 1 and 15.
 #' @param characters The number of characters for truncation. Default is 128L. Must be greater than 1.
 #' @param truncation The number of bits to truncate the UNF signature to. Default is 128L. Must be one of: 128,192,196,256.
@@ -125,32 +126,38 @@ unf.default <- function(x, version = 6, ...) {
 }
 
 #' @export
-unf.data.frame <- function(x, version = 6, ...){
+unf.data.frame <- function(x, version = 6, sort = TRUE, ...){
     if (length(x) == 1) {
         return(unf(x[[1]], version = version, ...))
     }
-    locale <- Sys.getlocale(category="LC_COLLATE")
-    Sys.setlocale(category="LC_COLLATE", "C")
-    on.exit(Sys.setlocale(category="LC_COLLATE", locale))
+    if (isTRUE(sort)) {
+        sort_fun <- sort
+        locale <- Sys.getlocale(category="LC_COLLATE")
+        Sys.setlocale(category="LC_COLLATE", "C")
+        on.exit(Sys.setlocale(category="LC_COLLATE", locale))
+    } else {
+        sort_fun <- function(x) x
+    }
     if (version == 3) {
         vars <- sapply(x, function(i) unf3(i, ...)$unf)
-        out <- unf3(sort(vars), ...)
+        out <- unf3(sort_fun(vars), ...)
     } else if (version == 4) {
         vars <- sapply(x, function(i) unf4(i, ...)$unf)
-        out <- unf4(sort(vars), ...)
+        out <- unf4(sort_fun(vars), ...)
     } else if (version == 4.1) {
         vars <- sapply(x, function(i) unf4(i, version = 4.1, ...)$unf)
-        out <- unf4(sort(vars), version = 4.1, ...)
+        out <- unf4(sort_fun(vars), version = 4.1, ...)
     } else if (version == 5) {
         vars <- sapply(x, function(i) unf5(i, ...)$unf)
-        out <- unf5(sort(vars), ...)
+        out <- unf5(sort_fun(vars), ...)
     } else if (version == 6) {
         vars <- sapply(x, function(i) unf6(i, ...)$unf)
-        out <- unf6(sort(vars), ...)
+        out <- unf6(sort_fun(vars), ...)
     } else {
         stop("Unrecognized UNF version: must be 3, 4, 4.1, 5, or 6.")
     }
     out$variables <- vars
+    attr(out, "sort") <- sort
     return(out)
 }
 
@@ -160,8 +167,13 @@ unf.list <- function(x, version = 6, ...) {
 }
 
 #' @export
-unf.matrix <- function(x, version = 6, ...) {
-    unf(as.data.frame(x), version = version, ...)
+unf.matrix <- function(x, version = 6, sort = TRUE, ...) {
+    unf(as.data.frame(x), version = version, sort = sort, ...)
+}
+
+#' @export
+unf.array <- function(x, version = 6, sort = TRUE, ...) {
+    unf(as.data.frame(x), version = version, sort = sort, ...)
 }
 
 #' @export

@@ -58,6 +58,8 @@ unf6(x, digits = 7L, characters = 128L, truncation = 128L,
 
 \item{complex_as_character}{A logical indicating whether to format raw vectors as character. If \code{TRUE}, UNF should match Dataverse UNFv5 implementation. If \code{FALSE}, complex numbers are formatted as \code{A,iB}.}
 
+\item{sort}{A logical indicating whether to sort the columns/variables of a matrix or data frame. The default is \code{TRUE}. If \code{FALSE}, column order is respected when calculating the final UNF hash. This can be useful for distinguishing two matrices from one another.}
+
 \item{\ldots}{Additional arguments passed to specific algorithm functions. Ignored.}
 }
 \value{
@@ -152,4 +154,3 @@ Data Citation Synthesis Group. 2013. Declaration of Data Citation Principles [DR
 \seealso{
 \code{\link{\%unf\%}}
 }
-

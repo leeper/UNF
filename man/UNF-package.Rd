@@ -2,8 +2,8 @@
 % Please edit documentation in R/UNF-package.R
 \docType{package}
 \name{UNF-package}
-\alias{UNF}
 \alias{UNF-package}
+\alias{UNF}
 \title{Tools for creating universal numeric fingerprints for data}
 \description{
 Computes a univeral numeric fingerprint of data objects.
@@ -21,11 +21,10 @@ A UNF differs from an ordinary file checksum in several important ways:
   \item \emph{UNFs are strongly tamper resistant.} Any accidental or intentional changes to data values will change the resulting UNF. Most file checksums and descriptive statistics detect only certain types of changes.
 }
 }
-\author{
-Thomas J. Leeper and Micah Altman.
-}
 \seealso{
 \code{\link{unf}} \code{\link{\%unf\%}}
 }
+\author{
+Thomas J. Leeper and Micah Altman.
+}
 \keyword{package}
-

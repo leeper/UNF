@@ -24,10 +24,9 @@ signif(pi,digits=5)
 signifz(pi,digits=5)
 
 }
-\author{
-Micah Altman
-}
 \seealso{
 \code{\link[base]{signif}}, \code{\link{unf}}
 }
-
+\author{
+Micah Altman
+}
