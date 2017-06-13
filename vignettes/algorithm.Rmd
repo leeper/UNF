@@ -1,15 +1,25 @@
-<!--
-%\VignetteEngine{knitr}
-%\VignetteIndexEntry{The UNF Algorithm}
--->
-
-# The UNF Algorithm #
+---
+title: "The UNF Algorithm"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    fig_caption: false
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+    toc_depth: 2
+vignette: >
+  %\VignetteIndexEntry{The UNF Algorithm}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 
 This vignette describes the UNF algorithm (Altman, Gill, McDonald 2003; Altman and King 2007; Altman 2008) and the R implementation thereof, which includes some peculiarities. The official specifications for various versions of UNF can be found elsewhere online. The algorithm is described in general terms [here](http://guides.dataverse.org/en/latest/developers/unf/index.html) and one can also find more specific descriptions of the [Version 3/4](http://guides.dataverse.org/en/latest/developers/unf/unf-v3.html), [Version 5](http://guides.dataverse.org/en/latest/developers/unf/unf-v5.html) and [Version 6](http://guides.dataverse.org/en/latest/developers/unf/unf-v6.html) algorithms.
 
 The current version of this package is an R implementation that relies on general implementations of the relevant hash functions provided by [digest](https://cran.r-project.org/package=digest) and base64 encoding provided by [base64enc](https://cran.r-project.org/package=base64enc). Versions 1 and 2 were available in an earlier version of the UNF package authored by Micah Altman, which was built on custom C libraries, and is included in the version logs on GitHub. That package was orphaned by CRAN in 2009. The package retains the core `unf()` function from the earlier versions of the UNF package, but simplifies its use considerably. The package additionally implements some new helper functions.
 
-## (1) Numerics ##
+## (1) Numerics
 
 Round numerics to *k* digits, where the default value of *k* is 7. (Note: In UNF versions <= 5, *k* was labeled *n*.) Then, convert those numerics to a character-class string containing exponential notation in the following form:
 
@@ -27,11 +37,11 @@ Round numerics to *k* digits, where the default value of *k* is 7. (Note: In UNF
     
   Note (c): The [Dataverse](http://dataverse.org/) implementation of UNFv5 represents zero values (and logical `FALSE`) values as "+0.e-6" rather than the implied "+0.e+" (like logical `TRUE` values: "+1.e+"). This can be replicated in `unf5()` by adding the argument `dvn_zero = TRUE`.
 
-## (2) Character Strings ##
+## (2) Character Strings
 
 Truncate character strings to *l* characters, where the default value of *l* is 128. (Note: In UNF versions <= 5, *l* was labeled *k*.)
 
-## (3) Other Data Classes ##
+## (3) Other Data Classes
 
 Handle other types of data in the following ways.
 
@@ -49,7 +59,7 @@ Handle other types of data in the following ways.
     e. Format complex numbers as `A,iB`, where `A` is the real component and and `B` is the complex component and both are formatted as numeric values as in (1), above.
     
 
-## (4) Dates, times, datetimes, intervals, and durations ##
+## (4) Dates, times, datetimes, intervals, and durations
 
 Dates, times, datetimes, intervals, and durations are handled as follows:
 
@@ -63,7 +73,7 @@ Dates, times, datetimes, intervals, and durations are handled as follows:
   
   Note: Given the different implementation of timezones in different programming languages and software applications, UNF signatures calculated for identical datasets in different applications may differ. For example, the UNFv6 specification notes that Stata does not implement time zones, while R always assumes a timezone. The suggested work around is to convert variables to a string representation and handle as in (2), above.
 
-## Computing the UNF ##
+## Computing the UNF
 
 1.  Append all non-missing values with an end-of-line (`\n`) character and a single null byte. Represent all missing values as a string of three null bytes. (Note: At some point in time, Dataverse appeared to treat empty character strings `""` as missing values. As of UNFv6, this is explicit that a missing value `NA` is represented by only three null bytes and an empty character string `""` is represented by an end-of-line character and a null byte.)
 
@@ -95,7 +105,7 @@ Dates, times, datetimes, intervals, and durations are handled as follows:
 
     Note: Multiple datasets need to be combined based on UNFs calculated with the same version of the algorithm. Thus when calculating a study-level UNF, dataset-level UNFs need to be calculated using the same version of the algorithm. (To achieve this, Dataverse recalculates old UNFs whenever new data is added to a study.)
 
-## Reporting the UNF ##
+## Reporting the UNF
 
 The UNF is intended to be used as part of a data citation, for example:
 
@@ -115,7 +125,7 @@ In UNFv6, the header can contain a number rounding parameter (N), a string trunc
 
 The package prints each UNF in the appropriate format, including any non-default parameters when appropriate.
 
-## References ##
+## References
 
 Altman, Micah, Jeff Gill and Michael P. McDonald.  2003. *Numerical Issues in Statistical Computing for the Social Scientist*.  John Wiley \& Sons. *(Describes version 3 of the algorithm)*
 

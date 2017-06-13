@@ -1,9 +1,20 @@
-<!--
-%\VignetteEngine{knitr}
-%\VignetteIndexEntry{Data Citation with UNF}
--->
+---
+title: "Data Citation with UNF"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    fig_caption: false
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+    toc_depth: 3
+vignette: >
+  %\VignetteIndexEntry{Data Citation with UNF}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 
-# Data Citation with UNF Signatures #
 
 This vignette shows some simple examples of how to use UNF signatures for data citation, using the **UNF** package on the `iris` dataset available in base R.
 
@@ -19,7 +30,7 @@ library("digest")
 data(iris)
 ```
 
-## MD5: The Current Alternative to UNF ##
+## MD5: The Current Alternative to UNF
 
 A common method of creating a unique hash for a data file (or any file) is the MD5 algorithm which, in most cases, produces a unique hash for a file that will change if the file is changed. This is useful from a data citation perspective because meaningful changes to the data will produce meaningful changes to the hash:
 
@@ -82,7 +93,7 @@ x2 <- x1 + 1e-7
 identical(digest(x1), digest(x2))
 ```
 
-## UNF Solves Problems of MD5 ##
+## UNF Solves Problems of MD5
 
 While file checksums are a common strategy for verifying a file, they are not well-suited to being used as global signatures for a dataset. A UNF differs from an ordinary file checksum in several important ways:
 
@@ -122,7 +133,7 @@ While file checksums are a common strategy for verifying a file, they are not we
 4. *UNFs are strongly tamper resistant.* Any accidental or intentional changes to data values will change the resulting UNF. Most file checksums and descriptive statistics detect only certain types of changes.
 
 
-## UNF in Practice ##
+## UNF in Practice
 
 UNF has at least two significant use cases:
 
@@ -131,7 +142,7 @@ UNF has at least two significant use cases:
  
 This section walks through both of these use cases.
 
-### UNF As Data Citation ###
+### UNF As Data Citation
 
 Because it is format-independent, the UNF hash is appropriated labeled a *universal* numeric fingerprint: any software application and any programming language can implement the algorithm. This means that data users can use UNF to create UNF-embedded citations for their data and use UNF citations to confirm they have the appropriate version and subset of a specified dataset.
 
@@ -153,7 +164,7 @@ When used in tandem with a persistent locator (e.g., a Handle or Data DOI), this
 
 > James Druckman; Jordan Fein; Thomas Leeper, 2012, "Replication data for: A Source of Bias in Public Opinion Stability", http://hdl.handle.net/1902.1/17864 UNF:5:esVZKwuUnh5kkpDhxXKLxA==
 
-### UNF As In-line Data Description ###
+### UNF As In-line Data Description
 
 In addition to use as part of a persistent identifier of a dataset, UNF can also be used within an analysis to make subsetting and versioning explicit. For example, `iris` contains data on three species (stored in the `Species` variable). If we analyze these data together, we are working with one subset of the data (the subset of the whole):
 

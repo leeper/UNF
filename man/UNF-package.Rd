@@ -2,14 +2,14 @@
 % Please edit documentation in R/UNF-package.R
 \docType{package}
 \name{UNF-package}
-\alias{UNF}
 \alias{UNF-package}
+\alias{UNF}
 \title{Tools for creating universal numeric fingerprints for data}
 \description{
 Computes a univeral numeric fingerprint of data objects.
 }
 \details{
-This package calculates a Universal Numeric Fingerprint (UNF) on an R data object. UNF is a crypographic hash or signature that can be used to uniquely identify a (version of a) dataset, or a subset thereof. UNF is used by the \href{http://www.thedata.org}{Dataverse} archives and this package can be used to verify a dataset against one listed available in a Dataverse study (e.g., as returned by the \href{http://cran.r-project.org/web/packages/dvn/}{dvn} package).
+This package calculates a Universal Numeric Fingerprint (UNF) on an R data object. UNF is a crypographic hash or signature that can be used to uniquely identify a (version of a) dataset, or a subset thereof. UNF is used by the \href{http://www.thedata.org}{Dataverse} archives and this package can be used to verify a dataset against one listed available in a Dataverse study (e.g., as returned by the \href{https://cran.r-project.org/package=dataverse}{dataverse} and \href{https://cran.r-project.org/package=dvn}{dvn} packages).
 
 A UNF is created by rounding data values (or truncating strings) to a known number of digits (or characters), representing those values in a standard form (as 8-bit [for versions 4.1 and 5] or 32-bit [for versions 3 and 4] unicode-formatted strings), and applying a fingerprinting method (a cryptographic hashing function) to this representation (md5 for versions 3 and 4 or sha256 for versions 4.1, 5, and 6). UNFs are computed from data values (independent of variable naming and column arrangement), so they directly reflect the internal representation of the data.
 
@@ -21,11 +21,10 @@ A UNF differs from an ordinary file checksum in several important ways:
   \item \emph{UNFs are strongly tamper resistant.} Any accidental or intentional changes to data values will change the resulting UNF. Most file checksums and descriptive statistics detect only certain types of changes.
 }
 }
-\author{
-Thomas J. Leeper and Micah Altman.
-}
 \seealso{
 \code{\link{unf}} \code{\link{\%unf\%}}
 }
+\author{
+Thomas J. Leeper and Micah Altman.
+}
 \keyword{package}
-

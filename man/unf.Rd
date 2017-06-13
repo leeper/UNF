@@ -152,4 +152,3 @@ Data Citation Synthesis Group. 2013. Declaration of Data Citation Principles [DR
 \seealso{
 \code{\link{\%unf\%}}
 }
-

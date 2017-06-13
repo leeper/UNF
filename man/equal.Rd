@@ -36,10 +36,9 @@ unf_equal(a, b, digits = 3)
 unf(a) \%unf\% "UNF6:aKW4lAFNBH8vfrnrDbQZjg=="
 
 }
-\author{
-Thomas J. Leeper
-}
 \seealso{
 \code{\link{unf}}
 }
-
+\author{
+Thomas J. Leeper
+}

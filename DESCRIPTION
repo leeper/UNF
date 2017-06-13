@@ -1,7 +1,7 @@
 Package: UNF
 Version: 2.0.6
 Title: Tools for Creating Universal Numeric Fingerprints for Data
-Date: 2016-08-09
+Date: 2017-06-13
 Authors@R: c(person("Thomas", "Leeper", role = c("aut","cre"),
                     email = "thosjleeper@gmail.com"),
              person("Micah", "Altman", role = c("aut")))
@@ -23,4 +23,4 @@ License: GPL-2
 URL: https://github.com/leeper/UNF
 BugReports: https://github.com/leeper/UNF/issues
 VignetteBuilder: knitr
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
