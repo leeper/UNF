@@ -190,8 +190,8 @@ To install the latest development version of **UNF** from GitHub:
 
 ``` r
 # latest (potentially unstable) version from GitHub
-if (!require("ghit")) {
-    install.packages("ghit")
+if (!require("remotes")) {
+    install.packages("remotes")
 }
-ghit::install_github("leeper/UNF")
+remotes::install_github("leeper/UNF")
 ```
