@@ -1,4 +1,4 @@
-# Universal Numeric Fingerprint
+# Universal Numeric Fingerprint <img src="man/figures/logo.png" align="right" />
 
 UNF is a cryptographic hash or signature that can be used to uniquely identify (a version of) a rectangular dataset, or a subset thereof. UNF can be used, in tandem with a DOI or Handle, to form a persistent citation to a versioned dataset. A UNF signature is printed in the following form:
 
