@@ -35,15 +35,15 @@
 #' \code{UNF:3:4,128:ZNQRI14053UZq389x0Bffg==}
 #' This representation identifies the signature as UNF, using version 3 of the algorithm, computed to 4 significant digits for numbers and 128 for characters. The segment following the final colon is the actual fingerprint in base64-encoded format.
 #' @references 
-#' \url{http://guides.dataverse.org/en/latest/developers/unf/index.html}
+#' \url{https://guides.dataverse.org/en/latest/developers/unf/index.html}
 #' 
-#' Altman, M., J. Gill and M. P. McDonald. 2003. \emph{Numerical Issues in Statistical Computing for the Social Scientist}. John Wiley \& Sons. \url{http://www.hmdc.harvard.edu/numerical_issues/} [Describes version 3 of the algorithm]
+#' Altman, M., J. Gill and M. P. McDonald. 2003. \emph{Numerical Issues in Statistical Computing for the Social Scientist}. John Wiley \& Sons. [Describes version 3 of the algorithm]
 #' 
 #' Altman, M., \& G. King. 2007. A Proposed Standard for the Scholarly Citation of Quantitative Data. \emph{D-Lib} 13(3/4). \url{http://dlib.org/dlib/march07/altman/03altman.html} [Describes a citation standard using UNFs]
 #' 
-#' Altman, M. 2008. A Fingerprint Method for Scientific Data Verification. In T. Sobh, editor, Advances in Computer and Information Sciences and Engineering, chapter 57, pages 311--316. Springer Netherlands, Netherlands, 2008. \url{http://link.springer.com/chapter/10.1007/978-1-4020-8741-7_57} [Describes version 5 of the algorithm]
+#' Altman, M. 2008. A Fingerprint Method for Scientific Data Verification. In T. Sobh, editor, Advances in Computer and Information Sciences and Engineering, chapter 57, pages 311--316. Springer Netherlands, Netherlands, 2008. \url{https://link.springer.com/chapter/10.1007/978-1-4020-8741-7_57} [Describes version 5 of the algorithm]
 #' 
-#' Data Citation Synthesis Group. 2013. Declaration of Data Citation Principles [DRAFT]. \url{http://www.force11.org/datacitation}. [Describes general principles of data citation, of which UNF is likely to be a part]
+#' Data Citation Synthesis Group. 2013. Declaration of Data Citation Principles [DRAFT]. \url{https://www.force11.org/datacitationprinciples}. [Describes general principles of data citation, of which UNF is likely to be a part]
 #' 
 #' @examples
 #' # Version 6 #
@@ -172,7 +172,7 @@ print.UNF <- function(x, ...){
         if (is.null(attr(x,'version'))) {
             out <- paste0('UNF:', x$unf)
         } else {
-            if (attr(x, 'version')==6) {
+            if (attr(x, 'version') == 6) {
                 digits <- ifelse(!is.null(attr(x, "digits")), attr(x, "digits"), 7)
                 characters <- ifelse(!is.null(attr(x, "characters")), attr(x, "characters"), 128)
                 truncation <- ifelse(!is.null(attr(x, "truncation")), attr(x, "truncation"), 128)

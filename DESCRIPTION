@@ -26,4 +26,4 @@ License: GPL-2
 URL: https://github.com/leeper/UNF
 BugReports: https://github.com/leeper/UNF/issues
 VignetteBuilder: knitr
-RoxygenNote: 6.0.1
+RoxygenNote: 7.1.0

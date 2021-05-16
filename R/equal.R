@@ -156,8 +156,7 @@ print.UNFtest <- function(x, ...){
         printxrows <- printyrows <- FALSE
     } else {
         cat('Objects are not identical\n\n')
-        if ((!is.null(x$dim.x) && !is.null(x$dim.y)) &&
-           (!x$dim.x==x$dim.y)){
+        if ((!is.null(x$dim.x) && !is.null(x$dim.y)) && any(!x$dim.x==x$dim.y)){
             cat('x dimensions: ', x$dim.x, '\n\n')
             cat('y dimensions: ', x$dim.y, '\n\n')
         }

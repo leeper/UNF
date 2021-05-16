@@ -15,7 +15,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-This vignette describes the UNF algorithm (Altman, Gill, McDonald 2003; Altman and King 2007; Altman 2008) and the R implementation thereof, which includes some peculiarities. The official specifications for various versions of UNF can be found elsewhere online. The algorithm is described in general terms [here](http://guides.dataverse.org/en/latest/developers/unf/index.html) and one can also find more specific descriptions of the [Version 3/4](http://guides.dataverse.org/en/latest/developers/unf/unf-v3.html), [Version 5](http://guides.dataverse.org/en/latest/developers/unf/unf-v5.html) and [Version 6](http://guides.dataverse.org/en/latest/developers/unf/unf-v6.html) algorithms.
+This vignette describes the UNF algorithm (Altman, Gill, McDonald 2003; Altman and King 2007; Altman 2008) and the R implementation thereof, which includes some peculiarities. The official specifications for various versions of UNF can be found elsewhere online. The algorithm is described in general terms [here](https://guides.dataverse.org/en/latest/developers/unf/index.html) and one can also find more specific descriptions of the [Version 3/4](https://guides.dataverse.org/en/latest/developers/unf/unf-v3.html), [Version 5](https://guides.dataverse.org/en/latest/developers/unf/unf-v5.html) and [Version 6](https://guides.dataverse.org/en/latest/developers/unf/unf-v6.html) algorithms.
 
 The current version of this package is an R implementation that relies on general implementations of the relevant hash functions provided by [digest](https://cran.r-project.org/package=digest) and base64 encoding provided by [base64enc](https://cran.r-project.org/package=base64enc). Versions 1 and 2 were available in an earlier version of the UNF package authored by Micah Altman, which was built on custom C libraries, and is included in the version logs on GitHub. That package was orphaned by CRAN in 2009. The package retains the core `unf()` function from the earlier versions of the UNF package, but simplifies its use considerably. The package additionally implements some new helper functions.
 
@@ -35,7 +35,7 @@ Round numerics to *k* digits, where the default value of *k* is 7. (Note: In UNF
   
   Note (b): `Inf`, `-Inf`, and `NaN` are represented as: "+inf", "-inf", and "+nan", respectively. At some point in time, Dataverse handled non-finites by treating them as missing.
     
-  Note (c): The [Dataverse](http://dataverse.org/) implementation of UNFv5 represents zero values (and logical `FALSE`) values as "+0.e-6" rather than the implied "+0.e+" (like logical `TRUE` values: "+1.e+"). This can be replicated in `unf5()` by adding the argument `dvn_zero = TRUE`.
+  Note (c): The [Dataverse](https://dataverse.org/) implementation of UNFv5 represents zero values (and logical `FALSE`) values as "+0.e-6" rather than the implied "+0.e+" (like logical `TRUE` values: "+1.e+"). This can be replicated in `unf5()` by adding the argument `dvn_zero = TRUE`.
 
 ## (2) Character Strings
 
@@ -77,11 +77,11 @@ Dates, times, datetimes, intervals, and durations are handled as follows:
 
 1.  Append all non-missing values with an end-of-line (`\n`) character and a single null byte. Represent all missing values as a string of three null bytes. (Note: At some point in time, Dataverse appeared to treat empty character strings `""` as missing values. As of UNFv6, this is explicit that a missing value `NA` is represented by only three null bytes and an empty character string `""` is represented by an end-of-line character and a null byte.)
 
-2. Convert to Unicode bit encoding. For UNF versions < 4.1, use [UTF-32BE](http://en.wikipedia.org/wiki/UTF-32BE). For UNF versions >= 4.1, use [UTF-8](http://en.wikipedia.org/wiki/UTF-8).
+2. Convert to Unicode bit encoding. For UNF versions < 4.1, use [UTF-32BE](https://en.wikipedia.org/wiki/UTF-32BE). For UNF versions >= 4.1, use [UTF-8](https://en.wikipedia.org/wiki/UTF-8).
 
-3. Concatenate all values into a single byte sequence. Compute a hash on the resulting byte sequence. For UNF versions > 3, use [SHA256](http://en.wikipedia.org/wiki/SHA-2). For UNF version 3, use [MD5](http://en.wikipedia.org/wiki/MD5). 
+3. Concatenate all values into a single byte sequence. Compute a hash on the resulting byte sequence. For UNF versions > 3, use [SHA256](https://en.wikipedia.org/wiki/SHA-2). For UNF version 3, use [MD5](https://en.wikipedia.org/wiki/MD5). 
 
-4. [Base64 encode](http://en.wikipedia.org/wiki/Base64) the resulting hash. For UNF versions >= 5, truncate the UNF by performing base64 encoding only on the leftmost 128, 192, 196, or 256 bits, where 128 bits (16 bytes) is the default.
+4. [Base64 encode](https://en.wikipedia.org/wiki/Base64) the resulting hash. For UNF versions >= 5, truncate the UNF by performing base64 encoding only on the leftmost 128, 192, 196, or 256 bits, where 128 bits (16 bytes) is the default.
 
 **To aggregate multiple variables:**
 
@@ -131,8 +131,8 @@ Altman, Micah, Jeff Gill and Michael P. McDonald.  2003. *Numerical Issues in St
 
 Altman, Micah, \& Gary King. 2007. "A Proposed Standard for the Scholarly Citation of Quantitative Data." *D-Lib* 13(3/4). http://dlib.org/dlib/march07/altman/03altman.html.
 
-Altman, Micah 2008. "A Fingerprint Method for Scientific Data Verification." In T. Sobh, editor, *Advances in Computer and Information Sciences and Engineering*, chapter 57, pp. 311-316. Springer Netherlands, Netherlands. http://link.springer.com/chapter/10.1007/978-1-4020-8741-7_57. *(Describes version 5 of the algorithm)*
+Altman, Micah 2008. "A Fingerprint Method for Scientific Data Verification." In T. Sobh, editor, *Advances in Computer and Information Sciences and Engineering*, chapter 57, pp. 311-316. Springer Netherlands, Netherlands. https://link.springer.com/chapter/10.1007/978-1-4020-8741-7_57. *(Describes version 5 of the algorithm)*
 
 Data Citation Synthesis Group. 2013. "Declaration of Data Citation Principles."
 
-Altman, Michah, and Merce Crosas. 2014. "The Evolution of Data Citation: From Principles to Implementation." *IASSIST QUARTERLY*, Forthcoming. http://thedata.org/files/thedata_new2/files/altmancrosasiassistqforthcoming.pdf.
+Altman, Michah, and Merce Crosas. 2014. "The Evolution of Data Citation: From Principles to Implementation." *IASSIST QUARTERLY*.

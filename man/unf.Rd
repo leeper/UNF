@@ -10,24 +10,60 @@
 \usage{
 unf(x, version = 6, ...)
 
-unf3(x, digits = 7L, characters = 128L, factor_as_character = TRUE,
-  nonfinites_as_missing = FALSE, empty_character_as_missing = FALSE,
-  dvn_zero = FALSE, ...)
+unf3(
+  x,
+  digits = 7L,
+  characters = 128L,
+  factor_as_character = TRUE,
+  nonfinites_as_missing = FALSE,
+  empty_character_as_missing = FALSE,
+  dvn_zero = FALSE,
+  ...
+)
 
-unf4(x, digits = 7L, characters = 128L, truncation = 128L, version = 4,
-  factor_as_character = TRUE, nonfinites_as_missing = FALSE,
-  empty_character_as_missing = FALSE, dvn_zero = FALSE, ...)
+unf4(
+  x,
+  digits = 7L,
+  characters = 128L,
+  truncation = 128L,
+  version = 4,
+  factor_as_character = TRUE,
+  nonfinites_as_missing = FALSE,
+  empty_character_as_missing = FALSE,
+  dvn_zero = FALSE,
+  ...
+)
 
-unf5(x, digits = 7L, characters = 128L, truncation = 128L,
-  raw_as_character = TRUE, factor_as_character = TRUE,
-  nonfinites_as_missing = FALSE, empty_character_as_missing = FALSE,
-  dvn_zero = FALSE, timezone = "", date_format = "\%Y-\%m-\%d",
-  decimal_seconds = 5, ...)
+unf5(
+  x,
+  digits = 7L,
+  characters = 128L,
+  truncation = 128L,
+  raw_as_character = TRUE,
+  factor_as_character = TRUE,
+  nonfinites_as_missing = FALSE,
+  empty_character_as_missing = FALSE,
+  dvn_zero = FALSE,
+  timezone = "",
+  date_format = "\%Y-\%m-\%d",
+  decimal_seconds = 5,
+  ...
+)
 
-unf6(x, digits = 7L, characters = 128L, truncation = 128L,
-  raw_as_character = TRUE, factor_as_character = TRUE,
-  complex_as_character = TRUE, nonfinites_as_missing = FALSE,
-  timezone = "", date_format = "\%Y-\%m-\%d", decimal_seconds = 5, ...)
+unf6(
+  x,
+  digits = 7L,
+  characters = 128L,
+  truncation = 128L,
+  raw_as_character = TRUE,
+  factor_as_character = TRUE,
+  complex_as_character = TRUE,
+  nonfinites_as_missing = FALSE,
+  timezone = "",
+  date_format = "\%Y-\%m-\%d",
+  decimal_seconds = 5,
+  ...
+)
 }
 \arguments{
 \item{x}{For \code{unf}, a vector, matrix, dataframe, or list; for \code{unf3}, \code{unf4}, \code{unf5}, a vector. If \code{x} is a dataframe or list with one variable or one vector element, respectively, \code{unf} returns the UNF for the single vector (which is consistent with the Dataverse implementation but ambiguous in the UNF standard). For algorithm versions < 5, all non-numeric vectors are treated as character.}
@@ -139,15 +175,15 @@ unf(cbind(x1,x2), ver=3)
 
 }
 \references{
-\url{http://guides.dataverse.org/en/latest/developers/unf/index.html}
+\url{https://guides.dataverse.org/en/latest/developers/unf/index.html}
 
-Altman, M., J. Gill and M. P. McDonald. 2003. \emph{Numerical Issues in Statistical Computing for the Social Scientist}. John Wiley \& Sons. \url{http://www.hmdc.harvard.edu/numerical_issues/} [Describes version 3 of the algorithm]
+Altman, M., J. Gill and M. P. McDonald. 2003. \emph{Numerical Issues in Statistical Computing for the Social Scientist}. John Wiley \& Sons. [Describes version 3 of the algorithm]
 
 Altman, M., \& G. King. 2007. A Proposed Standard for the Scholarly Citation of Quantitative Data. \emph{D-Lib} 13(3/4). \url{http://dlib.org/dlib/march07/altman/03altman.html} [Describes a citation standard using UNFs]
 
-Altman, M. 2008. A Fingerprint Method for Scientific Data Verification. In T. Sobh, editor, Advances in Computer and Information Sciences and Engineering, chapter 57, pages 311--316. Springer Netherlands, Netherlands, 2008. \url{http://link.springer.com/chapter/10.1007/978-1-4020-8741-7_57} [Describes version 5 of the algorithm]
+Altman, M. 2008. A Fingerprint Method for Scientific Data Verification. In T. Sobh, editor, Advances in Computer and Information Sciences and Engineering, chapter 57, pages 311--316. Springer Netherlands, Netherlands, 2008. \url{https://link.springer.com/chapter/10.1007/978-1-4020-8741-7_57} [Describes version 5 of the algorithm]
 
-Data Citation Synthesis Group. 2013. Declaration of Data Citation Principles [DRAFT]. \url{http://www.force11.org/datacitation}. [Describes general principles of data citation, of which UNF is likely to be a part]
+Data Citation Synthesis Group. 2013. Declaration of Data Citation Principles [DRAFT]. \url{https://www.force11.org/datacitationprinciples}. [Describes general principles of data citation, of which UNF is likely to be a part]
 }
 \seealso{
 \code{\link{\%unf\%}}
