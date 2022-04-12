@@ -184,6 +184,6 @@ Similarly, if we wanted to work with a random subsample of observations in `iris
 
 ```{r}
 set.seed(123)
-unf(iris[sample(20, 1:nrow(iris), FALSE),])
+unf(iris[sample(1:nrow(iris), 20, FALSE),])
 ```
 

@@ -43,7 +43,7 @@
 #' 
 #' Altman, M. 2008. A Fingerprint Method for Scientific Data Verification. In T. Sobh, editor, Advances in Computer and Information Sciences and Engineering, chapter 57, pages 311--316. Springer Netherlands, Netherlands, 2008. \url{https://link.springer.com/chapter/10.1007/978-1-4020-8741-7_57} [Describes version 5 of the algorithm]
 #' 
-#' Data Citation Synthesis Group. 2013. Declaration of Data Citation Principles [DRAFT]. \url{https://www.force11.org/datacitationprinciples}. [Describes general principles of data citation, of which UNF is likely to be a part]
+#' Data Citation Synthesis Group. 2013. Declaration of Data Citation Principles [DRAFT]. \url{https://force11.org/info/joint-declaration-of-data-citation-principles-final/}. [Describes general principles of data citation, of which UNF is likely to be a part]
 #' 
 #' @examples
 #' # Version 6 #
